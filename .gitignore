@@ -1,0 +1,17 @@
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/
+config/database.yml
+.DS_Store
+*.swp
+*.swo
+*.txt
+notes
+doc
+db/schema.rb
+*~
+mockups
+rerun.txt
+nbproject
+Gemfile.lock
