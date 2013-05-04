@@ -11,7 +11,7 @@
       <%#= stylesheet_link_tag "bootstrap-ie6.less" %>
       <style>
         body{ padding-top: 60px; }
-    </style>
+      </style>
       <!--[if IE 6]>    
         <link href="ie6.min.css" rel="stylesheet">
       <![endif]-->
@@ -22,7 +22,7 @@
           <div class="container">
             <a class="brand" href="#"><%= app_name %></a>
             <div class="nav-collapse">
-              <ul class="nav">
+              <ul class="nav main-links">
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="#">assests</a></li>
                 <li><a href="#">donors</a></li>
@@ -53,5 +53,7 @@
         <%= javascript_include_tag "jquery-1.7.1.min" %>
         <%= javascript_include_tag "bootstrap" %>
         <%= javascript_include_tag "dropdown" %>
+        <%= javascript_include_tag "placeholder" %>
+        <%= javascript_include_tag "invoke_placeholder" %>
   </body>
 </html>

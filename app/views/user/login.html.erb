@@ -1,0 +1,33 @@
+<style>
+  .main-links { display: none !important; }
+
+  .brand-name { display: inline; }                                              
+                                                                                
+  #image-logo {                                                                 
+    position: relative;                                                         
+    float: left;                                                                
+    width: 22%;                                                                 
+    height:385px;                                                               
+    padding-top: 15px;                                                          
+  }  
+
+</style>
+
+<%= form_tag :controller => 'user', :action => 'login', :method => :post do %> 
+                                                                                
+  <div id = "image-logo">                                                       
+    <%= image_tag("keys.png" ,:id => "keys")%>                                  
+  </div>                                                                        
+                                                                                
+  <div class="well sidebar-nav">                                                
+                                                                                
+  <p>                                                                           
+     <%=text_field(:user, :username, :textCase => "lower",:placeholder => "username") %>
+  </p>                                                                          
+  <p>                                                                           
+     <%=password_field(:user, :password, :textCase => "lower",:placeholder => "password") %>
+  </p>                                                                          
+  <%= submit_tag "Login" ,:class => "btn" %>                                    
+<% end %>                                                                       
+                                                                                
+</div> 
