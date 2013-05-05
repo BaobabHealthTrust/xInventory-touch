@@ -1,5 +1,16 @@
 XInventory::Application.routes.draw do
-  #get "user/login"
+
+  resources :assets do                                                          
+    member do                                                                   
+      get :remote, :action => :show                                  
+    end                                                                         
+                                                                                
+    collection do                                                               
+      post :show, :search, :create
+      get :show, :search, :new, :live_search
+    end                                                                         
+  end
+
 
   resources :user do                                                          
     member do                                                                   
@@ -8,7 +19,7 @@ XInventory::Application.routes.draw do
                                                                                 
     collection do                                                               
       post :login
-      get :login
+      get :login, :logout
     end                                                                         
   end
 

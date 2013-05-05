@@ -1,0 +1,187 @@
+<style>
+  .content-details { text-align: center; }                                                                          
+
+  .asset-details { width: 100%; }                                                                          
+</style>
+
+<script>
+
+function submitForm() {                                                         
+  if(validateForm())                                                            
+    document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+}                                                                               
+                                                                                
+function validateForm(){                                                        
+    asset_name = document.getElementById('asset_name');                      
+    serial_num = document.getElementById('asset_serial_num');                        
+    model = document.getElementById('asset_model');                            
+    asset_category = document.getElementById('asset_category');                               
+    asset_manufacturer = document.getElementById('asset_manufacturer');                          
+
+    work_project = document.getElementById('work_project');                             
+    work_donor = document.getElementById('work_donor');                             
+                                                                                
+    vendor_supplier = document.getElementById('vendor_supplier');                      
+    vendor_invoice_num = document.getElementById('vendor_invoice_num');                        
+    vendor_date_of_invoice = document.getElementById('vendor_date_of_invoice');                            
+    vendor_quantity = document.getElementById('vendor_quantity');                               
+    vendor_cost = document.getElementById('vendor_cost');    
+                      
+    org_receipt_date = document.getElementById('organisation_receipt_date');                             
+    org_delivered_by = document.getElementById('organisation_delivered_by');                             
+    org_delivery_status = document.getElementById('organisation_delivery_status');                             
+
+    if(asset_name.value == '') {                                                     
+      alert("Please enter asset name ...");                                     
+      return false;                                                             
+    }else if(serial_num.value == '') {                                               
+      alert("Please enter asset serial number ...");                                       
+      return false;                                                             
+    }else if(model.value == '') {                                         
+      alert("Please enter asset model ...");                                           
+      return false;                                                             
+    }else if(asset_category.value == 'Select asset category') {                                                 
+      alert("Please select asset category ...");                                      
+      return false;                                                             
+    }else if(asset_manufacturer.value == 'Select manufacturer') {                                                 
+      alert("Please select asset manufacturer ...");                                      
+      return false;                                                             
+    }else if(work_project.value == 'Select project') {                                                 
+      alert("Please select project ...");                                      
+      return false;                                                             
+    }else if(work_donor.value == 'Select donor') {                                                 
+      alert("Please select donor ...");                                      
+      return false;                                                             
+    }else if(vendor_supplier.value == '') {                                                 
+      alert("Please enter supplier's name ...");                                      
+      return false;                                                             
+    }else if(vendor_invoice_num.value == '') {                                                 
+      alert("Please enter invoice number ...");                                      
+      return false;                                                             
+    }else if(vendor_date_of_invoice.value == '') {                                                 
+      alert("Please enter invoice date ...");                                      
+      return false;                                                             
+    }else if(vendor_quantity.value == '') {                                                 
+      alert("Please enter quantity ...");                                      
+      return false;                                                             
+    }else if(vendor_cost.value == '') {                                                 
+      alert("Please enter cost ...");                                      
+      return false;                                                             
+    }else if(org_receipt_date.value == '') {                                                 
+      alert("Please enter receipt date ...");                                      
+      return false;                                                             
+    }else if(org_delivered_by.value == '') {                                                 
+      alert("Please enter the name of delivery person ...");                                      
+      return false;                                                             
+    }else if(org_delivery_status.value == 'Select delivery status') {                                                 
+      alert("Please select delivery status ...");                                      
+      return false;                                                             
+    }                                                                           
+  return true;                                                                  
+}  
+
+</script>
+
+
+
+<div class="page-header">
+  <h1>assets <small>register an asset</small></h1>
+</div>
+
+<siection id='modals'>                                              
+  <div class="content-details">
+  <%= form_tag :action => 'create', :method => :post  do %>
+
+  <table class="asset-details">                                              
+  <tbody>                                                                       
+    <tr>                                                                        
+      <td>&nbsp;</td>                                                           
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:asset, :name, :placeholder => "Name") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:asset, :serial_num, :placeholder => "Serial number") %></td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:asset, :model ,:placeholder => "Model") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "asset[category]", options_for_select(['Select asset category',"XXXX","YYYY", "ZZZZ"]),
+          :placeholder => "Category" %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "asset[manufacturer]", options_for_select(['Select manufacturer',"XXXX","YYYY", "ZZZZ"]),
+          :placeholder => "Manufacturer" %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "work[project]", options_for_select(['Select project',"XXXX","YYYY", "ZZZZ"]),
+          :placeholder => "Project" %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "work[donor]", options_for_select(['Select donor',"XXXX","YYYY", "ZZZZ"]),
+          :placeholder => "Donor" %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:vendor, :supplier, :placeholder => "Supplier") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:vendor, :invoice_num, :placeholder => "Invoice number") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:vendor, :date_of_invoice,  :placeholder => "Invoice date") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:vendor, :quantity, :placeholder => "Quantity") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:vendor, :cost, :placeholder => "Cost") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:organisation, :receipt_date, :placeholder => "Date of receipt") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:organisation, :delivered_by, :placeholder => "Delivered by") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "organisation[delivery_status]", options_for_select(['Select delivery status',"XXXX","YYYY", "ZZZZ"]),
+          :placeholder => "Delivery status" %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <input onclick="submitForm();" type="button" id="signup" 
+          class="btn btn-primary signup_btn" value="Register" style="width:100%;" />
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+  </tbody>                                                                      
+ </table>
+                      
+ <%end%>
+</div>                                                      
+</section> 

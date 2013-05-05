@@ -1,2 +1,81 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<style>    
+  #latest-outcomes ul {
+    color: #505050;
+    line-height: 1.5em;
+  }        
+
+  #content-right a {
+    color: green;
+    text-decoration: none;
+    font-family: Verdana,Tahoma,Arial;
+    font-size: 10px;
+    font-weight: normal;
+  } 
+                                                            
+  #content-right li {
+    line-height: 0.5em;
+  }
+
+
+#content-left {
+  color: #404040;
+  font-family: Verdana,Tahoma,Arial;
+  font-size: 12px;
+  width: 450px;
+  float: left;
+}
+
+#content-right {
+  color: #404040;
+  font-family: Verdana,Tahoma,Arial;
+  font-size: 12px;
+  width: 450px;
+  background-color: #F6F6F6;
+  border: 1px solid #E4E4E4;
+  color: #505050;
+  line-height: 1.5em;
+  margin-bottom: 10px;
+  padding: 6px;
+  float: right;
+}
+
+#latest-outcomes {
+  border-bottom: 1px dotted #696969;
+  color: #EE8206;
+}
+</style> 
+
+
+<div class="page-header">                                                       
+  <h1><%=organization_name %> <small>inventory system</small></h1>              
+</div>
+
+<div id = "main-content">
+
+  <div id = "content-left">
+    <%=render(:inline => print_content(about_organization))%>
+  </div>
+
+  <div id = "content-right">
+    <div id = "latest-outcomes">Latest stats</div>
+      <p/>
+      <ul>
+        <li>
+          <a href="#">Total registered assets</a>(<%=@total_registered_assets%>)
+          <p/>
+          <p>Total registered number of assets</p>
+        </li><br />
+        <li>
+          <a href="#">Available assets</a>&nbsp;(<%=@total_available_assets%>)
+          <p/>
+          <p>Total number of available assets</p>
+        </li><br />
+        <li>
+          <a href="#">Total number of missing assets</a>&nbsp;(<%=@total_missing_assets%>)
+          <p/>
+          <p>Total number of missing assets</p>
+        </li><br />
+      </ul>
+  </div>
+
+</div>

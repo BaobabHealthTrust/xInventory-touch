@@ -1,0 +1,87 @@
+<%=javascript_include_tag "prototype"%>                                         
+<%=javascript_include_tag "jquery_data_table" %>                                
+<%=javascript_include_tag "jquery.dataTables.min" %>                            
+                                                                                
+<%= stylesheet_link_tag "demo_table" %>                                         
+<%= stylesheet_link_tag "demo_table_jui" %>                                     
+<%= stylesheet_link_tag "demo_page" %>
+
+<style>
+                                                                                
+</style>
+
+<script>
+
+  function dataT(){                                                               
+    $('#search_results').dataTable();                                                  
+  }
+
+  function findStudents() {                                                       
+    var search_str = document.getElementById('search_words').value;               
+                                                                                
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results == 'undefined' || results == '' || results == '"not validate"') {                           
+            return;                                                               
+          }else{                                                                  
+            document.getElementById('results-cont').innerHTML = results;                                                           
+            dataT();                                                              
+          }                                                                       
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/assets/live_search?search_str="+search_str,true);           
+      xmlhttp.send();                                                             
+    } 
+ 
+</script>
+
+
+<div class="page-header">
+  <h1>assets <small>search</small></h1>
+</div>
+
+<section id='modals'>                                              
+  <table id="search_results" class="table table-striped table-bordered table-condensed">
+  <thead>                                                                       
+  <tr id = 'table_head'>                                                        
+    <th id="th1" style="width:200px;">Serial number</th>                           
+    <th id="th2" style="width:200px;">Invoice number</th>                           
+    <th id="th3" style="width:200px;">Name</th>                           
+    <th id="th4" style="width:200px;">Category</th>                            
+    <th id="th5" style="width:200px;">Brand</th>                          
+    <th id="th6" style="width:85px;">Project</th>                                   
+    <th id="th7" style="width:150px;">Donor</th>                                  
+    <th id="th8" style="width:150px;">Quantity</th>                                  
+    <th id="th9" style="width:150px;">Status</th>                                  
+    <th id="th10" style="width:100px;">&nbsp;</th>                               
+  </tr>                                                                         
+  </thead>                                                                      
+  <tbody id='results'>                                                          
+    <%(@assets || []).each do |asset| %>                                    
+    <tr>                                                                        
+      <td><%=asset.try(:id)%></td>                                            
+      <td><%=asset.try(:name)%></td>                                    
+      <td><%=asset.try(:name)%></td>                                    
+      <td><%=asset.try(:name)%></td>                                    
+      <td><%=asset.try(:name)%></td>                                    
+      <td><%=asset.try(:name)%></td>                                    
+      <td><%=asset.try(:name)%></td>                                    
+      <td><%=asset.try(:name)%></td>                                    
+      <td><%=asset.try(:name)%></td>                                    
+      <td><a href="/assets/show?id=<%=asset.try(:id)%>">Show</a></td>       
+    </tr>                                                                       
+    <%end%>                                                                     
+  </tbody>                                                                      
+  </table>
+</section> 
+
+
+<script>                                                                        
+  dataT();                                                                      
+</script>
