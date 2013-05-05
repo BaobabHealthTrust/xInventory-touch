@@ -1,5 +1,49 @@
 XInventory::Application.routes.draw do
 
+  resources :reports do                                                          
+    member do                                                                   
+      get :remote, :action => :show                                  
+    end                                                                         
+                                                                                
+    collection do                                                               
+      post :show, :search, :create
+      get :show, :search, :new, :live_search
+    end                                                                         
+  end
+
+  resources :manufacturer do                                                          
+    member do                                                                   
+      get :remote, :action => :show                                  
+    end                                                                         
+                                                                                
+    collection do                                                               
+      post :show, :search, :create
+      get :show, :search, :new, :live_search
+    end                                                                         
+  end
+
+  resources :suppliers do                                                          
+    member do                                                                   
+      get :remote, :action => :show                                  
+    end                                                                         
+                                                                                
+    collection do                                                               
+      post :show, :search, :create
+      get :show, :search, :new, :live_search
+    end                                                                         
+  end
+
+  resources :donors do                                                          
+    member do                                                                   
+      get :remote, :action => :show                                  
+    end                                                                         
+                                                                                
+    collection do                                                               
+      post :show, :search, :create
+      get :show, :search, :new, :live_search
+    end                                                                         
+  end
+
   resources :assets do                                                          
     member do                                                                   
       get :remote, :action => :show                                  
