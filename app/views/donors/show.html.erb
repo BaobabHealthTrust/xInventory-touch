@@ -1,2 +1,19 @@
-<h1>Donors#show</h1>
-<p>Find me in app/views/donors/show.html.erb</p>
+<style>
+  .buttons {                                                                    
+    width: 100% !important;                                                    
+  }                                                                              
+</style>
+
+<div class="page-header">
+  <h1>donors <small>....</small></h1>
+</div>
+
+<section id='modals'>                                              
+  <p>                                                                           
+    <%= link_to "Find donor(s)", '/donors/search', :class => 'btn btn-primary btn-large buttons' %>
+  </p>                                                                          
+                                                                                
+  <p>                                                                           
+    <%= link_to "Add a donor", '/donors/new', :class => 'btn btn-primary btn-large buttons' %>
+  </p>
+</section> 

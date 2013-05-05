@@ -1,2 +1,19 @@
-<h1>Suppliers#show</h1>
-<p>Find me in app/views/suppliers/show.html.erb</p>
+<style>
+  .buttons {                                                                    
+    width: 100% !important;                                                    
+  }                                                                              
+</style>
+
+<div class="page-header">
+  <h1>suppliers <small>....</small></h1>
+</div>
+
+<section id='modals'>                                              
+  <p>                                                                           
+    <%= link_to "Find supplier(s)", '/suppliers/search', :class => 'btn btn-primary btn-large buttons' %>
+  </p>                                                                          
+                                                                                
+  <p>                                                                           
+    <%= link_to "Register a supplier", '/suppliers/new', :class => 'btn btn-primary btn-large buttons' %>
+  </p>
+</section> 

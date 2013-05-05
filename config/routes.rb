@@ -1,5 +1,16 @@
 XInventory::Application.routes.draw do
 
+  resources :projects do                                                          
+    member do                                                                   
+      get :remote, :action => :show                                  
+    end                                                                         
+                                                                                
+    collection do                                                               
+      post :show, :search, :create
+      get :show, :search, :new, :live_search
+    end                                                                         
+  end
+
   resources :reports do                                                          
     member do                                                                   
       get :remote, :action => :show                                  
