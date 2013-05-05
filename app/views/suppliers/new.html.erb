@@ -1,0 +1,74 @@
+<%#= javascript_include_tag "bootstrap-datepicker" %>
+<%#= stylesheet_link_tag "datepicker" %>
+
+<style>
+  .content-details { text-align: center; }                                                                          
+
+  .asset-details { width: 100%; }                                                                          
+
+</style>
+
+
+<script>
+
+function submitForm() {                                                         
+  if(validateForm())                                                            
+    document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+}                                                                               
+                                                                                
+function validateForm(){                                                        
+    supplier_name = document.getElementById('supplier_name');                      
+
+    if(supplier_name.value == '') {                                                     
+      alert("Please enter project name ...");                                     
+      return false;                                                             
+    }                                                                           
+  return true;                                                                  
+}  
+
+</script>
+
+
+
+<div class="page-header">
+  <h1>supplier <small>registered a supplier</small></h1>
+</div>
+
+<siection id='modals'>                                              
+  <div class="content-details">
+  <%= form_tag :action => 'create', :method => :post  do %>
+
+  <table class="asset-details">                                              
+  <tbody>                                                                       
+    <tr>                                                                        
+      <td>&nbsp;</td>                                                           
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:supplier, :name, :placeholder => "Name") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_area_tag("supplier[description]", nil, :placeholder => "Description") %></td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <input onclick="submitForm();" type="button" id="signup" 
+          class="btn btn-primary signup_btn" value="Register" style="width:100%;" />
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+  </tbody>                                                                      
+ </table>
+                      
+ <%end%>
+</div>                                                      
+</section> 
+
