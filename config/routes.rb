@@ -33,7 +33,30 @@ XInventory::Application.routes.draw do
   # This route can be invoked with supplier_details_url(:id => supplier.id)
   ########## Projects end #####################
 
-  
+  ########## Manufacturers #####################
+  match 'manufacturers' => 'manufacturer#index'
+  match 'create_new_manufacturer' => 'manufacturer#new'
+  match 'manufacturers_search' => 'manufacturer#search'
+  post "manufacturer/create"
+  match 'manufacturer_details/:id' => 'manufacturer#show', :as => :manufacturer_details
+  # This route can be invoked with supplier_details_url(:id => manufacturer.id)
+  ########## Projects end #####################
+
+  ########## Assets #####################
+  match 'assets' => 'assets#index'
+  match 'create_new_asset' => 'assets#new'
+  match 'asset_search' => 'assets#search'
+  match 'asset_categories' => 'assets#search_categories'
+  match 'create_new_category' => 'assets#new_category'
+  match 'asset_states_search' => 'assets#states_search'
+  match 'create_new_state' => 'assets#new_state'
+  post "assets/create_category"
+  post "assets/create_state"
+  post "assets/create"
+  match 'asset_details/:id' => 'assets#show', :as => :asset_details
+  # This route can be invoked with asset_details_url(:id => asset.id)
+  ########## Donors end #####################
+
   
   
 

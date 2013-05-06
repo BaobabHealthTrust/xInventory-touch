@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  before_filter :check_authorized
+
   def show
   end
 
@@ -36,6 +38,16 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find(params[:id])
+  end
+
+  private                                                                       
+                                                                                
+  def check_authorized                                                          
+    if action_name == 'new' or action_name == 'create'                          
+      unless admin?                                                             
+        redirect_to '/projects'                                            
+      end                                                                       
+    end                                                                         
   end
 
 end

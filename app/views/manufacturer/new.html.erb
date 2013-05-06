@@ -37,6 +37,13 @@ function validateForm(){
 
 <siection id='modals'>                                              
   <div class="content-details">
+  <div>                                                                         
+    <%if flash[:notice]%>                                                       
+      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
+    <%elsif flash[:error]%>                                                     
+      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
+    <%end%>                                                                     
+  </div>
   <%= form_tag :action => 'create', :method => :post  do %>
 
   <table class="asset-details">                                              

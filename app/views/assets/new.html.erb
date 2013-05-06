@@ -113,14 +113,16 @@ function validateForm(){
       <td><%=text_field(:asset, :model ,:placeholder => "Model") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td>                                                                      
-        <%= select_tag "asset[category]", options_for_select(['Select asset category',"XXXX","YYYY", "ZZZZ"]),
+      <td>   
+        <%@categories.unshift('Select asset category') %>                                                                  
+        <%= select_tag "asset[category]", options_for_select(@categories),
           :placeholder => "Category" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%= select_tag "asset[manufacturer]", options_for_select(['Select manufacturer',"XXXX","YYYY", "ZZZZ"]),
+        <%@manufacturers.unshift('Select manufacturer') %>                                                                  
+        <%= select_tag "asset[manufacturer]", options_for_select(@manufacturers),
           :placeholder => "Manufacturer" %>                                              
       </td>                                                                     
     </tr>                                                                       
@@ -129,13 +131,15 @@ function validateForm(){
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%= select_tag "work[project]", options_for_select(['Select project',"XXXX","YYYY", "ZZZZ"]),
+        <%@projects.unshift('Select project') %>                                                                  
+        <%= select_tag "work[project]", options_for_select(@projects),
           :placeholder => "Project" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%= select_tag "work[donor]", options_for_select(['Select donor',"XXXX","YYYY", "ZZZZ"]),
+        <%@donors.unshift('Select donor') %>                                                                  
+        <%= select_tag "work[donor]", options_for_select(@donors),
           :placeholder => "Donor" %>                                              
       </td>                                                                     
     </tr>                                                                       
@@ -168,7 +172,8 @@ function validateForm(){
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%= select_tag "organisation[delivery_status]", options_for_select(['Select delivery status',"XXXX","YYYY", "ZZZZ"]),
+        <%@status.unshift('Select delivery status') %>                                                                  
+        <%= select_tag "organisation[delivery_status]", options_for_select(@status),
           :placeholder => "Delivery status" %>                                              
       </td>                                                                     
     </tr>                                                                       

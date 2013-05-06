@@ -18,10 +18,10 @@ function submitForm() {
 }                                                                               
                                                                                 
 function validateForm(){                                                        
-    supplier_name = document.getElementById('supplier_name');                      
+    category_name = document.getElementById('category_name');                      
 
-    if(supplier_name.value == '') {                                                     
-      alert("Please enter project name ...");                                     
+    if(category_name.value == '') {                                                     
+      alert("Please enter category name ...");                                     
       return false;                                                             
     }                                                                           
   return true;                                                                  
@@ -32,7 +32,7 @@ function validateForm(){
 
 
 <div class="page-header">
-  <h1>supplier <small>register a supplier</small></h1>
+  <h1>asset <small>create category</small></h1>
 </div>
 
 <siection id='modals'>                                              
@@ -44,7 +44,7 @@ function validateForm(){
       <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
     <%end%>                                                                     
   </div>
-  <%= form_tag :action => 'create', :method => :post  do %>
+  <%= form_tag :action => 'create_category', :method => :post  do %>
 
   <table class="asset-details">                                              
   <tbody>                                                                       
@@ -52,22 +52,16 @@ function validateForm(){
       <td>&nbsp;</td>                                                           
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:supplier, :name, :placeholder => "Name") %> </td>
+      <td><%=text_field(:category, :name, :placeholder => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:supplier, :phone_num, :placeholder => "Phone number") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_area_tag("supplier[address]", nil, :placeholder => "Postal address") %></td>
+      <td><%=text_field(:category, :abv, :placeholder => "Abbreviation") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_area_tag("supplier[description]", nil, :placeholder => "Description") %></td>
+      <td><%=text_area_tag("category[description]", nil, :placeholder => "Description") %></td>
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   

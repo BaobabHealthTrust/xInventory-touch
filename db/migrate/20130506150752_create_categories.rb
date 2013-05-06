@@ -1,8 +1,9 @@
-class CreateStateTypes < ActiveRecord::Migration
+class CreateCategories < ActiveRecord::Migration
   def change
-    create_table :state_types do |t|
+    create_table :categories do |t|
       t.string :name, :null => false
-      t.text :description, :null => true
+      t.string :abbreviation, :null => true
+      t.text :description
       t.boolean :voided, :null => false, :default => false                      
       t.text :void_reason, :null => true
 
@@ -11,7 +12,7 @@ class CreateStateTypes < ActiveRecord::Migration
   end
 
   def self.down                                                                 
-    drop_table :state_types                                                        
-  end 
+    drop_table :categories                                                  
+  end
 
 end

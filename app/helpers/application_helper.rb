@@ -20,4 +20,8 @@ EOF
     str.html_safe.gsub(/\r\n?/,"<br/>")                                         
   end
 
+  def admin?
+    User.current_user.user_roles.map(&:role).include?('admin')
+  end
+
 end

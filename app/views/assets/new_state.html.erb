@@ -18,10 +18,10 @@ function submitForm() {
 }                                                                               
                                                                                 
 function validateForm(){                                                        
-    supplier_name = document.getElementById('supplier_name');                      
+    state_name = document.getElementById('state_name');                      
 
-    if(supplier_name.value == '') {                                                     
-      alert("Please enter project name ...");                                     
+    if(state_name.value == '') {                                                     
+      alert("Please enter state name ...");                                     
       return false;                                                             
     }                                                                           
   return true;                                                                  
@@ -32,7 +32,7 @@ function validateForm(){
 
 
 <div class="page-header">
-  <h1>supplier <small>register a supplier</small></h1>
+  <h1>asset <small>create asset status</small></h1>
 </div>
 
 <siection id='modals'>                                              
@@ -44,7 +44,7 @@ function validateForm(){
       <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
     <%end%>                                                                     
   </div>
-  <%= form_tag :action => 'create', :method => :post  do %>
+  <%= form_tag :action => 'create_state', :method => :post  do %>
 
   <table class="asset-details">                                              
   <tbody>                                                                       
@@ -52,22 +52,13 @@ function validateForm(){
       <td>&nbsp;</td>                                                           
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:supplier, :name, :placeholder => "Name") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:supplier, :phone_num, :placeholder => "Phone number") %> </td>
+      <td><%=text_field(:state, :name, :placeholder => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_area_tag("supplier[address]", nil, :placeholder => "Postal address") %></td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_area_tag("supplier[description]", nil, :placeholder => "Description") %></td>
+      <td><%=text_area_tag("state[description]", nil, :placeholder => "Description") %></td>
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   

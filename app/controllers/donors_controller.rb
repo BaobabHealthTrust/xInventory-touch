@@ -1,4 +1,6 @@
 class DonorsController < ApplicationController
+  before_filter :check_authorized
+
   def show
   end
 
@@ -21,6 +23,16 @@ class DonorsController < ApplicationController
 
   def show
     @donor = Donor.find(params[:id])
+  end
+
+  private                                                                       
+                                                                                
+  def check_authorized                                                          
+    if action_name == 'new' or action_name == 'create'                          
+      unless admin?                                                             
+        redirect_to '/donors'                                            
+      end                                                                       
+    end                                                                         
   end
 
 end

@@ -27,5 +27,10 @@ user.username = 'admin'
 user.password_hash = 'admin'
 user.person_id = person.id   
 user.save
+
+role = UserRole.new()
+role.user_id = user.id
+role.role = 'admin'
+role.save
                            
 puts "Your new user is: admin, password: admin"
