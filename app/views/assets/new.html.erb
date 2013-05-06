@@ -21,6 +21,7 @@ function validateForm(){
     asset_name = document.getElementById('asset_name');                      
     serial_num = document.getElementById('asset_serial_num');                        
     model = document.getElementById('asset_model');                            
+    version = document.getElementById('asset_version');                            
     asset_category = document.getElementById('asset_category');                               
     asset_manufacturer = document.getElementById('asset_manufacturer');                          
 
@@ -36,6 +37,7 @@ function validateForm(){
     org_receipt_date = document.getElementById('organisation_receipt_date');                             
     org_delivered_by = document.getElementById('organisation_delivered_by');                             
     org_delivery_status = document.getElementById('organisation_delivery_status');                             
+    org_store_location = document.getElementById('organisation_location');                             
 
     if(asset_name.value == '') {                                                     
       alert("Please enter asset name ...");                                     
@@ -45,6 +47,9 @@ function validateForm(){
       return false;                                                             
     }else if(model.value == '') {                                         
       alert("Please enter asset model ...");                                           
+      return false;                                                             
+    }else if(version.value == '') {                                         
+      alert("Please enter asset version ...");                                           
       return false;                                                             
     }else if(asset_category.value == 'Select asset category') {                                                 
       alert("Please select asset category ...");                                      
@@ -58,8 +63,8 @@ function validateForm(){
     }else if(work_donor.value == 'Select donor') {                                                 
       alert("Please select donor ...");                                      
       return false;                                                             
-    }else if(vendor_supplier.value == '') {                                                 
-      alert("Please enter supplier's name ...");                                      
+    }else if(vendor_supplier.value == 'Select a supplier') {                                                 
+      alert("Please select a supplier ...");                                      
       return false;                                                             
     }else if(vendor_invoice_num.value == '') {                                                 
       alert("Please enter invoice number ...");                                      
@@ -81,6 +86,9 @@ function validateForm(){
       return false;                                                             
     }else if(org_delivery_status.value == 'Select delivery status') {                                                 
       alert("Please select delivery status ...");                                      
+      return false;                                                             
+    }else if(org_store_location.value == 'Select store room location') {                                                 
+      alert("Please select store room location ...");                                      
       return false;                                                             
     }                                                                           
   return true;                                                                  
@@ -111,6 +119,9 @@ function validateForm(){
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :model ,:placeholder => "Model") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:asset, :version ,:placeholder => "Version") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>   
@@ -147,7 +158,11 @@ function validateForm(){
       <td><hr /></td>   
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :supplier, :placeholder => "Supplier") %> </td>
+      <td>                                                                      
+        <%@suppliers.unshift('Select a supplier') %>                                                                  
+        <%= select_tag "vendor[supplier]", options_for_select(@suppliers),
+          :placeholder => "Supplier" %>                                              
+      </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:vendor, :invoice_num, :placeholder => "Invoice number") %> </td>
@@ -159,7 +174,7 @@ function validateForm(){
       <td><%=text_field(:vendor, :quantity, :placeholder => "Quantity") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :cost, :placeholder => "Cost") %> </td>
+      <td><%=text_field(:vendor, :cost, :placeholder => "Cost (MK)") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
@@ -175,6 +190,13 @@ function validateForm(){
         <%@status.unshift('Select delivery status') %>                                                                  
         <%= select_tag "organisation[delivery_status]", options_for_select(@status),
           :placeholder => "Delivery status" %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%@location.unshift('Select store room location') %>                                                                  
+        <%= select_tag "organisation[location]", options_for_select(@location),
+          :placeholder => "Select store room location" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
