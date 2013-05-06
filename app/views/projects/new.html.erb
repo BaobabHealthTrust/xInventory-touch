@@ -18,12 +18,17 @@ function submitForm() {
 }                                                                               
                                                                                 
 function validateForm(){                                                        
-    project_name = document.getElementById('asset_name');                      
+  project_name = document.getElementById('project_name');                      
+  project = document.getElementById('project_donor');                      
 
-    if(project_name.value == '') {                                                     
-      alert("Please enter project name ...");                                     
-      return false;                                                             
-    }                                                                           
+  if(project_name.value == '') {                                                     
+    alert("Please enter project name ...");                                     
+    return false;                                                             
+  }else if(project.value == 'Select donor') {                                                     
+    alert("Please select a project donor ...");                                     
+    return false;   
+  }
+                                                            
   return true;                                                                  
 }  
 
@@ -37,6 +42,13 @@ function validateForm(){
 
 <siection id='modals'>                                              
   <div class="content-details">
+  <div>                                                                         
+    <%if flash[:notice]%>                                                       
+      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
+    <%elsif flash[:error]%>                                                     
+      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
+    <%end%>                                                                     
+  </div> 
   <%= form_tag :action => 'create', :method => :post  do %>
 
   <table class="asset-details">                                              
@@ -46,6 +58,13 @@ function validateForm(){
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:project, :name, :placeholder => "Name") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>
+        <%= select_tag "project[donor]", 
+          options_for_select(@donors),
+          :placeholder => "Select donor" %>
+      </td>   
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   

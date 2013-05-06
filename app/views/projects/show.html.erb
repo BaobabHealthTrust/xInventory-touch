@@ -1,19 +1,107 @@
+
 <style>
-  .buttons {                                                                    
-    width: 100% !important;                                                    
-  }                                                                              
+
+  .buttons {
+    width: 400px !important;
+  }
+
+  .sidebar-nav {
+    font-size: 12px;
+    padding-bottom: 40px;
+  }
+
+  .demographics {
+    width: 99%;
+  }
+
+  .demographics td , th{
+    text-align: left;
+  }
+
+  #sub-content-view {
+    background-color: #FFFFDD;
+    height: auto;
+    border: 1px dotted #696969;
+  }
+
+  #sub-content-view hr {
+    border-style: dotted;
+    border-width: 1px;
+    margin-left: 12px;
+    margin-right: 12px; 
+    background-color: black;
+  }
+
+
+  .demographics {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-family: Tahoma,Verdana,Arial;
+  font-size: 11px; 
+  width: 98%;
+  text-align: left;
+}
+
+.demographics th{
+  word-wrap: break-word;
+  vertical-align: top;
+  color: #404040;
+}
+
+.demographics td{
+  vertical-align: top;
+}
+
+.xool_information {                                                           
+  font-size: 11px;                                                              
+  margin-left: 12px;                                                            
+  margin-right: 12px;                                                           
+}
 </style>
 
+
 <div class="page-header">
-  <h1>projects <small>....</small></h1>
+  <h1>donor <small>details</small></h1>
 </div>
 
 <section id='modals'>                                              
-  <p>                                                                           
-    <%= link_to "Find project(s)", '/projects/search', :class => 'btn btn-primary btn-large buttons' %>
-  </p>                                                                          
-                                                                                
-  <p>                                                                           
-    <%= link_to "Create a project", '/projects/new', :class => 'btn btn-primary btn-large buttons' %>
-  </p>
+
+    <div id = "sub-content-view">
+
+    <table class = "demographics">
+      <tr>
+        <th>Name:&nbsp;</th>
+        <td>
+          <%= @project.name %>&nbsp;
+          <%= @student.first_name rescue '' %>
+        </td>
+        <th>ID number:&nbsp;</th><td><%=params[:id].rjust(5,'0')%></td>
+      </tr>
+        <th>Date registered:&nbsp;</th><td><%=@project.created_at.strftime('%A, %d %B %Y')%></td>
+      </tr>
+    </table>
+
+    <hr />
+
+    <p class="xool_information"><strong>Project description</strong></p>
+    <p class="xool_information">
+    <%=render(:inline => print_content(@project.description))%> 
+    </p>
+  </div>
+  
+  <div style="padding-top:10px;float:right;">
+    <table>
+    <tr>
+      <td><a href="/programs/select_program_to_enroll?student_id=<%=@project.id%>">Enroll into a program</a>&nbsp;&nbsp;</td>
+      <td><a href="#">Remove from program</a>&nbsp;&nbsp;</td>
+      <td><a href="#">Edit demographics</a>&nbsp;&nbsp;</td>
+      <td><a href="#">Void</a></td>
+    </tr>
+    </table>
+  </div>
+
 </section> 
+
+
+
+

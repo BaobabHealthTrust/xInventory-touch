@@ -1,95 +1,31 @@
 XInventory::Application.routes.draw do
 
-  resources :projects do                                                          
-    member do                                                                   
-      get :remote, :action => :show                                  
-    end                                                                         
-                                                                                
-    collection do                                                               
-      post :show, :search, :create
-      get :show, :search, :new, :live_search
-    end                                                                         
-  end
+  match 'home' => 'home#index'
 
-  resources :reports do                                                          
-    member do                                                                   
-      get :remote, :action => :show                                  
-    end                                                                         
-                                                                                
-    collection do                                                               
-      post :show, :search, :create
-      get :show, :search, :new, :live_search
-    end                                                                         
-  end
+  get "user/logout"
+  post "user/login"
 
-  resources :manufacturer do                                                          
-    member do                                                                   
-      get :remote, :action => :show                                  
-    end                                                                         
-                                                                                
-    collection do                                                               
-      post :show, :search, :create
-      get :show, :search, :new, :live_search
-    end                                                                         
-  end
+  ########## Donors #####################
+  match 'donors' => 'donors#index'
+  match 'create_new_donor' => 'donors#new'
+  match 'donor_search' => 'donors#search'
+  post "donors/create"
+  #match 'donor_details' => 'donors#search'
+  match 'donors_details/:id' => 'donors#show', :as => :donor_details
+  # This route can be invoked with donor_details_url(:id => donor.id)
+  ########## Donors end #####################
 
-  resources :suppliers do                                                          
-    member do                                                                   
-      get :remote, :action => :show                                  
-    end                                                                         
-                                                                                
-    collection do                                                               
-      post :show, :search, :create
-      get :show, :search, :new, :live_search
-    end                                                                         
-  end
+  ########## Projects #####################
+  match 'projects' => 'projects#index'
+  match 'create_new_project' => 'projects#new'
+  match 'projects_search' => 'projects#search'
+  post "projects/create"
+  match 'project_details/:id' => 'projects#show', :as => :project_details
+  # This route can be invoked with project_details_url(:id => project.id)
+  ########## Projects end #####################
 
-  resources :donors do                                                          
-    member do                                                                   
-      get :remote, :action => :show                                  
-    end                                                                         
-                                                                                
-    collection do                                                               
-      post :show, :search, :create
-      get :show, :search, :new, :live_search
-    end                                                                         
-  end
-
-  resources :assets do                                                          
-    member do                                                                   
-      get :remote, :action => :show                                  
-    end                                                                         
-                                                                                
-    collection do                                                               
-      post :show, :search, :create
-      get :show, :search, :new, :live_search
-    end                                                                         
-  end
-
-
-  resources :user do                                                          
-    member do                                                                   
-      get :remote, :action => :login                                    
-    end                                                                         
-                                                                                
-    collection do                                                               
-      post :login
-      get :login, :logout
-    end                                                                         
-  end
-
-  resources :home do                                                          
-    member do                                                                   
-      get :remote, :action => :index                                     
-    end                                                                         
-                                                                                
-    collection do                                                               
-      post :index
-      get :index
-    end                                                                         
-  end
-
-
+  
+  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

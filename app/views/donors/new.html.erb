@@ -18,69 +18,10 @@ function submitForm() {
 }                                                                               
                                                                                 
 function validateForm(){                                                        
-    asset_name = document.getElementById('asset_name');                      
-    serial_num = document.getElementById('asset_serial_num');                        
-    model = document.getElementById('asset_model');                            
-    asset_category = document.getElementById('asset_category');                               
-    asset_manufacturer = document.getElementById('asset_manufacturer');                          
+    asset_name = document.getElementById('donor_name');                      
 
-    work_project = document.getElementById('work_project');                             
-    work_donor = document.getElementById('work_donor');                             
-                                                                                
-    vendor_supplier = document.getElementById('vendor_supplier');                      
-    vendor_invoice_num = document.getElementById('vendor_invoice_num');                        
-    vendor_date_of_invoice = document.getElementById('vendor_date_of_invoice');                            
-    vendor_quantity = document.getElementById('vendor_quantity');                               
-    vendor_cost = document.getElementById('vendor_cost');    
-                      
-    org_receipt_date = document.getElementById('organisation_receipt_date');                             
-    org_delivered_by = document.getElementById('organisation_delivered_by');                             
-    org_delivery_status = document.getElementById('organisation_delivery_status');                             
-
-    if(asset_name.value == '') {                                                     
-      alert("Please enter asset name ...");                                     
-      return false;                                                             
-    }else if(serial_num.value == '') {                                               
-      alert("Please enter asset serial number ...");                                       
-      return false;                                                             
-    }else if(model.value == '') {                                         
-      alert("Please enter asset model ...");                                           
-      return false;                                                             
-    }else if(asset_category.value == 'Select asset category') {                                                 
-      alert("Please select asset category ...");                                      
-      return false;                                                             
-    }else if(asset_manufacturer.value == 'Select manufacturer') {                                                 
-      alert("Please select asset manufacturer ...");                                      
-      return false;                                                             
-    }else if(work_project.value == 'Select project') {                                                 
-      alert("Please select project ...");                                      
-      return false;                                                             
-    }else if(work_donor.value == 'Select donor') {                                                 
-      alert("Please select donor ...");                                      
-      return false;                                                             
-    }else if(vendor_supplier.value == '') {                                                 
-      alert("Please enter supplier's name ...");                                      
-      return false;                                                             
-    }else if(vendor_invoice_num.value == '') {                                                 
-      alert("Please enter invoice number ...");                                      
-      return false;                                                             
-    }else if(vendor_date_of_invoice.value == '') {                                                 
-      alert("Please enter invoice date ...");                                      
-      return false;                                                             
-    }else if(vendor_quantity.value == '') {                                                 
-      alert("Please enter quantity ...");                                      
-      return false;                                                             
-    }else if(vendor_cost.value == '') {                                                 
-      alert("Please enter cost ...");                                      
-      return false;                                                             
-    }else if(org_receipt_date.value == '') {                                                 
-      alert("Please enter receipt date ...");                                      
-      return false;                                                             
-    }else if(org_delivered_by.value == '') {                                                 
-      alert("Please enter the name of delivery person ...");                                      
-      return false;                                                             
-    }else if(org_delivery_status.value == 'Select delivery status') {                                                 
-      alert("Please select delivery status ...");                                      
+    if(donor_name.value == '') {                                                     
+      alert("Please enter donor name ...");                                     
       return false;                                                             
     }                                                                           
   return true;                                                                  
@@ -96,6 +37,13 @@ function validateForm(){
 
 <siection id='modals'>                                              
   <div class="content-details">
+  <div>
+    <%if flash[:notice]%>                                                           
+      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
+    <%elsif flash[:error]%>
+      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
+    <%end%>
+  </div>
   <%= form_tag :action => 'create', :method => :post  do %>
 
   <table class="asset-details">                                              
@@ -104,13 +52,16 @@ function validateForm(){
       <td>&nbsp;</td>                                                           
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :name, :placeholder => "Name") %> </td>
+      <td><%=text_field(:donor, :name, :placeholder => "Name") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:donor, :abv, :placeholder => "Abbreviation") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_area_tag("asset[description]", nil, :placeholder => "Description") %></td>
+      <td><%=text_area_tag("donor[description]", nil, :placeholder => "Description") %></td>
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
