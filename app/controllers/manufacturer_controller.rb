@@ -2,6 +2,27 @@ class ManufacturerController < ApplicationController
   before_filter :check_authorized
   
   def show
+    @manufacturer = Manufacturer.find(params[:id])
+  end
+
+  def edit
+    @manufacturer = Manufacturer.find(params[:id])
+    if request.post?
+      @manufacturer.name = params[:manufacturer]['name']
+      unless params[:manufacturer]['description'].blank?
+        @manufacturer.description = params[:manufacturer]['description'] 
+      end
+      @manufacturer.save
+      redirect_to manufacturer_details_url(:id => @manufacturer.id)
+    end
+  end
+
+  def delete
+    @manufacturer = Manufacturer.find(params[:id])
+    @manufacturer.voided = true
+    @manufacturer.void_reason = 'Removed by user'
+    @manufacturer.save
+    redirect_to '/manufacturers_search'
   end
 
   def create
@@ -21,10 +42,6 @@ class ManufacturerController < ApplicationController
 
   def search 
     @manufacturers = Manufacturer.order('Name ASC')
-  end
-
-  def show
-    @manufacturer = Manufacturer.find(params[:id])
   end
 
   private

@@ -10,14 +10,10 @@ XInventory::Application.routes.draw do
   match 'create_new_donor' => 'donors#new'
   match 'donor_search' => 'donors#search'
   post "donors/create"
-  #match 'donor_details' => 'donors#search'
   match 'donors_details/:id' => 'donors#show', :as => :donor_details
-
   match 'edit_donor_details/:id' => 'donors#edit_donor_details', :as => :edit_donor_details
   post "donors/edit_donor_details"
   match 'delete_donor/:id' => 'donors#delete', :as => :delete_donor
-
-  # This route can be invoked with donor_details_url(:id => donor.id)
   ########## Donors end #####################
 
   ########## Projects #####################
@@ -26,8 +22,6 @@ XInventory::Application.routes.draw do
   match 'projects_search' => 'projects#search'
   post "projects/create"
   match 'project_details/:id' => 'projects#show', :as => :project_details
-  # This route can be invoked with project_details_url(:id => project.id)
-
   post "projects/edit_project_details"
   match 'edit_project_details/:id' => 'projects#edit_project_details', :as => :edit_project_details
   match 'delete_project/:id' => 'projects#delete', :as => :delete_project
@@ -39,7 +33,6 @@ XInventory::Application.routes.draw do
   match 'supplier_search' => 'suppliers#search'
   post "suppliers/create"
   match 'supplier_details/:id' => 'suppliers#show', :as => :supplier_details
-
   match 'edit_supplier_details/:id' => 'suppliers#edit', :as => :edit_supplier_details
   post "suppliers/edit"
   match 'delete_supplier/:id' => 'suppliers#delete', :as => :delete_supplier
@@ -51,7 +44,9 @@ XInventory::Application.routes.draw do
   match 'manufacturers_search' => 'manufacturer#search'
   post "manufacturer/create"
   match 'manufacturer_details/:id' => 'manufacturer#show', :as => :manufacturer_details
-  # This route can be invoked with supplier_details_url(:id => manufacturer.id)
+  post "manufacturer/edit"
+  match 'edit_manufacturer_details/:id' => 'manufacturer#edit', :as => :edit_manufacturer_details
+  match 'delete_manufacturer/:id' => 'manufacturer#delete', :as => :delete_manufacturer
   ########## Projects end #####################
 
   ########## Assets #####################
@@ -69,13 +64,9 @@ XInventory::Application.routes.draw do
   post "assets/update"
   match 'delete_asset/:id' => 'assets#delete', :as => :delete_asset
   match 'asset_details/:id' => 'assets#show', :as => :asset_details
-
-
   match 'edit_asset_category/:id' => 'assets#show_asset_category', :as => :edit_asset_category
   post "assets/show_asset_category"
   match 'delete_asset_category/:id' => 'assets#delete_asset_category', :as => :delete_asset_category
-
-
   match 'edit_asset_state/:id' => 'assets#edit_asset_state', :as => :edit_asset_state
   match 'delete_asset_state/:id' => 'assets#delete_asset_state', :as => :delete_asset_state
   post "assets/edit_asset_state"
