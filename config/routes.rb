@@ -5,6 +5,12 @@ XInventory::Application.routes.draw do
   get "user/logout"
   post "user/login"
 
+
+  ########## dispatch_receive start #####################
+  match 'dispatch_receive' => 'dispatch_receive#index'
+
+  ########## dispatch_receive end #####################
+
   ########## Donors #####################
   match 'donors' => 'donors#index'
   match 'create_new_donor' => 'donors#new'

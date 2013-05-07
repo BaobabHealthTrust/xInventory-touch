@@ -29,6 +29,13 @@
                 <li><a href="/donors">donor</a></li>
                 <li><a href="/suppliers">suppliers</a></li>
                 <li><a href="/manufacturers">manufacturer</a></li>
+                <li><a href="/dispatch_receive" id="dispatch_receive">dispatch/receive </a></li>
+                <%unless admin?%>
+                  <script>
+                    document.getElementById("dispatch_receive").href = '#';
+                    document.getElementById("dispatch_receive").style.color = "grey"
+                  </script>
+                <%end%>
                 <li><a href="/reports">reports</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
