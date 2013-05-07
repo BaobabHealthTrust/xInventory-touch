@@ -51,30 +51,22 @@
   <thead>                                                                       
   <tr id = 'table_head'>                                                        
     <th id="th1" style="width:200px;">Serial number</th>                           
-    <th id="th2" style="width:200px;">Invoice number</th>                           
     <th id="th3" style="width:200px;">Name</th>                           
     <th id="th4" style="width:200px;">Category</th>                            
     <th id="th5" style="width:200px;">Brand</th>                          
-    <th id="th6" style="width:85px;">Project</th>                                   
-    <th id="th7" style="width:150px;">Donor</th>                                  
     <th id="th8" style="width:150px;">Quantity</th>                                  
-    <th id="th9" style="width:150px;">Status</th>                                  
     <th id="th10" style="width:100px;">&nbsp;</th>                               
   </tr>                                                                         
   </thead>                                                                      
   <tbody id='results'>                                                          
-    <%(@assets || []).each do |asset| %>                                    
+    <%(@assets || []).each do |asset_id,asset| %>                                    
     <tr>                                                                        
-      <td><%=asset.try(:id)%></td>                                            
-      <td><%=asset.try(:name)%></td>                                    
-      <td><%=asset.try(:name)%></td>                                    
-      <td><%=asset.try(:name)%></td>                                    
-      <td><%=asset.try(:name)%></td>                                    
-      <td><%=asset.try(:name)%></td>                                    
-      <td><%=asset.try(:name)%></td>                                    
-      <td><%=asset.try(:name)%></td>                                    
-      <td><%=asset.try(:name)%></td>                                    
-      <td><a href="/assets/show?id=<%=asset.try(:id)%>">Show</a></td>       
+      <td><%=asset[:serial_number]%></td>                                            
+      <td><%=asset[:name]%></td>                                    
+      <td><%=asset[:category]%></td>                                    
+      <td><%=asset[:brand]%></td>                                    
+      <td><%=asset[:quantity]%></td>                                    
+      <td><a href="<%=asset_details_url(:id => asset_id)%>">Show</a></td>       
     </tr>                                                                       
     <%end%>                                                                     
   </tbody>                                                                      

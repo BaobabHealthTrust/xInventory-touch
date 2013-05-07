@@ -1,19 +1,137 @@
 <style>
-  .buttons {                                                                    
-    width: 100% !important;                                                    
-  }                                                                              
+
+  .buttons {
+    width: 400px !important;
+  }
+
+  .sidebar-nav {
+    font-size: 12px;
+    padding-bottom: 40px;
+  }
+
+  .demographics {
+    width: 99%;
+  }
+
+  .demographics td , th{
+    text-align: left;
+  }
+
+  #sub-content-view {
+    background-color: #FFFFDD;
+    height: auto;
+    border: 1px dotted #696969;
+  }
+
+  #sub-content-view hr {
+    border-style: dotted;
+    border-width: 1px;
+    margin-left: 12px;
+    margin-right: 12px; 
+    background-color: black;
+  }
+
+
+  .demographics {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-family: Tahoma,Verdana,Arial;
+  font-size: 11px; 
+  width: 98%;
+  text-align: left;
+}
+
+.demographics th{
+  word-wrap: break-word;
+  vertical-align: top;
+  color: #404040;
+}
+
+.demographics td{
+  vertical-align: top;
+}
+
+.xool_information {                                                           
+  font-size: 11px;                                                              
+  margin-left: 12px;                                                            
+  margin-right: 12px;                                                           
+}
 </style>
 
-<div class="page-header">
-  <h1>assets <small>....</small></h1>
-</div>
+  <%(@asset || {}).each do |asset_id,asset|%>
 
-<section id='modals'>                                              
-  <p>                                                                           
-    <%= link_to "Find asset(s)", '/assets/search', :class => 'btn btn-primary btn-large buttons' %>
-  </p>                                                                          
-                                                                                
-  <p>                                                                           
-    <%= link_to "Register an asset", '/assets/new', :class => 'btn btn-primary btn-large buttons' %>
-  </p>
-</section> 
+  <div class="page-header">                                                       
+    <h1>asset <small>details</small></h1>                                         
+  </div> 
+
+  <div class="well sidebar-nav">
+
+    <div id = "sub-content-view">
+
+    <table class = "demographics">
+      <tr>
+        <th>Name:&nbsp;</th>
+        <td>
+          <%= asset[:name] %>&nbsp;
+          <%= asset[:category] %>
+        </td>
+        <th>Version:&nbsp;</th><td><%=asset[:version]%></td>
+      </tr>
+        <th>Model:&nbsp;</td><td><%=asset[:model]%></td>
+        <!--th>Occupation:&nbsp;</th><td><%#=''%></td-->
+      </tr>
+      <tr>
+        <th>Project:&nbsp;</th><td><%=asset[:project]%></td>
+        <th>Donor:&nbsp;</th><td><%=asset[:donor]%></td>
+      </tr>
+      <tr>
+        <th>Supplier:&nbsp;</th><td><%=asset[:supplier]%></td>
+        <th>Receipt date:&nbsp;</th><td><%=asset[:date_of_receipt]%></td>
+      </tr>
+    </table>
+
+    <hr />
+
+    <table class="xool_information">
+      <tr>
+        <td style="font-weight:bold;">Order/Invoice number:&nbsp;</td><td><%=asset[:order_number]%></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Purchased date&nbsp;</td><td><%=asset[:purchased_date]%></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Cost:&nbsp;</td><td><%=asset[:cost]%></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Quantity:&nbsp;</td><td><%=asset[:quantity]%></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Delivered by:&nbsp;</td><td><%=asset[:delivered_by]%></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Status on delivery&nbsp;</td><td><%=asset[:status_on_delivery]%></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Location&nbsp;</td><td><%=asset[:location]%></td>
+      </tr>                     
+    </table>                                                                     
+
+
+  </div>
+  
+  <div style="padding-top:10px;float:right;">
+    <table>
+      <tr><%if admin? %>                                                          
+        <td><a href="/programs/select_program_to_enroll?student_id=<%=asset_id%>">Edit</a>&nbsp;&nbsp;</td>
+        <td><a href="#">Delete</a>&nbsp;&nbsp;</td>                               
+        <%end%>                                                                   
+        <td><a href="javascript:history.go(-1);">Back</a></td>                    
+      </tr> 
+    </table>
+  </div>
+
+
+
+  </div>
+
+  <%end%>
