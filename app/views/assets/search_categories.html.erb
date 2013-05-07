@@ -1,2 +1,77 @@
-<h1>Assets#search_categories</h1>
-<p>Find me in app/views/assets/search_categories.html.erb</p>
+<%=javascript_include_tag "prototype"%>                                         
+<%=javascript_include_tag "jquery_data_table" %>                                
+<%=javascript_include_tag "jquery.dataTables.min" %>                            
+                                                                                
+<%= stylesheet_link_tag "demo_table" %>                                         
+<%= stylesheet_link_tag "demo_table_jui" %>                                     
+<%= stylesheet_link_tag "demo_page" %>
+
+<style>
+                                                                                
+</style>
+
+<script>
+
+  function dataT(){                                                               
+    $('#search_results').dataTable();                                                  
+  }
+
+  function findStudents() {                                                       
+    var search_str = document.getElementById('search_words').value;               
+                                                                                
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results == 'undefined' || results == '' || results == '"not validate"') {                           
+            return;                                                               
+          }else{                                                                  
+            document.getElementById('results-cont').innerHTML = results;                                                           
+            dataT();                                                              
+          }                                                                       
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/assets/live_search?search_str="+search_str,true);           
+      xmlhttp.send();                                                             
+    } 
+ 
+</script>
+
+
+<div class="page-header">
+  <h1>asset category <small>search</small></h1>
+</div>
+
+<section id='modals'>                                              
+  <table id="search_results" class="table table-striped table-bordered table-condensed">
+  <thead>                                                                       
+  <tr id = 'table_head'>                                                        
+    <th id="th1" style="width:45%;">Name</th>                           
+    <th id="th2" style="width:10%;">Abbreviation</th>                           
+    <th id="th2" style="width:45%;">Description</th>                           
+    <th id="th10" style="width:5%;">&nbsp;</th>                               
+    <th id="th10" style="width:5%;">&nbsp;</th>                               
+  </tr>                                                                         
+  </thead>                                                                      
+  <tbody id='results'>                                                          
+    <%(@categories || []).each do |category| %>                                    
+    <tr>                                                                        
+      <td><%=category.try(:name)%></td>                                            
+      <td><%=category.try(:abbreviation)%></td>                                            
+      <td><%=render(:inline => print_content(category.try(:description)))%></td>                                    
+      <td><a href="<%=edit_asset_category_url(:id => category.try(:id))%>">Edit</a></td>       
+      <td><a href="<%=delete_asset_category_url(:id => category.try(:id))%>">Delete</a></td>       
+    </tr>                                                                       
+    <%end%>                                                                     
+  </tbody>                                                                      
+  </table>
+</section> 
+
+
+<script>                                                                        
+  dataT();                                                                      
+</script>

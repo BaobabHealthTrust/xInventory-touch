@@ -56,9 +56,17 @@ XInventory::Application.routes.draw do
   match 'edit_asset/:id' => 'assets#edit', :as => :edit_asset
   post "assets/update"
   match 'delete_asset/:id' => 'assets#delete', :as => :delete_asset
-
   match 'asset_details/:id' => 'assets#show', :as => :asset_details
-  # This route can be invoked with asset_details_url(:id => asset.id)
+
+
+  match 'edit_asset_category/:id' => 'assets#show_asset_category', :as => :edit_asset_category
+  post "assets/show_asset_category"
+  match 'delete_asset_category/:id' => 'assets#delete_asset_category', :as => :delete_asset_category
+
+
+  match 'edit_asset_state/:id' => 'assets#edit_asset_state', :as => :edit_asset_state
+  match 'delete_asset_state/:id' => 'assets#delete_asset_state', :as => :delete_asset_state
+  post "assets/edit_asset_state"
   ########## Donors end #####################
 
   

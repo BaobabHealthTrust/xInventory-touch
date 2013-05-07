@@ -1,0 +1,85 @@
+<%#= javascript_include_tag "bootstrap-datepicker" %>
+<%#= stylesheet_link_tag "datepicker" %>
+
+<style>
+  .content-details { text-align: center; }                                                                          
+
+  .asset-details { width: 100%; }                                                                          
+
+</style>
+
+
+<script>
+
+function submitForm() {                                                         
+  if(validateForm())                                                            
+    document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+}                                                                               
+                                                                                
+function validateForm(){                                                        
+    category_name = document.getElementById('category_name');                      
+
+    if(category_name.value == '') {                                                     
+      alert("Please enter category name ...");                                     
+      return false;                                                             
+    }                                                                           
+  return true;                                                                  
+}  
+
+</script>
+
+
+
+<div class="page-header">
+  <h1>asset <small>edit asset category</small></h1>
+</div>
+
+<siection id='modals'>                                              
+  <div class="content-details">
+  <div>                                                                         
+    <%if flash[:notice]%>                                                       
+      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
+    <%elsif flash[:error]%>                                                     
+      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
+    <%end%>                                                                     
+  </div>
+  <%= form_tag :action => 'show_asset_category', :method => :post  do %>
+
+  <table class="asset-details">                                              
+  <tbody>                                                                       
+    <tr>                                                                        
+      <td>&nbsp;</td>                                                           
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:category, :name, :placeholder => "Name",:value => @category.name) %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:category, :abv, :placeholder => "Abbreviation",:value => @category.abbreviation) %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_area_tag("category[description]", nil, :placeholder => "Description",
+        :value => render(:inline => print_content(about_organization)) ) %></td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <input onclick="submitForm();" type="button" id="signup" 
+          class="btn btn-primary signup_btn" value="Update" style="width:100%;" />
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+  </tbody>                                                                      
+ </table>
+ <input type='hidden' name='id' value="<%=params[:id]%>" /> 
+ <%end%>
+</div>                                                      
+</section> 
+

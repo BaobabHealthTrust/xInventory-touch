@@ -183,9 +183,60 @@ class AssetsController < ApplicationController
   end
 
   def delete
-    Item.delete(params[:id])
+    asset = Item.find(params[:id])
+    asset.voided = true
+    asset.void_reason = 'removed by user'
+    asset.save
     redirect_to '/asset_search'
   end
+
+  def search_categories
+    @categories = Category.order('name DESC')
+  end
+
+  def show_asset_category
+    @category = Category.find(params[:id])
+    if request.post?
+      @category.name = params[:category]['name']                                         
+      @category.abbreviation = params[:category]['abv'] unless params[:category]['abv'].blank?
+      @category.description = params[:category]['description'] unless params[:category]['description'].blank?
+      @category.save
+      redirect_to '/asset_categories' and return
+    end
+  end
+
+  def delete_asset_category
+    @category = Category.find(params[:id])
+    @category.voided = true
+    @category.void_reason = 'removed by user'
+    @category.save
+    redirect_to '/asset_categories' 
+  end
+
+  def states_search
+    @states = StateType.order('name DESC')
+  end
+
+  def edit_asset_state
+    @state = StateType.find(params[:id])                                                    
+    if request.post?
+      @state.name = params[:state]['name']                                         
+      @state.description = params[:state]['description'] unless params[:state]['description'].blank?
+      @state.save
+      redirect_to '/asset_states_search' 
+    end
+  end
+
+  def delete_asset_state
+    state = StateType.find(params[:id])
+    state.voided = true
+    state.void_reason = 'removed by user'
+    state.save
+    redirect_to '/asset_states_search' 
+  end
+
+
+
 
 
   private                                                                       
