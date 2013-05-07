@@ -95,15 +95,15 @@
     </p>
   </div>
   
-  <div style="padding-top:10px;float:right;">
-    <table>
-    <tr>
-      <td><a href="/programs/select_program_to_enroll?student_id=<%=@supplier.id%>">Enroll into a program</a>&nbsp;&nbsp;</td>
-      <td><a href="#">Remove from program</a>&nbsp;&nbsp;</td>
-      <td><a href="#">Edit demographics</a>&nbsp;&nbsp;</td>
-      <td><a href="#">Void</a></td>
-    </tr>
-    </table>
+   <div style="padding-top:10px;float:right;">                                   
+    <table>                                                                     
+      <tr><%if admin? %>                                                        
+        <td><a href="<%=edit_supplier_details_url(:id => @supplier.id)%>">Edit</a>&nbsp;&nbsp;</td>
+        <td><a href="<%=delete_supplier_url(:id => @supplier.id)%>">Delete</a>&nbsp;&nbsp;</td>
+        <%end%>                                                                 
+        <td><a href="/asset_search">Back</a></td>                               
+      </tr>                                                                     
+    </table>                                                                    
   </div>
 
 </section> 

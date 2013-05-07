@@ -39,8 +39,11 @@ XInventory::Application.routes.draw do
   match 'supplier_search' => 'suppliers#search'
   post "suppliers/create"
   match 'supplier_details/:id' => 'suppliers#show', :as => :supplier_details
-  # This route can be invoked with supplier_details_url(:id => supplier.id)
-  ########## Projects end #####################
+
+  match 'edit_supplier_details/:id' => 'suppliers#edit', :as => :edit_supplier_details
+  post "suppliers/edit"
+  match 'delete_supplier/:id' => 'suppliers#delete', :as => :delete_supplier
+  ########## Suppliers end #####################
 
   ########## Manufacturers #####################
   match 'manufacturers' => 'manufacturer#index'

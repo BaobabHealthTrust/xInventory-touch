@@ -1,0 +1,92 @@
+<%#= javascript_include_tag "bootstrap-datepicker" %>
+<%#= stylesheet_link_tag "datepicker" %>
+
+<style>
+  .content-details { text-align: center; }                                                                          
+
+  .asset-details { width: 100%; }                                                                          
+
+</style>
+
+
+<script>
+
+function submitForm() {                                                         
+  if(validateForm())                                                            
+    document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+}                                                                               
+                                                                                
+function validateForm(){                                                        
+    supplier_name = document.getElementById('supplier_name');                      
+
+    if(supplier_name.value == '') {                                                     
+      alert("Please enter project name ...");                                     
+      return false;                                                             
+    }                                                                           
+  return true;                                                                  
+}  
+
+</script>
+
+
+
+<div class="page-header">
+  <h1>supplier <small>edit supplier's details</small></h1>
+</div>
+
+<siection id='modals'>                                              
+  <div class="content-details">
+  <div>                                                                         
+    <%if flash[:notice]%>                                                       
+      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
+    <%elsif flash[:error]%>                                                     
+      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
+    <%end%>                                                                     
+  </div>
+  <%= form_tag :action => 'edit', :method => :post  do %>
+
+  <table class="asset-details">                                              
+  <tbody>                                                                       
+    <tr>                                                                        
+      <td>&nbsp;</td>                                                           
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:supplier, :name, :placeholder => "Name",:value => @supplier.name) %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:supplier, :phone_num, :placeholder => "Phone number",:value => @supplier.phone_number) %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                               
+    <tr>                                                                        
+      <td><%=text_area_tag("supplier[address]",@supplier.address, 
+        :placeholder => "Postal address")%></td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_area_tag("supplier[description]",@supplier.description, 
+        :placeholder => "Description") %></td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <input onclick="submitForm();" type="button" id="signup" 
+          class="btn btn-primary signup_btn" value="Update" style="width:100%;" />
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+  </tbody>                                                                      
+ </table>
+                      
+ <%end%>
+</div>                                                      
+</section> 
+
