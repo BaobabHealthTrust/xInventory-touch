@@ -18,17 +18,21 @@
   }
 
   #sub-content-view {
-    background-color: #FFFFDD;
+    background: none repeat scroll 0 0 rgb(255, 235, 144);
     height: auto;
     border: 1px dotted #696969;
   }
 
   #sub-content-view hr {
-    border-style: dotted;
-    border-width: 1px;
     margin-left: 12px;
     margin-right: 12px; 
-    background-color: black;
+    -moz-box-sizing: border-box;
+    -moz-float-edge: margin-box;
+    border: 1px inset;
+    color: gray;
+    display: block;
+    height: 2px;
+    /*margin: 0.5em auto;*/
   }
 
 
@@ -58,8 +62,6 @@
 }
 </style>
 
-  <%(@asset || {}).each do |asset_id,asset|%>
-
   <div class="page-header">                                                       
     <h1>asset <small>details</small></h1>                                         
   </div> 
@@ -72,21 +74,21 @@
       <tr>
         <th>Name:&nbsp;</th>
         <td>
-          <%= asset[:name] %>&nbsp;
-          <%= asset[:category] %>
+          <%= @asset[:name] %>&nbsp;
+          <%= @asset[:category] %>
         </td>
-        <th>Version:&nbsp;</th><td><%=asset[:version]%></td>
+        <th>Version:&nbsp;</th><td><%=@asset[:version]%></td>
       </tr>
-        <th>Model:&nbsp;</td><td><%=asset[:model]%></td>
-        <th>Serial number:&nbsp;</th><td><%=asset[:serial_number]%></td>
-      </tr>
-      <tr>
-        <th>Project:&nbsp;</th><td><%=asset[:project]%></td>
-        <th>Donor:&nbsp;</th><td><%=asset[:donor]%></td>
+        <th>Model:&nbsp;</td><td><%=@asset[:model]%></td>
+        <th>Serial number:&nbsp;</th><td><%=@asset[:serial_number]%></td>
       </tr>
       <tr>
-        <th>Supplier:&nbsp;</th><td><%=asset[:supplier]%></td>
-        <th>Receipt date:&nbsp;</th><td><%=asset[:date_of_receipt]%></td>
+        <th>Project:&nbsp;</th><td><%=@asset[:project]%></td>
+        <th>Donor:&nbsp;</th><td><%=@asset[:donor]%></td>
+      </tr>
+      <tr>
+        <th>Supplier:&nbsp;</th><td><%=@asset[:supplier]%></td>
+        <th>Receipt date:&nbsp;</th><td><%=@asset[:date_of_receipt]%></td>
       </tr>
     </table>
 
@@ -94,25 +96,25 @@
 
     <table class="xool_information">
       <tr>
-        <td style="font-weight:bold;">Order/Invoice number:&nbsp;</td><td><%=asset[:order_number]%></td>
+        <td style="font-weight:bold;">Order/Invoice number:&nbsp;</td><td><%=@asset[:order_number]%></td>
       </tr>                     
       <tr>
-        <td style="font-weight:bold;">Purchased date&nbsp;</td><td><%=asset[:purchased_date]%></td>
+        <td style="font-weight:bold;">Purchased date&nbsp;</td><td><%=@asset[:purchased_date]%></td>
       </tr>                     
       <tr>
-        <td style="font-weight:bold;">Cost:&nbsp;</td><td><%=asset[:cost]%></td>
+        <td style="font-weight:bold;">Cost:&nbsp;</td><td><%=@asset[:cost]%></td>
       </tr>                     
       <tr>
-        <td style="font-weight:bold;">Quantity:&nbsp;</td><td><%=asset[:quantity]%></td>
+        <td style="font-weight:bold;">Quantity:&nbsp;</td><td><%=@asset[:quantity]%></td>
       </tr>                     
       <tr>
-        <td style="font-weight:bold;">Delivered by:&nbsp;</td><td><%=asset[:delivered_by]%></td>
+        <td style="font-weight:bold;">Delivered by:&nbsp;</td><td><%=@asset[:delivered_by]%></td>
       </tr>                     
       <tr>
-        <td style="font-weight:bold;">Status on delivery&nbsp;</td><td><%=asset[:status_on_delivery]%></td>
+        <td style="font-weight:bold;">Status on delivery&nbsp;</td><td><%=@asset[:status_on_delivery]%></td>
       </tr>                     
       <tr>
-        <td style="font-weight:bold;">Location&nbsp;</td><td><%=asset[:location]%></td>
+        <td style="font-weight:bold;">Location&nbsp;</td><td><%=@asset[:location]%></td>
       </tr>                     
     </table>                                                                     
 
@@ -122,10 +124,10 @@
   <div style="padding-top:10px;float:right;">
     <table>
       <tr><%if admin? %>                                                          
-        <td><a href="/programs/select_program_to_enroll?student_id=<%=asset_id%>">Edit</a>&nbsp;&nbsp;</td>
-        <td><a href="#">Delete</a>&nbsp;&nbsp;</td>                               
+        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Edit</a>&nbsp;&nbsp;</td>
+        <td><a href="<%=delete_asset_url(:id => @asset[:asset_id])%>">Delete</a>&nbsp;&nbsp;</td>                               
         <%end%>                                                                   
-        <td><a href="javascript:history.go(-1);">Back</a></td>                    
+        <td><a href="/asset_search">Back</a></td>                    
       </tr> 
     </table>
   </div>
@@ -133,5 +135,3 @@
 
 
   </div>
-
-  <%end%>

@@ -2,27 +2,7 @@ class AssetsController < ApplicationController
   before_filter :check_authorized
 
   def show
-    asset = Item.find(params[:id])
-    @asset = {}
-    @asset[asset.id] = {
-      :name => asset.name,
-      :category => Category.find(asset.category_type).name,
-      :brand => Manufacturer.find(asset.brand).name,
-      :version => asset.version,
-      :model => asset.model,
-      :serial_number => asset.serial_number,
-      :supplier => Supplier.find(asset.vendor).name,
-      :project => Project.find(asset.project_id).name,
-      :donor => Donor.find(asset.donor_id).name,
-      :purchased_date => asset.purchased_date.strftime('%d %B %Y'),
-      :order_number => asset.order_number,
-      :quantity => asset.quantity,
-      :cost => asset.cost,
-      :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),
-      :delivered_by => asset.delivered_by,
-      :status_on_delivery => StateType.find(asset.status_on_delivery).name,
-      :location => Site.find(asset.location).name
-    }
+    @asset = get_asset(params[:id])
   end
 
   def search
@@ -141,6 +121,71 @@ class AssetsController < ApplicationController
     redirect_to '/create_new_state'
   end
 
+  def edit
+    @asset = get_asset(params[:id])
+    @categories = Category.order('name ASC').collect do |category|
+      [category.name , category.id]
+    end
+
+    @manufacturers = Manufacturer.order('name ASC').collect do |manu|
+      [manu.name , manu.id]
+    end
+
+    @projects = Project.order('name ASC').collect do |project|
+      [project.name , project.id]
+    end
+
+    @donors = Donor.order('name ASC').collect do |donor|
+      [donor.name , donor.id]
+    end
+
+    @status = StateType.order('name ASC').collect do |state|
+      [state.name , state.id]
+    end
+
+    @suppliers = Supplier.order('name ASC').collect do |supplier|
+      [supplier.name , supplier.id]
+    end
+
+    @location = Site.order('name ASC').collect do |site|
+      [site.name , site.id]
+    end
+
+  end
+
+  def update
+    Item.transaction do
+      item = Item.find(params[:id])
+      item.name = params[:asset]['name']
+      item.category_type = params[:asset]['category']
+      item.brand = params[:asset]['manufacturer']
+      item.version = params[:asset]['version']
+      item.serial_number = params[:asset]['serial_num']
+      item.vendor = params[:vendor]['supplier']
+      item.model = params[:asset]['model']
+      item.project_id = params[:work]['project']
+      item.donor_id = params[:work]['donor']
+      item.purchased_date = params[:vendor]['date_of_invoice'].to_date
+      item.order_number = params[:vendor]['invoice_num']
+      item.quantity = params[:vendor]['quantity']
+      item.cost = params[:vendor]['cost']
+      item.date_of_receipt = params[:organisation]['receipt_date'].to_date
+      item.delivered_by = params[:organisation]['delivered_by']
+      item.status_on_delivery = params[:organisation]['delivery_status']
+      item.location = params[:organisation]['location']
+      if item.save 
+        flash[:notice] = 'Successfully updated.'                                  
+      else                                                                        
+        flash[:error] = 'Something went wrong - did not create.'                  
+      end
+    end
+    redirect_to asset_details_url(:id => params[:id])
+  end
+
+  def delete
+    Item.delete(params[:id])
+    redirect_to '/asset_search'
+  end
 
 
   private                                                                       
@@ -153,6 +198,31 @@ class AssetsController < ApplicationController
         redirect_to '/assets'                                            
       end                                                                       
     end                                                                         
+  end
+
+  def get_asset(asset_id)
+    asset = Item.find(asset_id)
+    @asset = {}
+    @asset[asset.id] = {
+      :name => asset.name,
+      :category => Category.find(asset.category_type).name,
+      :brand => Manufacturer.find(asset.brand).name,
+      :version => asset.version,
+      :model => asset.model,
+      :serial_number => asset.serial_number,
+      :supplier => Supplier.find(asset.vendor).name,
+      :project => Project.find(asset.project_id).name,
+      :donor => Donor.find(asset.donor_id).name,
+      :purchased_date => asset.purchased_date.strftime('%d %B %Y'),
+      :order_number => asset.order_number,
+      :quantity => asset.quantity,
+      :cost => asset.cost,
+      :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),
+      :delivered_by => asset.delivered_by,
+      :status_on_delivery => StateType.find(asset.status_on_delivery).name,
+      :location => Site.find(asset.location).name , 
+      :asset_id => asset.id
+    }
   end
 
 end

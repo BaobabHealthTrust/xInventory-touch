@@ -53,6 +53,10 @@ XInventory::Application.routes.draw do
   post "assets/create_category"
   post "assets/create_state"
   post "assets/create"
+  match 'edit_asset/:id' => 'assets#edit', :as => :edit_asset
+  post "assets/update"
+  match 'delete_asset/:id' => 'assets#delete', :as => :delete_asset
+
   match 'asset_details/:id' => 'assets#show', :as => :asset_details
   # This route can be invoked with asset_details_url(:id => asset.id)
   ########## Donors end #####################
