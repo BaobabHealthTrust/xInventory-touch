@@ -12,6 +12,11 @@ XInventory::Application.routes.draw do
   post "donors/create"
   #match 'donor_details' => 'donors#search'
   match 'donors_details/:id' => 'donors#show', :as => :donor_details
+
+  match 'edit_donor_details/:id' => 'donors#edit_donor_details', :as => :edit_donor_details
+  post "donors/edit_donor_details"
+  match 'delete_donor/:id' => 'donors#delete', :as => :delete_donor
+
   # This route can be invoked with donor_details_url(:id => donor.id)
   ########## Donors end #####################
 
