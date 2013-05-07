@@ -22,6 +22,10 @@ XInventory::Application.routes.draw do
   post "projects/create"
   match 'project_details/:id' => 'projects#show', :as => :project_details
   # This route can be invoked with project_details_url(:id => project.id)
+
+  post "projects/edit_project_details"
+  match 'edit_project_details/:id' => 'projects#edit_project_details', :as => :edit_project_details
+  match 'delete_project/:id' => 'projects#delete', :as => :delete_project
   ########## Projects end #####################
 
   ########## Suppliers #####################

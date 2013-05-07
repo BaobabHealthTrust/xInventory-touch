@@ -2,7 +2,10 @@ class ProjectsController < ApplicationController
   before_filter :check_authorized
 
   def show
+    @project = Project.find(params[:id])
+    @donor = Donor.find(@project.donor)
   end
+
 
   def new
     @donors = ['Select donor', nil]
@@ -36,9 +39,31 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def show
+  def edit_project_details 
     @project = Project.find(params[:id])
+    if request.post?
+      @project.name = params[:project]['name']                                         
+      @project.donor = params[:project]['donor']
+      @project.description = params[:project]['description'] unless params[:project]['description'].blank?
+      @project.save
+      redirect_to "/project_details/#{@project.id}"
+    end
+
+    @donors = ['Select donor', nil]
+    Donor.order('name').each do |donor|
+      @donors << [donor.name,donor.id]
+    end
+    @donors = @donors.compact
   end
+  
+  def delete
+    project = Project.find(params[:id])
+    project.voided = true
+    project.void_reason = 'Removed by user'
+    project.save
+    redirect_to '/projects_search'
+  end
+
 
   private                                                                       
                                                                                 

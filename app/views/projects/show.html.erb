@@ -78,7 +78,7 @@
           <%= @project.name %>&nbsp;
           <%= @student.first_name rescue '' %>
         </td>
-        <th>ID number:&nbsp;</th><td><%=params[:id].rjust(5,'0')%></td>
+        <th>Donor:&nbsp;</th><td><%=@donor.name%></td>
       </tr>
         <th>Date registered:&nbsp;</th><td><%=@project.created_at.strftime('%A, %d %B %Y')%></td>
       </tr>
@@ -92,15 +92,15 @@
     </p>
   </div>
   
-  <div style="padding-top:10px;float:right;">
-    <table>
-    <tr>
-      <td><a href="/programs/select_program_to_enroll?student_id=<%=@project.id%>">Enroll into a program</a>&nbsp;&nbsp;</td>
-      <td><a href="#">Remove from program</a>&nbsp;&nbsp;</td>
-      <td><a href="#">Edit demographics</a>&nbsp;&nbsp;</td>
-      <td><a href="#">Void</a></td>
-    </tr>
-    </table>
+  <div style="padding-top:10px;float:right;">                                   
+    <table>                                                                     
+      <tr><%if admin? %>                                                        
+        <td><a href="<%=edit_project_details_url(:id => @project.id)%>">Edit</a>&nbsp;&nbsp;</td>
+        <td><a href="<%=delete_project_url(:id => @project.id)%>">Delete</a>&nbsp;&nbsp;</td>
+        <%end%>                                                                 
+        <td><a href="/asset_search">Back</a></td>                               
+      </tr>                                                                     
+    </table>                                                                    
   </div>
 
 </section> 
