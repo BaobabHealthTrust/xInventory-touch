@@ -62,10 +62,62 @@ class DispatchReceiveController < ApplicationController
   end
 
   def process_transfer
-    raise params.to_yaml
+    asset_ids = params[:assets_ids].split(',')
+    Transfer.transaction do
+      @transfer = Transfer.new()
+      @transfer.transfer_date = params[:transfer]['date']
+      @transfer.save
+      (asset_ids).each do |assets_id|
+        asset = Item.find(assets_id)
+        TransferTransations.transaction do
+          transfer_transaction = TransferTransations.new()
+          transfer_transaction.transfer_id = @transfer.id
+          transfer_transaction.asset_id = asset.id
+          transfer_transaction.from_project = asset.project_id
+          transfer_transaction.from_donor = asset.donor_id
+          transfer_transaction.from_location = asset.location
+          transfer_transaction.to_project = params[:transfer]['project']
+          transfer_transaction.to_donor = params[:transfer]['donor']
+          transfer_transaction.to_location = params[:transfer]['location']
+          transfer_transaction.save
+
+          #now we up the asset info to reflect the transfer
+          asset.project_id = params[:transfer]['project']
+          asset.donor_id = params[:transfer]['donor'] 
+          asset.location = params[:transfer]['location']
+          asset.save
+        end
+      end
+    end
+   
+   if @transfer                                                             
+     flash[:notice] = 'Successfully transfered.'                                
+     redirect_to transfer_results_url(:id => @transfer.id) 
+    else                                                                      
+      flash[:error] = 'Something went wrong - did not transfer.'                
+    end
+  end
+
+  def transfer_results
+    @results = get_transfer_results(params[:id])
   end
 
   private   
+
+  def get_transfer_results(transfer_id)
+    transfer = Transfer.find(transfer_id)
+    results = {}
+    (transfer.transfer_transactions || []).each do |trans|  
+      results[trans.id] = {
+        :name => Item.find(trans.asset_id).name,
+        :donor_from => Donor.find(trans.from_donor).name,
+        :project_from => Project.find(trans.from_project).name,
+        :donor_to => Donor.find(trans.to_donor).name,
+        :project_to => Project.find(trans.to_project).name,
+      }
+    end
+    return results 
+  end
 
   def get_assets_by_ids(asset_ids)                                                       
     assets = Item.where("id IN(?)",asset_ids)                                                 
