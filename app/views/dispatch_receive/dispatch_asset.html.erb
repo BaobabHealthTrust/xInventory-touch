@@ -1,0 +1,213 @@
+<style>
+  .dispatch_receive {
+    width: 98%;
+  }
+
+  .buttons {
+    width: 400px !important;
+  }
+
+  .sidebar-nav {
+    font-size: 12px;
+    padding-bottom: 40px;
+  }
+
+  .demographics {
+    width: 99%;
+  }
+
+  .demographics td , th{
+    text-align: left;
+  }
+
+  #sub-content-view {
+    background: none repeat scroll 0 0 rgb(255, 235, 144);
+    height: auto;
+    border: 1px dotted #696969;
+  }
+
+  #sub-content-view hr {
+    margin-left: 12px;
+    margin-right: 12px; 
+    -moz-box-sizing: border-box;
+    -moz-float-edge: margin-box;
+    border: 1px inset;
+    color: gray;
+    display: block;
+    height: 2px;
+    /*margin: 0.5em auto;*/
+  }
+
+
+  .demographics {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-family: Tahoma,Verdana,Arial;
+  font-size: 11px; 
+  width: 98%;
+  text-align: left;
+}
+
+.demographics th{
+  word-wrap: break-word;
+  vertical-align: top;
+  color: #404040;
+}
+
+.demographics td{
+  vertical-align: top;
+}
+
+.xool_information {                                                           
+  font-size: 11px;                                                              
+  margin-left: 12px;                                                            
+  margin-right: 12px;                                                           
+}
+</style>
+
+
+<script>
+
+  function submitForm() {                                                         
+    if(validateForm())                                                            
+      document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+  } 
+
+  function validateForm(){                                                        
+    dispatch_date = document.getElementById('dispatch_date');                         
+    quantity = document.getElementById('dispatch_quantity');                        
+    dispatch_status = document.getElementById('dispatch_status');                             
+    approved_by = document.getElementById('dispatch_approved_by');                            
+    collected_by = document.getElementById('dispatch_collected_by');                               
+    dispatch_location = document.getElementById('dispatch_location'); 
+
+    if(dispatch_date.value == ''){
+      alert('Please enter dispatch date');
+      return;
+    }else if(quantity.value == '') {
+      alert('Please enter dispatch quantity');
+      return;
+    }else if(dispatch_status.value == 'Select dispatch status') {
+      alert('Please select dispatched status');
+      return;
+    }else if(approved_by.value == '') {
+      alert('Who approved the dispatch');
+      return;
+    }else if(collected_by.value == '') {
+      alert('Please enter who collected the asset');
+      return;
+    }else if(dispatch_location.value == 'Select dispatch location') {
+      alert('Please enter where the asset is being dispatched to');
+      return;
+    }
+
+    return false;
+  }
+
+
+</script>
+
+
+  <div class="page-header">                                                       
+    <h1>asset <small>despatch</small></h1>                                         
+  </div> 
+
+  <div class="well sidebar-nav">
+
+    <div id = "sub-content-view">
+
+    <table class = "demographics">
+      <tr>
+        <th>Name:&nbsp;</th>
+        <td>
+          <%= @asset[:name] %>&nbsp;
+          <%= @asset[:category] %>
+        </td>
+        <th>Version:&nbsp;</th><td><%=@asset[:version]%></td>
+      </tr>
+        <th>Model:&nbsp;</td><td><%=@asset[:model]%></td>
+        <th>Serial number:&nbsp;</th><td><%=@asset[:serial_number]%></td>
+      </tr>
+      <tr>
+        <th>Project:&nbsp;</th><td><%=@asset[:project]%></td>
+        <th>Donor:&nbsp;</th><td><%=@asset[:donor]%></td>
+      </tr>
+      <tr>
+        <th>Supplier:&nbsp;</th><td><%=@asset[:supplier]%></td>
+        <th>Receipt date:&nbsp;</th><td><%=@asset[:date_of_receipt]%></td>
+      </tr>
+    </table>
+
+    <hr />
+
+    <%= form_tag :action => 'dispatch_asset', :method => :post  do %> 
+    <table class="xool_information dispatch_receive">
+      <tr>
+        <td style="font-weight:bold;">Dispatch date&nbsp;</td>
+        <td><%=text_field(:dispatch, :date, :placeholder => "Dispatch date") %></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Quantity:&nbsp;</td>
+        <td><%=text_field(:dispatch, :quantity, :placeholder => "Quantity") %></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Status:&nbsp;</td>
+        <td>
+           <%@status.unshift('Select dispatch status') %>                          
+           <%= select_tag "dispatch[status]", options_for_select(@status),
+             :placeholder => "Select dispatch status" %>
+        </td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Approved by:&nbsp;</td>
+        <td><%=text_field(:dispatch, :approved_by, :placeholder => "Approved by") %></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Collected by:&nbsp;</td>
+        <td><%=text_field(:dispatch, :collected_by, :placeholder => "Collected by") %></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Dispatch location:&nbsp;</td>
+        <td>
+          <%@location.unshift('Select dispatch location') %>                    
+          <%= select_tag "dispatch[location]", options_for_select(@location), 
+              :placeholder => "Select dispatch location" %>
+        </td>
+      </tr>                     
+      <tr>                     
+        <td colspan='2'><hr /></td>
+      </tr>                     
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <%=text_area("dispatch[reason]",nil,
+            :placeholder =>"Dispatch reason",:rows => 5,:cols => 5) %>
+        </td>
+      </tr>                     
+      <tr>                     
+        <td colspan='2'><hr /></td>
+      </tr>                     
+      <tr>                     
+        <td colspan="2">
+          <input onclick="submitForm();" type="button" id="signup"                
+            class="btn btn-primary signup_btn" value="Dispatch" style="width:100%;" />
+        </td>
+      </tr>                     
+    </table>                                                                     
+    <input type="hidden" name="id" value="<%=params[:id]%>" />
+    <%end%>
+
+  </div>
+  
+  <div style="padding-top:10px;float:right;">
+    <table>
+      <tr>
+        <td><a href="<%= assets_to_url(:id => 'dispatch')%>">Cancel</a></td>                    
+      </tr> 
+    </table>
+  </div>
+
+
+
+  </div>

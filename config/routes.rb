@@ -8,7 +8,10 @@ XInventory::Application.routes.draw do
 
   ########## dispatch_receive start #####################
   match 'dispatch_receive' => 'dispatch_receive#index'
-
+  match 'search/:id' => 'dispatch_receive#search', :as => :assets_to
+  match 'search/:id' => 'dispatch_receive#search', :as => :assets_to
+  match 'dispatch/:id' => 'dispatch_receive#dispatch_asset', :as => :dispatch
+  match 'receive/:id' => 'dispatch_receive#receive_asset', :as => :receive
   ########## dispatch_receive end #####################
 
   ########## Donors #####################

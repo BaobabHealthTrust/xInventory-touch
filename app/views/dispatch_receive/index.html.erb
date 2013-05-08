@@ -10,19 +10,15 @@
 
 <section id='modals'>                                              
   <p>                                                                           
-    <%= link_to "Dispatch assets", '/donor_search', :class => 'btn btn-primary btn-large buttons' %>
+    <%= link_to "Dispatch assets", assets_to_url(:id => 'dispatch'), :class => 'btn btn-primary btn-large buttons' %>
   </p>                                                                          
                                                                                 
   <p>                                                                           
-    <%= link_to "Receive assets", '/donor_search', :class => 'btn btn-primary btn-large buttons' %>
+    <%= link_to "Receive assets", assets_to_url(:id => 'receive') , :class => 'btn btn-primary btn-large buttons' %>
   </p>                                                                          
                                                                                 
   <p>                                                                           
-    <%= link_to "Transfer assets between donors", '/create_new_donor', :class => 'btn btn-primary btn-large buttons' %>
+    <%= link_to "Transfer assets between donors and projects", '/create_new_donor', :class => 'btn btn-primary btn-large buttons' %>
   </p>
   
-  <p>                                                                           
-    <%= link_to "Transfer assets between projects", '/create_new_donor', :class => 'btn btn-primary btn-large buttons' %>
-  </p>                                                                          
-                                                                                
 </section> 
