@@ -1,0 +1,49 @@
+<style>
+  #content-heading {                                                                 
+    color: #404040;                                                               
+    font-family: Verdana,Tahoma,Arial;                                            
+    font-size: 14px;                                                              
+    width: 99%;   
+    background: none repeat scroll 0 0 rgb(255, 235, 144);                      
+    height: auto;                                                               
+    border: 1px solid #696969;                                                              
+    padding: 10px;
+  }
+
+  #content-data {                                                                 
+    color: black;                                                               
+    font-family: Verdana,Tahoma,Arial;                                            
+    font-size: 14px;                                                              
+    width: 99%;   
+    background-color: white;                      
+    height: auto;                                                               
+    padding: 10px;
+  }
+  
+</style>
+
+<div class="page-header">                                                       
+  <h1>report <small>List of items dispatched showing the final location of the item</small></h1>                              
+</div>
+
+<div id = "content-heading">                                                     
+  <table style="width: 99%;">
+    <tr>
+      <td colspan="2"><%=text_field(:repeat, :start_date ,:placeholder => "Start date") %></td>
+    </tr>
+    <tr>
+      <td><%=text_field(:report, :end_date ,:placeholder => "End date") %></td>
+      <td>
+          <input onclick="submitForm();" type="button" id="signup"                
+          class="btn btn-primary signup_btn" value="Apply" style="width:100%;" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<br><hr /></br>
+
+<div id = "content-data">                                                     
+  ....................
+</div>
+

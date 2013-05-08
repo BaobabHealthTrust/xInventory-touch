@@ -5,6 +5,14 @@ XInventory::Application.routes.draw do
   get "user/logout"
   post "user/login"
 
+  ########## Reports start #####################
+  match 'reports' => 'reports#index'
+  
+  match 'stock_balances' => 'reports#stock_balances'
+  match 'dispatched_assets' => 'reports#list_of_dispatched_assets'
+  match 'items_bought_in' => 'reports#list_of_items_bought_in'
+
+  ########## Reports end #####################
 
   ########## dispatch_receive start #####################
   match 'dispatch_receive' => 'dispatch_receive#index'

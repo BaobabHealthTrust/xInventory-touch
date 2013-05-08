@@ -1,0 +1,27 @@
+<style>
+  .buttons {                                                                    
+    width: 100% !important;                                                    
+  }                                                                              
+</style>
+
+<div class="page-header">
+  <h1>reports <small>....</small></h1>
+</div>
+
+<section id='modals'>                                              
+  <p>                                                                           
+    <%= link_to "List of items bought in", '/stock_balances', 
+        :class => 'btn btn-primary btn-large buttons' %>
+  </p>                                                                          
+                                                                                
+  <p>                                                                           
+    <%= link_to "List of dispatched assets", '/dispatched_assets' , 
+        :class => 'btn btn-primary btn-large buttons' %>
+  </p>                                                                          
+                                                                                
+  <p>                                                                           
+    <%= link_to "Itemized list of stock balances per Donor/Site/project", '/stock_balances', 
+      :class => 'btn btn-primary btn-large buttons' %>
+  </p>
+  
+</section> 
