@@ -96,13 +96,13 @@ function validateForm(){
 <div id = "main-content">
 
   <div id = "content-left">
-    <table style="width: 98%;" class="asset-transfer">
+    <table style="width: 98%;margin-bottom:15px;" class="asset-transfer">
       <tr>
         <th style="border-style:solid;border-width:0px 0px 1px 0px;text-align:left;">Name</th>
         <th style="border-style:solid;border-width:0px 0px 1px 0px;text-align:left;">Category</th>
       </tr>
       <%@assets.each do |id,values|%>
-        <tr>
+        <tr style="border-style:solid;border-width:0px 0px 1px 0px;">
           <td><%=values[:name]%></td>
           <td><%=values[:category]%></td>
         </tr>
