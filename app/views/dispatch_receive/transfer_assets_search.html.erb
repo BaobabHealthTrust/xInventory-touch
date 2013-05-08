@@ -1,0 +1,127 @@
+<%=javascript_include_tag "prototype"%>                                         
+<%=javascript_include_tag "jquery_data_table" %>                                
+<%=javascript_include_tag "jquery.dataTables.min" %>                            
+                                                                                
+<%= stylesheet_link_tag "demo_table" %>                                         
+<%= stylesheet_link_tag "demo_table_jui" %>                                     
+<%= stylesheet_link_tag "demo_page" %>
+
+<style>
+                                                                                
+</style>
+
+<script>
+
+  var selected_assets = [];
+
+  function submitForm() {                                                         
+    if(validateForm())                                                            
+      document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+  }                                                                               
+                                                                                
+  function validateForm(){              
+    selected_assets = [];
+    var assets = document.getElementsByClassName('assets');
+    
+    for(var i = 0; i < assets.length ; i++) {
+      if(assets[i].checked)
+        selected_assets.push(parseInt(assets[i].id));
+
+    }
+
+    if(selected_assets.length > 0){                                         
+      document.getElementById('selected_assets').value = selected_assets.join(',');
+      return true;
+    }
+
+    alert("Select asset(s) to tranfer")
+    return false; 
+  }  
+
+
+  function dataT(){                                                               
+    $('#search_results').dataTable();                                                  
+  }
+
+  function findStudents() {                                                       
+    var search_str = document.getElementById('search_words').value;               
+                                                                                
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results == 'undefined' || results == '' || results == '"not validate"') {                           
+            return;                                                               
+          }else{                                                                  
+            document.getElementById('results-cont').innerHTML = results;                                                           
+            dataT();                                                              
+          }                                                                       
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/assets/live_search?search_str="+search_str,true);           
+      xmlhttp.send();                                                             
+    } 
+ 
+</script>
+
+
+<div class="page-header">
+  <h1>assets <small>select which assets to tranfer to another donor/project</small></h1>
+</div>
+
+<section id='modals'>                                              
+  <table id="search_results" class="table table-striped table-bordered table-condensed">
+  <thead>                                                                       
+  <tr id = 'table_head'>                                                        
+    <th id="th1" style="width:200px;">Serial number</th>                           
+    <th id="th3" style="width:200px;">Name</th>                           
+    <th id="th4" style="width:200px;">Category</th>                            
+    <th id="th5" style="width:200px;">Brand</th>                          
+    <th id="th8" style="width:150px;">Quantity in store</th>                                  
+    <th id="th5" style="width:200px;">Donor</th>                          
+    <th id="th5" style="width:200px;">Project</th>                          
+    <th id="th10" style="width:100px;">&nbsp;</th>                               
+  </tr>                                                                         
+  </thead>                                                                      
+  <tbody id='results'>                                                          
+    <%(@assets || []).each do |asset_id,asset| %>                                    
+    <tr>                                                                        
+      <td><%=asset[:serial_number]%></td>                                            
+      <td><%=asset[:name]%></td>                                    
+      <td><%=asset[:category]%></td>                                    
+      <td><%=asset[:brand]%></td>                                    
+      <td><%=asset[:quantity]%></td>                                    
+      <td><%=asset[:donor]%></td>                                    
+      <td><%=asset[:project]%></td>                                    
+      <td style="text-align:center;">
+        <%= check_box("#{asset_id}", nil, options = {:class => 'assets'}) %>
+      </td>       
+    </tr>                                                                       
+    <%end%>                                                                     
+  </tbody>                                                                      
+  </table>
+
+  <%unless @assets.blank?%>
+  <table style="width: 98%;">
+     <tr>                                                                        
+      <td>                                                                      
+        <input onclick="submitForm();" type="button" id="signup"                
+          class="btn btn-primary signup_btn" value="Start tranfer" style="width:100%;" />
+      </td>                                                                     
+    </tr> 
+  </table>
+  <%end%>
+</section> 
+
+
+<form type="hidden" method="post" action="/selected_assets">
+  <input type="hidden" name="selected_assets" value="" id="selected_assets" />
+</form>
+<script>                                                                        
+  dataT();                                                                      
+</script>

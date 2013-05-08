@@ -12,6 +12,11 @@ XInventory::Application.routes.draw do
   match 'search/:id' => 'dispatch_receive#search', :as => :assets_to
   match 'dispatch/:id' => 'dispatch_receive#dispatch_asset', :as => :dispatch
   match 'receive/:id' => 'dispatch_receive#receive_asset', :as => :receive
+  
+  #post "dispatch_receive/transfer_assets"
+  match 'selected_assets' => 'dispatch_receive#asset_transfers', :as => :selected_assets
+  match 'transfer_assets_search' => 'dispatch_receive#transfer_assets_search'
+  match 'process_transfer' => 'dispatch_receive#process_transfer'
   ########## dispatch_receive end #####################
 
   ########## Donors #####################

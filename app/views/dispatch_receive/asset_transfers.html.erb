@@ -1,0 +1,175 @@
+<style>    
+  #latest-outcomes ul {
+    color: #505050;
+    line-height: 1.5em;
+  }        
+
+  #content-right a {
+    color: green;
+    text-decoration: none;
+    font-family: Verdana,Tahoma,Arial;
+    font-size: 14px;
+    font-weight: normal;
+  } 
+                                                            
+  #content-right li {
+    line-height: 0.5em;
+    list-style-type: none;
+  }
+
+
+#content-left {
+  color: #404040;
+  font-family: Verdana,Tahoma,Arial;
+  font-size: 13px;
+  width: 450px;
+  float: left;
+  background: none repeat scroll 0 0 rgb(255, 235, 144); 
+  padding-left: 10px;
+}
+
+#content-right {
+  color: #404040;
+  font-family: Verdana,Tahoma,Arial;
+  font-size: 13px;
+  width: 450px;
+  background-color: #F6F6F6;
+  border: 1px solid #E4E4E4;
+  color: #505050;
+  line-height: 1.5em;
+  margin-bottom: 10px;
+  padding: 6px;
+  float: right;
+}
+
+#latest-outcomes {
+  border-bottom: 1px dotted #696969;
+  color: #EE8206;
+}
+
+
+</style> 
+
+<script>
+  function submitForm() {                                                         
+  if(validateForm())                                                            
+    document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+}                                                                               
+                                                                                
+function validateForm(){                                                
+  project = document.getElementById("transfer_project");
+  donor = document.getElementById("transfer_donor");
+  tdate = document.getElementById("transfer_date");
+  approved_by = document.getElementById("transfer_approved_by");
+  reason = document.getElementById("transfer_reason");
+  transfer_location = document.getElementById("transfer_location");
+  
+  if(project.value == 'Select project'){
+    alert('Please select a project');
+    return false
+  }else if(donor.value == 'Select donor'){
+    alert('Please select a donor');
+    return false
+  }else if(tdate.value == ''){
+    alert('Please select transfer date');
+    return false
+  }else if(approved_by.value ==''){
+    alert('Please enter the name of the person who approved the transfer');
+    return false
+  }else if(transfer_location.value == 'Select location'){
+    alert('Please select transfer location');
+    return false
+  }
+        
+  return true;
+}
+
+
+</script>
+
+
+<div class="page-header">                                                       
+  <h1>asset(s) <small>transfer</small></h1>                              
+</div>
+
+<div id = "main-content">
+
+  <div id = "content-left">
+    <table style="width: 98%;" class="asset-transfer">
+      <tr>
+        <th style="border-style:solid;border-width:0px 0px 1px 0px;text-align:left;">Name</th>
+        <th style="border-style:solid;border-width:0px 0px 1px 0px;text-align:left;">Category</th>
+      </tr>
+      <%@assets.each do |id,values|%>
+        <tr>
+          <td><%=values[:name]%></td>
+          <td><%=values[:category]%></td>
+        </tr>
+      <%end%>
+    </table>
+  </div>
+
+  <div id = "content-right">
+    <div id = "latest-outcomes">Receiving donor/project</div>
+      <form action="process_transfer" method="post">
+      <p/>
+      <ul>
+        <li>
+          <a href="#">Receiving project</a>
+          <p/>
+          <p><%@projects.unshift('Select project') %>                                
+             <%= select_tag "transfer[project]", options_for_select(@projects),          
+                :placeholder => "Project" %>
+          </p>
+        </li><br />
+        <li>
+          <a href="#">Receiving donor</a>
+          <p/>
+          <p><%@donors.unshift('Select donor') %>                                
+             <%= select_tag "transfer[donor]", options_for_select(@donors),          
+                :placeholder => "Project" %>
+          </p>
+        </li><br />
+        <li>
+          <a href="#">Transfer date</a>
+          <p/>
+          <p>
+            <%=text_field(:transfer, :date ,:placeholder => "Transfer date") %> 
+          </p>
+        </li><br />
+        <li>
+          <a href="#">Approved by</a>
+          <p/>
+          <p>
+            <%=text_field(:transfer, :approved_by ,:placeholder => "Approved By") %> 
+          </p>
+        </li><br />
+        <li>
+          <a href="#">Reason for tranfer</a>
+          <p/>
+          <p>
+            <%=text_area("transfer[reason]", nil ,
+              :placeholder => "Reason for transfer",
+              :rows => 5, :cols => 5) %> 
+          </p>
+        </li><br />
+        <li>
+          <a href="#">Transfer Location</a>
+          <p/>
+          <p><%@locations.unshift('Select location') %>                                
+             <%= select_tag "transfer[location]", options_for_select(@locations),          
+                :placeholder => "Select location" %>
+          </p>
+        </li><br />
+        <li>
+           <input onclick="submitForm();" type="button" id="signup"                
+            class="btn btn-primary signup_btn" 
+            value="Transfer" style="width:98%;" />
+        </li><br />
+      </ul>
+      <input type="hidden" name="assets_ids" value="<%=@asset_ids.join(',')%>" />
+      </form>
+  </div>
+
+</div>

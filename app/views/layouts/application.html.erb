@@ -40,6 +40,10 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        <%unless User.current_user.blank?%>
+                          <li><a href="#"><%=User.current_user.username[0..14]%></a></li>
+                        <%end%>
+                        <li class="divider"></li>
                         <li><a href="#"><i class="icon-search"></i>my account</a></li>
                         <li><a href="#"><i class="icon-search"></i>add users</a></li>
                         <li class="divider"></li>
