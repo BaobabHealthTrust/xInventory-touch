@@ -14,6 +14,29 @@ class DispatchReceiveController < ApplicationController
   end
 
   def dispatch_asset
+    if request.post? and not params[:dispatch_asset].blank?
+       asset = Item.find(params[:id])
+       dispatch = DispatchReceive.new()
+       dispatch.asset_id = asset.id
+       dispatch.transaction_type = DispatchReceiveType.find_by_name('Dispatch').id
+       dispatch.encounter_date = params[:dispatch]['date']
+       dispatch.approved_by = params[:dispatch]['approved_by'] 
+       dispatch.responsible_person = params[:dispatch]['collected_by'] 
+       dispatch.location_id = params[:dispatch]['location']
+       dispatch.quantity = params[:dispatch]['quantity']
+       unless params[:dispatch]['reason'].blank?
+         dispatch.reason = params[:dispatch]['reason']
+       end
+       if dispatch.save             
+         asset.quantity -= dispatch.quantity
+         asset.save                                                
+         flash[:notice] = 'Successfully dispatched.'                                
+       else                                                                      
+         flash[:error] = 'Something went wrong - did not dispatch.'                
+       end
+       redirect_to assets_to_url(:id => 'dispatch')
+    end
+
     @asset = get_asset(params[:id])
 
     @status = StateType.order('name ASC').collect do |state|                    
@@ -27,6 +50,30 @@ class DispatchReceiveController < ApplicationController
   end  
 
   def receive_asset
+    if request.post? and not params[:receive_asset].blank?
+       asset = Item.find(params[:id])
+       dispatch = DispatchReceive.new()
+       dispatch.asset_id = asset.id
+       dispatch.transaction_type = DispatchReceiveType.find_by_name('Receive').id
+       dispatch.encounter_date = params[:receive]['date']
+       dispatch.approved_by = params[:receive]['approved_by'] 
+       dispatch.responsible_person = params[:receive]['collected_by'] 
+       dispatch.location_id = params[:receive]['location']
+       dispatch.quantity = params[:receive]['quantity']
+       unless params[:receive]['reason'].blank?
+         dispatch.reason = params[:receive]['reason']
+       end
+
+       if dispatch.save             
+         asset.quantity += dispatch.quantity
+         asset.save                                                
+         flash[:notice] = 'Successfully received.'                                
+       else                                                                      
+         flash[:error] = 'Something went wrong - did not received.'                
+       end
+       redirect_to assets_to_url(:id => 'receive')
+    end
+
     @asset = get_asset(params[:id])
 
     @status = StateType.order('name ASC').collect do |state|                    

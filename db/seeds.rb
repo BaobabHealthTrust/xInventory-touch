@@ -16,6 +16,15 @@ site.name = 'Baobab Health Trust (BT)'
 site.description = 'Baobab regional branch located in Blantyre city - Mandala'         
 site.save
                                    
+type = DispatchReceiveType.new()
+type.name = 'Dispatch'
+type.description = 'Process of dispatching assets'         
+type.save
+                                   
+type = DispatchReceiveType.new()
+type.name = 'Receive'
+type.description = 'Process of receiving assets'         
+type.save
                                              
 person = Person.new()
 person.first_name = 'Super'
