@@ -94,13 +94,11 @@
     <p class="xool_information"><strong>Project(s) funding</strong></p>
 
 
-    <%(@programs || {}).each do |program_name,modules| %>
-      <ul><%=program_name%>
-      <%modules.each do |module_name| %>
-        <ol style="font-weight:bold;"><%=module_name%></ol>
-      <%end%>
-      </ul>
+    <ol>
+    <%(@donor.projects || {}).each do |project| %>
+        <li style="font-weight:bold;"><a href="<%=project_details_url(:id => project.id)%>"><%=project.name%></a></li>
     <%end%>
+    </ol>
 
   </div>
   

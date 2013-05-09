@@ -85,6 +85,7 @@ function validateForm(){
     org_receipt_date = document.getElementById('organisation_receipt_date');                             
     org_delivered_by = document.getElementById('organisation_delivered_by');                             
     org_delivery_status = document.getElementById('organisation_delivery_status');                             
+    org_current_status = document.getElementById('organisation_current_status');
     org_store_location = document.getElementById('organisation_location');                             
 
     if(asset_name.value == '') {                                                     
@@ -134,6 +135,9 @@ function validateForm(){
       return false;                                                             
     }else if(org_delivery_status.value == 'Select delivery status') {                                                 
       alert("Please select delivery status ...");                                      
+      return false;
+    }else if(org_current_status.value == 'Select current status') {                                                 
+      alert("Please select Item current status ...");                                      
       return false;                                                             
     }else if(org_store_location.value == 'Select store room location') {                                                 
       alert("Please select store room location ...");                                      
@@ -241,7 +245,14 @@ function validateForm(){
         <%= select_tag "organisation[delivery_status]", options_for_select(@status),
           :placeholder => "Delivery status" %>                                              
       </td>                                                                     
-    </tr>                                                                       
+    </tr>         
+     <tr>                                                                        
+      <td>                                                                      
+        <%@status.unshift('Select current status') %>                           
+        <%= select_tag "organisation[current_status]", options_for_select(@status),
+          :placeholder => "Current status" %>                                   
+      </td>                                                                     
+    </tr>                                                              
     <tr>                                                                        
       <td>                                                                      
         <%@location.unshift('Select store room location') %>                                                                  

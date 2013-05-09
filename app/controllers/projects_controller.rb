@@ -18,7 +18,7 @@ class ProjectsController < ApplicationController
   def create
     prj = Project.new()                                                         
     prj.name = params[:project]['name']                                         
-    prj.donor = params[:project]['donor']
+    prj.donor_id = params[:project]['donor']
     prj.description = params[:project]['description'] unless params[:project]['description'].blank?
     if prj.save                                                               
       flash[:notice] = 'Successfully created.'                                  

@@ -65,8 +65,34 @@
 }
 </style>
 
-
-<script>
+<%= stylesheet_link_tag "DatePicker/jsDatePick_ltr.min" %>                      
+<%= javascript_include_tag "DatePicker/jsDatePick.min.1.3" %>                   
+                                                                                
+<script>                                                                        
+ var currDate = new Date();                                                     
+ var dateNow =  currDate.getDate();                                             
+ var yrNow =  currDate.getFullYear();                                           
+ var monthNow =  (currDate.getMonth() + 1);                                     
+                                                                                
+ function initDate(id){                                                          
+    new JsDatePick({                                                            
+      useMode:2,                                                                
+      target: id ,                                                              
+      dateFormat:"%d-%M-%Y",                                                    
+      selectedDate:{                                                            
+        day: dateNow,                                                           
+        month: monthNow,                                                        
+        year: yrNow                                                             
+      },                                                                        
+      yearsRange:[2000,yrNow],                                                  
+      limitToToday: true,                                                       
+      cellColorScheme:"beige",                                                  
+      dateFormat:"%d-%m-%Y",                                                    
+      imgPath:"img/",                                                           
+      weekStartDay:1                                                            
+    });                                                                         
+  };                                                                            
+      
 
   function submitForm() {                                                         
     if(validateForm())                                                            
@@ -209,6 +235,8 @@
     </table>
   </div>
 
-
-
   </div>
+
+ <script>
+   initDate('receive_date');
+ </script>

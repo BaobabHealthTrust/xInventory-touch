@@ -6,15 +6,17 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Emanuel', :city => cities.first)
 
-site = Site.new()
-site.name = 'Baobab Health Trust (LL)'
-site.description = "Baobab's head office located in Lilongwe city in area 3"
-site.save
-         
-site = Site.new()
-site.name = 'Baobab Health Trust (BT)'
-site.description = 'Baobab regional branch located in Blantyre city - Mandala'         
-site.save
+
+sites = [['Baobab Health Trust (LL)',"Baobab's head office located in Lilongwe city in area 3"],
+ ['Baobab Health Trust (BT)','Baobab regional branch located in Blantyre city - Mandala']
+]         
+
+sites.each do |name,description|
+  site = Site.new()
+  site.name = name
+  site.description = description
+  site.save
+end
                                    
 type = DispatchReceiveType.new()
 type.name = 'Dispatch'
@@ -25,6 +27,20 @@ type = DispatchReceiveType.new()
 type.name = 'Receive'
 type.description = 'Process of receiving assets'         
 type.save
+                             
+asset_states = [
+ ['Good condition',nil] ,
+ ['Bad condition',nil]  ,            
+ ['Stolen',nil] ,    
+ ['Damage',nil]  ,            
+ ['Went missing in the field',nil]              
+]              
+                             
+asset_states.each do |name,description|
+  asset_state = StateType.new()
+  asset_state.name = name
+  asset_state.save
+end                             
                                              
 person = Person.new()
 person.first_name = 'Super'

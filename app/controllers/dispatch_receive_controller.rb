@@ -28,6 +28,10 @@ class DispatchReceiveController < ApplicationController
          dispatch.reason = params[:dispatch]['reason']
        end
        if dispatch.save             
+         curr_state = ItemState.where(:'item_id' => asset.id).first    
+         curr_state = StateType.find(params[:dispatch]['status']).id
+         curr_state.save
+
          asset.current_quantity -= dispatch.quantity
          asset.save                                                
          flash[:notice] = 'Successfully dispatched.'                                
@@ -64,7 +68,11 @@ class DispatchReceiveController < ApplicationController
          dispatch.reason = params[:receive]['reason']
        end
 
-       if dispatch.save             
+       if dispatch.save  
+         curr_state = ItemState.where(:'item_id' => asset.id).first    
+         curr_state = StateType.find(params[:receive]['status']).id
+         curr_state.save
+                
          asset.current_quantity += dispatch.quantity
          asset.save                                                
          flash[:notice] = 'Successfully received.'                                

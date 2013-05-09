@@ -3,6 +3,11 @@ class AssetsController < ApplicationController
 
   def show
     @asset = get_asset(params[:id])
+
+    @status = StateType.order('name ASC').collect do |state|                    
+      [state.name , state.id]                                                   
+    end 
+
   end
 
   def search
@@ -82,7 +87,11 @@ class AssetsController < ApplicationController
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
-      if item.save 
+      if item.save
+        curr_state = ItemState.new()                                  
+        curr_state.item_id = item.id
+        curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
+        curr_state.save 
         flash[:notice] = 'Successfully created.'                                  
       else                                                                        
         flash[:error] = 'Something went wrong - did not create.'                  
@@ -176,6 +185,9 @@ class AssetsController < ApplicationController
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
       if item.save 
+        curr_state = ItemState.where(:'item_id' => item.id)                                  
+        curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
+        curr_state.save 
         flash[:notice] = 'Successfully updated.'                                  
       else                                                                        
         flash[:error] = 'Something went wrong - did not create.'                  
@@ -275,7 +287,8 @@ class AssetsController < ApplicationController
       :delivered_by => asset.delivered_by,
       :status_on_delivery => StateType.find(asset.status_on_delivery).name,
       :location => Site.find(asset.location).name , 
-      :asset_id => asset.id
+      :asset_id => asset.id,
+      :current_state => StateType.find(asset.current_state.current_state).name
     }
   end
 

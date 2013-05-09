@@ -117,6 +117,15 @@
         <td style="font-weight:bold;">Status on delivery&nbsp;</td><td><%=@asset[:status_on_delivery]%></td>
       </tr>                     
       <tr>
+        <td style="font-weight:bold;">Current state&nbsp;</td>
+        <td>
+           <%@status.unshift(@asset[:current_state]) %>                          
+              <%= select_tag "asset[status]", options_for_select(@status),
+              :placeholder => "Delivery status" %>                                  
+      </td> 
+        </td>
+      </tr>                     
+      <tr>
         <td style="font-weight:bold;">Location&nbsp;</td><td><%=@asset[:location]%></td>
       </tr>                     
     </table>                                                                     
