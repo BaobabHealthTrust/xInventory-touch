@@ -13,7 +13,7 @@ XInventory::Application.routes.draw do
   match 'items_bought_in' => 'reports#list_of_items_bought_in'
   match '/search_for_dispatched_assets' => 'reports#search_for_dispatched_assets'
   match '/search_for_assets_bought_in' => 'reports#search_for_assets_bought_in'
-  match '/search_for_stock_balances' => 'reports#search_forstock_balances'
+  match '/search_for_stock_balances' => 'reports#search_for_stock_balances'
   ########## Reports end #####################
 
   ########## dispatch_receive start #####################

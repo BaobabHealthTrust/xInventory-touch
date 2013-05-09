@@ -20,7 +20,7 @@ class AssetsController < ApplicationController
         :donor => Donor.find(asset.donor_id).name,
         :purchased_date => asset.purchased_date,
         :order_number => asset.order_number,
-        :quantity => asset.quantity,
+        :quantity => asset.current_quantity,
         :cost => asset.cost,
         :date_of_receipt => asset.date_of_receipt,
         :delivered_by => asset.delivered_by,
@@ -75,7 +75,8 @@ class AssetsController < ApplicationController
       item.donor_id = params[:work]['donor']
       item.purchased_date = params[:vendor]['date_of_invoice'].to_date
       item.order_number = params[:vendor]['invoice_num']
-      item.quantity = params[:vendor]['quantity']
+      item.current_quantity = params[:vendor]['quantity']
+      item.bought_quantity = params[:vendor]['quantity']
       item.cost = params[:vendor]['cost']
       item.date_of_receipt = params[:organisation]['receipt_date'].to_date
       item.delivered_by = params[:organisation]['delivered_by']
@@ -167,7 +168,8 @@ class AssetsController < ApplicationController
       item.donor_id = params[:work]['donor']
       item.purchased_date = params[:vendor]['date_of_invoice'].to_date
       item.order_number = params[:vendor]['invoice_num']
-      item.quantity = params[:vendor]['quantity']
+      item.current_quantity = params[:vendor]['quantity']
+      item.bought_quantity = params[:vendor]['quantity']
       item.cost = params[:vendor]['cost']
       item.date_of_receipt = params[:organisation]['receipt_date'].to_date
       item.delivered_by = params[:organisation]['delivered_by']
@@ -266,7 +268,7 @@ class AssetsController < ApplicationController
       :donor => Donor.find(asset.donor_id).name,
       :purchased_date => asset.purchased_date.strftime('%d %B %Y'),
       :order_number => asset.order_number,
-      :quantity => asset.quantity,
+      :quantity => asset.current_quantity,
       :cost => asset.cost,
       :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),
       :delivered_by => asset.delivered_by,

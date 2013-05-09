@@ -44,7 +44,35 @@ class ReportsController < ApplicationController
 
   private
 
+  def get_total_dispatched(category_type,start_date,end_date)
+    asset_ids = Item.where("category_type = ? AND purchased_date >= ? 
+      AND purchased_date <= ?",category_type,start_date,end_date).map(&:id)
+
+    return 0 if asset_ids.blank?
+
+    DispatchReceive.where("asset_id IN(?) AND encounter_date >= ? 
+      AND encounter_date <= ?",asset_ids,start_date,end_date).sum(:quantity)
+  end
+
+  def get_total_bought(category_type,start_date,end_date)
+    Item.where("category_type = ? AND purchased_date >= ? 
+      AND purchased_date <= ?",category_type,start_date,end_date).sum(:bought_quantity)
+  end
+
   def get_stock_balance(start_date,end_date)
+    @categories = {}
+    assets = Item.group(:category_type).where("purchased_date >= ? 
+      AND purchased_date <=?",start_date,end_date)
+
+    (assets || []).each do |asset|
+      if  @categories[asset.category.name].blank?
+        @categories[asset.category.name] = {:bought => 0 , :dispatched => 0 ,:balance => 0} 
+      end
+
+      @categories[asset.category.name][:bought] += get_total_bought(asset.category_type,start_date,end_date)
+      @categories[asset.category.name][:dispatched] += get_total_dispatched(asset.category_type,start_date,end_date)
+      @categories[asset.category.name][:balance] = (@categories[asset.category.name][:bought] - @categories[asset.category.name][:dispatched])
+    end
 
     @html =<<EOF
   <table id='search_results' class='table table-striped table-bordered table-condensed'>
@@ -59,46 +87,18 @@ class ReportsController < ApplicationController
   <tbody id='results'>  
 EOF
 
-    (data).each do |dispatch|  
-      asset = Item.find(dispatch.asset_id)
-      asset_name = asset.name
-      location = Site.find(dispatch.location_id).name
-      encounter_date = dispatch.encounter_date
-      purchase_date = asset.purchased_date
-      donor = Donor.find(asset.donor_id).name
-      project = Project.find(asset.project_id).name
-      supplier = Supplier.find(asset.vendor).name
-      order_num = asset.order_number
-      asset_model = asset.version
-      quantity = dispatch.quantity
-      store = Site.find(asset.location).name
-      serial_num = asset.serial_number
-      total_quantity += quantity
+    (@categories || {}).each do | category , values |  
     @html +=<<EOF
       <tr>                                                                        
-      <td>#{asset_name}</td>                                       
-      <td>#{serial_num}</td>                                       
-      <td>#{asset_model}</td>                                       
-      <td>#{purchase_date}</td>                                       
-      <td>#{donor}</td>                                       
-      <td>#{project}</td>                                       
-      <td>#{supplier}</td>                                       
-      <td>#{order_num}</td>                                       
-      <td>#{store}</td>                                       
-      <td>#{location}</td>                                       
-      <td>#{encounter_date}</td>                                       
-      <td>#{quantity}</td>                                       
+      <td>#{category}</td>                                       
+      <td>#{values[:bought]}</td>                                       
+      <td>#{values[:dispatched]}</td>                                       
+      <td>#{values[:balance]}</td>                                       
     </tr>
 EOF
     end
 
     @html +=<<EOF
-        <tfoot>
-        <tr>
-            <th style="text-align:left;paddding-left:5px;" colspan="11">Total:</th>
-            <th>#{total_quantity}</th>
-        </tr>
-        </tfoot> 
       </tbody>                                                                      
   </table>                                                                      
 EOF

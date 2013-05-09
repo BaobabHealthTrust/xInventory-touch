@@ -13,7 +13,8 @@ class CreateItems < ActiveRecord::Migration
       t.integer :donor_id, :null => false
       t.date :purchased_date, :null => false
       t.string :order_number, :null => false
-      t.float :quantity, :null => false
+      t.float :current_quantity, :null => false
+      t.float :bought_quantity, :null => false
       t.float :cost, :null => false
       t.date :date_of_receipt, :null => false
       t.string :delivered_by, :null => false

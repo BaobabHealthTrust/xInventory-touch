@@ -28,7 +28,7 @@ class DispatchReceiveController < ApplicationController
          dispatch.reason = params[:dispatch]['reason']
        end
        if dispatch.save             
-         asset.quantity -= dispatch.quantity
+         asset.current_quantity -= dispatch.quantity
          asset.save                                                
          flash[:notice] = 'Successfully dispatched.'                                
        else                                                                      
@@ -65,7 +65,7 @@ class DispatchReceiveController < ApplicationController
        end
 
        if dispatch.save             
-         asset.quantity += dispatch.quantity
+         asset.current_quantity += dispatch.quantity
          asset.save                                                
          flash[:notice] = 'Successfully received.'                                
        else                                                                      
@@ -182,7 +182,7 @@ class DispatchReceiveController < ApplicationController
       :donor => Donor.find(asset.donor_id).name,                                
       :purchased_date => asset.purchased_date.strftime('%d %B %Y'),             
       :order_number => asset.order_number,                                      
-      :quantity => asset.quantity,                                              
+      :quantity => asset.current_quantity,                                              
       :cost => asset.cost,                                                      
       :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),           
       :delivered_by => asset.delivered_by,                                      
@@ -209,7 +209,7 @@ class DispatchReceiveController < ApplicationController
       :donor => Donor.find(asset.donor_id).name,                                
       :purchased_date => asset.purchased_date.strftime('%d %B %Y'),             
       :order_number => asset.order_number,                                      
-      :quantity => asset.quantity,                                              
+      :quantity => asset.current_quantity,                                              
       :cost => asset.cost,                                                      
       :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),           
       :delivered_by => asset.delivered_by,                                      
@@ -240,7 +240,7 @@ class DispatchReceiveController < ApplicationController
         :donor => Donor.find(asset.donor_id).name,                              
         :purchased_date => asset.purchased_date,                                
         :order_number => asset.order_number,                                    
-        :quantity => asset.quantity,                                            
+        :quantity => asset.current_quantity,                                            
         :cost => asset.cost,                                                    
         :date_of_receipt => asset.date_of_receipt,                              
         :delivered_by => asset.delivered_by,                                    
