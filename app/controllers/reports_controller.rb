@@ -41,8 +41,68 @@ class ReportsController < ApplicationController
     render :text => get_stock_balance(start_date,end_date) and return
   end
 
+  def search_for_transfers
+    start_date = params[:start_date].to_date rescue nil
+    end_date = params[:end_date].to_date rescue nil
+    
+    if start_date.blank? or end_date.blank?
+      render :text => '' and return 
+    elsif start_date > end_date
+      render :text => '' and return 
+    end
+
+    render :text => get_transferred_assets(start_date,end_date) and return
+  end
+
 
   private
+
+  def get_transferred_assets(start_date,end_date)
+    transfers = Transfer.where("transfer_date >= ? AND transfer_date <=?",
+      start_date,end_date)
+
+    return nil if transfers.blank?
+    
+    @html =<<EOF                                                                
+  <table id='search_results' class='table table-striped table-bordered table-condensed'>
+  <thead>                                                                       
+  <tr id = 'table_head'>                                                        
+    <th id="th3" style="width:200px;">Item</th>                                 
+    <th id="th1" style="width:200px;">Donor - From</th>                               
+    <th id="th1" style="width:200px;">Project - From</th>                               
+    <th id="th1" style="width:200px;">Donor - To</th>                               
+    <th id="th1" style="width:200px;">Project - To</th>                               
+    <th id="th1" style="width:200px;">Densination</th>                               
+    <th id="th1" style="width:200px;">Date of Transfer</th>                               
+  </tr>                                                                         
+  </thead>                                                                      
+  <tbody id='results'>                            
+EOF
+                                                       
+    (transfers).each do |transfer| 
+      (transfer.transfer_transactions).each do |transaction|
+        @html +=<<EOF                                                               
+      <tr>                                                                        
+      <td>#{Item.find(transaction.asset_id).name}</td>                                                      
+      <td>#{Donor.find(transaction.from_donor).name}</td>                                                      
+      <td>#{Project.find(transaction.from_project).name}</td>                                                      
+      <td>#{Donor.find(transaction.to_donor).name}</td>                                                      
+      <td>#{Project.find(transaction.to_project).name}</td>                                                      
+      <td>#{Site.find(transaction.to_location).name}</td>                                                      
+      <td>#{transfer.transfer_date}</td>                                                      
+    </tr>                                                                       
+EOF
+                                                                           
+      end                                                                         
+    end                                                                         
+                                                                                
+    @html +=<<EOF                                                               
+      </tbody>                                                                      
+  </table>                                                                      
+EOF
+                                                                                
+    return @html
+  end
 
   def get_total_dispatched(category_type,start_date,end_date)
     asset_ids = Item.where("category_type = ? AND purchased_date >= ? 
