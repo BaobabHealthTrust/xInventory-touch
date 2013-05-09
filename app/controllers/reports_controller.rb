@@ -50,18 +50,10 @@ class ReportsController < ApplicationController
   <table id='search_results' class='table table-striped table-bordered table-condensed'>
   <thead>                                                                       
   <tr id = 'table_head'>                                                        
-    <th id="th3" style="width:200px;">Asset</th>                                 
-    <th id="th1" style="width:200px;">Serial number</th>                        
-    <th id="th4" style="width:200px;">Model</th>                             
-    <th id="th5" style="width:200px;">Purchase date</th>                                
-    <th id="th8" style="width:150px;">Donor</th>                             
-    <th id="th8" style="width:150px;">Project</th>                             
-    <th id="th8" style="width:150px;">Supplier</th>                             
-    <th id="th8" style="width:150px;">Order Number</th>                             
-    <th id="th8" style="width:150px;">Origin</th>                             
-    <th id="th8" style="width:150px;">Dispatched to</th>                             
-    <th id="th8" style="width:150px;">Date of dispatch</th>                             
-    <th id="th8" style="width:150px;">Quantity</th>                             
+    <th id="th3" style="width:200px;">Item</th>                                 
+    <th id="th1" style="width:200px;">Bought</th>                        
+    <th id="th4" style="width:200px;">Dispatched</th>                             
+    <th id="th5" style="width:200px;">Balance</th>                                
   </tr>                                                                         
   </thead>                                                                      
   <tbody id='results'>  

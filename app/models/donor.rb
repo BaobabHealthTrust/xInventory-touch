@@ -1,4 +1,7 @@
 class Donor < ActiveRecord::Base
   default_scope where('voided = 0')
-  # attr_accessible :title, :body
+
+  has_many :projects, :class_name => :Project,:foreign_key => :donor
+  has_many :assets, :class_name => :Item,:foreign_key => :donor_id
+
 end
