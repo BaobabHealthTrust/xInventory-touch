@@ -203,7 +203,7 @@ EOF
     <th id="th8" style="width:150px;">Project</th>                             
     <th id="th8" style="width:150px;">Supplier</th>                             
     <th id="th8" style="width:150px;">Order Number</th>                             
-    <th id="th8" style="width:150px;">Quantity</th>                             
+    <th id="th8" style="width:150px;">Current quantity</th>                             
     <th id="th8" style="width:150px;">Cost</th>                             
   </tr>                                                                         
   </thead>                                                                      
@@ -219,7 +219,7 @@ EOF
       project = Project.find(asset.project_id).name
       supplier = Supplier.find(asset.vendor).name
       order_num = asset.order_number
-      quantity = asset.quantity
+      quantity = asset.current_quantity
       cost = asset.cost
       asset_model = asset.version
       serial_num = asset.serial_number

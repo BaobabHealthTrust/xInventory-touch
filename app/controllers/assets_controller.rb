@@ -151,7 +151,7 @@ class AssetsController < ApplicationController
     @location = Site.order('name ASC').collect do |site|
       [site.name , site.id]
     end
-
+    
   end
 
   def update
@@ -268,7 +268,8 @@ class AssetsController < ApplicationController
       :donor => Donor.find(asset.donor_id).name,
       :purchased_date => asset.purchased_date.strftime('%d %B %Y'),
       :order_number => asset.order_number,
-      :quantity => asset.current_quantity,
+      :current_quantity => asset.current_quantity,
+      :bought_quantity => asset.bought_quantity,
       :cost => asset.cost,
       :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),
       :delivered_by => asset.delivered_by,
