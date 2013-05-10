@@ -29,7 +29,7 @@ class DispatchReceiveController < ApplicationController
        end
        if dispatch.save             
          curr_state = ItemState.where(:'item_id' => asset.id).first    
-         curr_state = StateType.find(params[:dispatch]['status']).id
+         curr_state.current_state = StateType.find(params[:dispatch]['status']).id
          curr_state.save
 
          asset.current_quantity -= dispatch.quantity
