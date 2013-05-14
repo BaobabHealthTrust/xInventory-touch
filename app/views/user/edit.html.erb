@@ -1,0 +1,118 @@
+<%#= javascript_include_tag "bootstrap-datepicker" %>
+<%#= stylesheet_link_tag "datepicker" %>
+
+<style>
+  .content-details { text-align: center; }                                                                          
+
+  .asset-details { width: 100%; }                                                                          
+
+</style>
+
+
+<script>
+
+function submitForm() {                                                         
+  if(validateForm())                                                            
+    document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+}                                                                               
+                                                                                
+function validateForm(){                                                        
+    first_name = document.getElementById('user_first_name');                      
+    last_name = document.getElementById('user_last_name');                      
+    user_role = document.getElementById('user_role');                      
+    password = document.getElementById('user_password');                        
+    password_confirm = document.getElementById('user_confirm_password');                      
+                                                                                
+    if(first_name.value == '') {                                                     
+      alert("Please enter user first name ...");                                     
+      return false;                                                             
+    }else if(last_name.value == '') {                                                     
+      alert("Please enter user last name ...");                                     
+      return false;                                                             
+    }else if(user_role.value == '') {                                                     
+      alert("Please select user role ...");                                     
+      return false;                                                             
+    }
+
+    if(password.value.length > 0){                                    
+      if(password.value.length < 6) {                                                     
+        alert("Please password should be atleast six characters ....");                                     
+        return false;                                                             
+      }else if(password.value != password_confirm.value) {                                                     
+        alert("The two passwords you enter do not match ...");                                     
+        return false;                                                             
+      }
+    }
+
+    return true;                                                                  
+  }    
+
+</script>
+
+
+
+<div class="page-header">
+  <h1><%=@user.username%> <small>edit</small></h1>
+</div>
+
+<siection id='modals'>                                              
+  <div class="content-details">
+  <div>                                                                         
+    <%if flash[:notice]%>                                                       
+      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
+    <%elsif flash[:error]%>                                                     
+      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
+    <%end%>                                                                     
+  </div>
+  <%= form_tag :action => 'update', :method => :post  do %>
+
+  <table class="asset-details">                                              
+  <tbody>                                                                       
+    <tr>                                                                        
+      <td>&nbsp;</td>                                                           
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:user, :first_name, :placeholder => "First name",
+          :value => @user.person.first_name) %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:user, :last_name, :placeholder => "Last name",
+          :value => @user.person.last_name) %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=password_field(:user, :password, :placeholder => "Password") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=password_field(:user, :confirm_password, :placeholder => "Confirm password") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr><td>           
+      <% @roles.unshift('') %> 
+      <%= select_tag "user[role]", options_for_select(@roles), 
+                :placeholder => "Select user role" %></td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <input onclick="submitForm();" type="button" id="signup" 
+          class="btn btn-primary signup_btn" value="Update" style="width:100%;" />
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+  </tbody>                                                                      
+ </table>
+ <input type="hidden" name='id' value="<%=params[:id]%>" /> 
+ <%end%>
+</div>                                                      
+</section> 
+

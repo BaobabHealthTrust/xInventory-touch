@@ -1,0 +1,154 @@
+<%#= javascript_include_tag "bootstrap-datepicker" %>
+<%#= stylesheet_link_tag "datepicker" %>
+
+<style>
+  .content-details { text-align: center; }                                                                          
+
+  .asset-details { width: 100%; }                                                                          
+
+</style>
+
+
+<script>
+
+function submitForm() {                                                         
+  if(validateForm())                                                            
+    document.getElementsByTagName('form')[0].submit();                          
+                                                                                
+}                                                                               
+                                                                                
+function validateForm(){                                                        
+    username = document.getElementById('user_username');                      
+    first_name = document.getElementById('user_first_name');                      
+    last_name = document.getElementById('user_last_name');                      
+    user_role = document.getElementById('user_role');                      
+    password = document.getElementById('user_password');                      
+    password_confirm = document.getElementById('user_confirm_password');                      
+
+    if(username.value == '') {                                                     
+      alert("Please enter username ...");                                     
+      return false;                                                             
+    }else if(first_name.value == '') {                                                     
+      alert("Please enter user first name ...");                                     
+      return false;                                                             
+    }else if(last_name.value == '') {                                                     
+      alert("Please enter user last name ...");                                     
+      return false;                                                             
+    }else if(password.value == '') {                                                     
+      alert("Please password ...");                                     
+      return false;                                                             
+    }else if(password.value.length < 6) {                                                     
+      alert("Please password should be atleast six characters ....");                                     
+      return false;                                                             
+    }else if(password.value != password_confirm.value) {                                                     
+      alert("The two passwords you enter do not match ...");                                     
+      return false;                                                             
+    }else if(user_role.value == '') {                                                     
+      alert("Please select user role ...");                                     
+      return false;                                                             
+    }                               
+                                        
+    return true;                                                                  
+  }    
+
+  function checkUsername() {
+    username = document.getElementById('user_username').value;
+                                                                                
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results == 'undefined' || results == '' || results == '"not validate"') {                           
+            return;                                                               
+          }else{                                                                  
+            if(results == 'available') {
+              document.getElementById('notice').innerHTML = 'username ' + results;
+              document.getElementById('notice').style.color = 'green';
+              document.getElementById('signup').disabled = false;
+            }else{
+              document.getElementById('notice').innerHTML = 'username ' + results;
+              document.getElementById('notice').style.color = 'red';
+              document.getElementById('signup').disabled = 'disabled';
+            }
+          }                                                                       
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/username_availability?search_str="+username,true);           
+      xmlhttp.send();                                                             
+
+  }
+</script>
+
+
+
+<div class="page-header">
+  <h1>user <small>register a user</small></h1>
+</div>
+
+<siection id='modals'>                                              
+  <div class="content-details">
+  <div>                                                                         
+    <%if flash[:notice]%>                                                       
+      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
+    <%elsif flash[:error]%>                                                     
+      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
+    <%end%>                                                                     
+  </div>
+  <%= form_tag :action => 'create', :method => :post  do %>
+
+  <table class="asset-details">                                              
+  <tbody>                                                                       
+    <tr>                                                                        
+      <td>&nbsp;</td>                                                           
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><span id='notice'></span><br />
+        <%=text_field(:user, :username, :placeholder => "Username",:onkeyup => "checkUsername();") %> 
+      </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:user, :first_name, :placeholder => "First name") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field(:user, :last_name, :placeholder => "Last name") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=password_field(:user, :password, :placeholder => "Password") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=password_field(:user, :confirm_password, :placeholder => "Confirm password") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr><td>           
+      <% @roles.unshift('') %> 
+      <%= select_tag "user[role]", options_for_select(@roles), 
+                :placeholder => "Select user role" %></td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <input onclick="submitForm();" type="button" id="signup" disabled='disabled' 
+          class="btn btn-primary signup_btn" value="Register" style="width:100%;" />
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><hr /></td>   
+    </tr>                                                                       
+  </tbody>                                                                      
+ </table>
+                      
+ <%end%>
+</div>                                                      
+</section> 
+

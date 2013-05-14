@@ -2,8 +2,21 @@ XInventory::Application.routes.draw do
 
   match 'home' => 'home#index'
 
+  ########## Users start #####################
   get "user/logout"
   post "user/login"
+  match 'edit_user/:id' => 'user#edit', :as => :edit_user
+  post "user/update"
+  match 'settings/:id' => 'user#index', :as => :settings
+  match 'new_user' => 'user#new'
+  post 'user/create'
+  match 'remove_user/:id' => 'user#delete', :as => :remove_user
+  match 'assign_role/:id' => 'user#roles', :as => :assign_role
+  post 'user/assign_role'
+  match '/username_availability' => 'user#username_availability'
+  match 'details/:id' => 'user#show', :as => :details
+  match 'assign_role' => 'user#assign_role'
+  ########## Users end #####################
 
   ########## Reports start #####################
   match 'reports' => 'reports#index'

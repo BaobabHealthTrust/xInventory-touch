@@ -1,0 +1,93 @@
+
+<style>
+
+  .buttons {
+    width: 400px !important;
+  }
+
+  .sidebar-nav {
+    font-size: 12px;
+    padding-bottom: 40px;
+  }
+
+  .demographics {
+    width: 99%;
+  }
+
+  .demographics td , th{
+    text-align: left;
+  }
+
+  #sub-content-view {                                                           
+    background: none repeat scroll 0 0 rgb(255, 235, 144);                      
+    height: auto;                                                               
+    border: 1px dotted #696969;                                                 
+  }                                                                             
+                                                                                
+  #sub-content-view hr {                                                        
+    margin-left: 12px;                                                          
+    margin-right: 12px;                                                         
+    -moz-box-sizing: border-box;                                                
+    -moz-float-edge: margin-box;                                                
+    border: 1px inset;                                                          
+    color: gray;                                                                
+    display: block;                                                             
+    height: 2px;                                                                
+    /*margin: 0.5em auto;*/                                                     
+  }
+
+  .demographics {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-family: Tahoma,Verdana,Arial;
+  font-size: 11px; 
+  width: 98%;
+  text-align: left;
+}
+
+.demographics th{
+  word-wrap: break-word;
+  vertical-align: top;
+  color: #404040;
+}
+
+.demographics td{
+  vertical-align: top;
+}
+
+.xool_information {                                                           
+  font-size: 11px;                                                              
+  margin-left: 12px;                                                            
+  margin-right: 12px;                                                           
+}
+</style>
+
+
+<div class="page-header">
+  <h1>User's <small>details</small></h1>
+</div>
+
+<section id='modals'>                                              
+
+    <div id = "sub-content-view">
+
+    <table class = "demographics">
+      <tr>
+        <th>Username:&nbsp;</th>
+        <td>
+          <%= @user.username %>&nbsp;
+        </td>
+        <th>Name:&nbsp;</th><td><%=@user.name%></td>
+      </tr>
+        <th>Role:&nbsp;</th><td><%=@user.user_roles[0].role%></td>
+        <th>Date registered:&nbsp;</th><td><%=@user.created_at.strftime('%A, %d %B %Y')%></td>
+      </tr>
+    </table>
+
+    <hr />
+
+</section> 
+
+
+
+

@@ -4,8 +4,8 @@ class User < ActiveRecord::Base
   # attr_accessible :title, :body
   cattr_accessor :current_user                                                  
                                                                                 
-  belongs_to :people                                                            
-  has_many :user_roles, :class_name => "UserRole",:foreign_key => :user_id     
+  belongs_to :person ,:class_name => :Person, :foreign_key => :person_id                                                        
+  has_many :user_roles, :class_name => :UserRole ,:foreign_key => :user_id     
                                                                                 
   before_save do |pass|                                                         
     self.password_hash = BCrypt::Password.create(self.password_hash)            
@@ -26,5 +26,10 @@ class User < ActiveRecord::Base
     @password = BCrypt::Password.create(new_password)                           
     self.password_hash = @password                                              
   end 
+
+  def name
+    person = self.person
+    "#{person.first_name} #{person.last_name}"
+  end
 
 end

@@ -41,6 +41,15 @@ asset_states.each do |name,description|
   asset_state.name = name
   asset_state.save
 end                             
+
+user_roles = ['admin','superuser','standard']
+user_roles.each do |role|
+  r = UserRoleType.new()
+  r.name = role
+  r.save
+end
+
+
                                              
 person = Person.new()
 person.first_name = 'Super'

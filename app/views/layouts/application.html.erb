@@ -41,13 +41,14 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <%unless User.current_user.blank?%>
-                          <li><a href="#"><%=User.current_user.username[0..14]%></a></li>
+                          <li><a href="<%=details_url(:id => User.current_user.id)%>"><%=User.current_user.username[0..14]%></a></li>
                         <%end%>
                         <li class="divider"></li>
                         <%if admin?%>
-                          <li><a href="#"><i class="icon-search"></i>add users</a></li>
-                          <li><a href="#"><i class="icon-search"></i>remove users</a></li>
-                          <li><a href="#"><i class="icon-search"></i>assign roles</a></li>
+                          <li><a href="/new_user"><i class="icon-search"></i>add users</a></li>
+                          <li><a href="<%=settings_url(:id => 'edit_users')%>"><i class="icon-search"></i>edit users</a></li>
+                          <li><a href="<%=settings_url(:id => 'remove_users')%>"><i class="icon-search"></i>remove users</a></li>
+                          <li><a href="<%=settings_url(:id => 'assign_roles')%>"><i class="icon-search"></i>assign roles</a></li>
                           <li class="divider"></li>
                         <%end%>
                         <li><a href="/user/logout"><i class="icon-search"></i>Logout</a></li>

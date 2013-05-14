@@ -1,0 +1,132 @@
+
+<style>
+
+  .buttons {
+    width: 400px !important;
+  }
+
+  .sidebar-nav {
+    font-size: 12px;
+    padding-bottom: 40px;
+  }
+
+  .demographics {
+    width: 99%;
+  }
+
+  .demographics td , th{
+    text-align: left;
+  }
+
+  #sub-content-view {                                                           
+    background: none repeat scroll 0 0 rgb(255, 235, 144);                      
+    height: auto;                                                               
+    border: 1px dotted #696969;                                                 
+  }                                                                             
+                                                                                
+  #sub-content-view hr {                                                        
+    margin-left: 12px;                                                          
+    margin-right: 12px;                                                         
+    -moz-box-sizing: border-box;                                                
+    -moz-float-edge: margin-box;                                                
+    border: 1px inset;                                                          
+    color: gray;                                                                
+    display: block;                                                             
+    height: 2px;                                                                
+    /*margin: 0.5em auto;*/                                                     
+  }
+
+  .demographics {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-family: Tahoma,Verdana,Arial;
+  font-size: 11px; 
+  width: 98%;
+  text-align: left;
+}
+
+.demographics th{
+  word-wrap: break-word;
+  vertical-align: top;
+  color: #404040;
+}
+
+.demographics td{
+  vertical-align: top;
+}
+
+.xool_information {                                                           
+  font-size: 11px;                                                              
+  margin-left: 12px;                                                            
+  margin-right: 12px;                                                           
+}
+</style>
+
+<script>
+
+function assignRole(element) {                                                    
+    role = element.value;  
+                                                                                
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results) {
+            document.getElementById('role').innerHTML = results;                           
+          }                                                                       
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/assign_role?role="+role+"&user_id=<%=@user.id%>",true);           
+      xmlhttp.send();                                                             
+                                                                                
+  } 
+
+</script>
+
+
+<div class="page-header">
+  <h1>User <small>details</small></h1>
+</div>
+
+<section id='modals'>                                              
+
+    <div id = "sub-content-view">
+
+    <table class = "demographics">
+      <tr>
+        <th>Name:&nbsp;</th>
+        <td>
+          <%= @user.name %>&nbsp;
+        </td>
+        <th>Role:&nbsp;</th><td id='role'><%=@user.user_roles[0].role%></td>
+      </tr>
+        <th>Username:&nbsp;</th><td><%=@user.username%></td>
+        <th>Date registered:&nbsp;</th><td><%=@user.created_at.strftime('%A, %d %B %Y')%></td>
+      </tr>
+      <tr>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+        <th colspan="4"><hr /></th>
+      </tr>
+      <tr>
+        <th>
+          <%@roles.unshift('Select role') %>                    
+          <%= select_tag "user[role]", options_for_select(@roles), 
+          :placeholder => "Select role" ,:onchange => "assignRole(this);"%> 
+        </th>
+      </tr>
+    </table>
+
+  </div>
+
+    
+</section> 
+
+
+
+
