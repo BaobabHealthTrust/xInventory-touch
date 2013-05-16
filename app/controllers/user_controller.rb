@@ -12,7 +12,7 @@ class UserController < ApplicationController
   def login
     if request.post?                                                            
       user = User.find_by_username params[:user]["username"]                   
-      if user and user.password_matches?(params[:user]["password"])             
+      if user and user.password_matches?(params[:user]["password"]) 
         session[:user_id] = user.id                                             
         redirect_to "/home"                                                         
       else                                                                      
@@ -99,8 +99,10 @@ class UserController < ApplicationController
         user.password_hash = params[:user]['password']                                         
       end
       user.save                                                                       
-                                                                                      
-      UserRole.where("user_id = ?",user.id).update_all(:role => params[:user]['role'])
+      
+      if admin?                                                                                
+        UserRole.where("user_id = ?",user.id).update_all(:role => params[:user]['role'])
+      end
       flash[:notice] = 'Successfully created.'                                
     end     
     redirect_to settings_url(:id => 'edit_users')

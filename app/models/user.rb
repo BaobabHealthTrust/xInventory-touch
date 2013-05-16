@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
   before_save do |pass|                                                         
     self.password_hash = BCrypt::Password.create(self.password_hash)            
   end                                                                           
+   
+  before_update do |pass|                                                         
+    self.password_hash = BCrypt::Password.create(self.password_hash)            
+  end                                                                           
                                                                                 
   def password_matches?(plain_password)                                         
     not plain_password.nil? and self.password == plain_password                 

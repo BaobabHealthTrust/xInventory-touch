@@ -20,7 +20,9 @@ function submitForm() {
 function validateForm(){                                                        
     first_name = document.getElementById('user_first_name');                      
     last_name = document.getElementById('user_last_name');                      
-    user_role = document.getElementById('user_role');                      
+    <%if admin?%>
+      user_role = document.getElementById('user_role');                      
+    <%end%>
     password = document.getElementById('user_password');                        
     password_confirm = document.getElementById('user_confirm_password');                      
                                                                                 
@@ -30,10 +32,14 @@ function validateForm(){
     }else if(last_name.value == '') {                                                     
       alert("Please enter user last name ...");                                     
       return false;                                                             
-    }else if(user_role.value == '') {                                                     
-      alert("Please select user role ...");                                     
-      return false;                                                             
     }
+
+    <%if admin?%>
+      if(user_role.value == '') {                                                     
+        alert("Please select user role ...");                                     
+        return false;                                                             
+      }
+    <%end%>
 
     if(password.value.length > 0){                                    
       if(password.value.length < 6) {                                                     
@@ -91,12 +97,12 @@ function validateForm(){
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
-    </tr>                                                                       
+    </tr><%if admin?%>                                                                      
     <tr><td>           
       <% @roles.unshift('') %> 
       <%= select_tag "user[role]", options_for_select(@roles), 
                 :placeholder => "Select user role" %></td>
-    </tr>                                                                       
+    </tr><%end%>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
     </tr>                                                                       
