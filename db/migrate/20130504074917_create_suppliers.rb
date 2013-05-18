@@ -1,7 +1,7 @@
 class CreateSuppliers < ActiveRecord::Migration
   def change
     create_table :suppliers do |t|
-      t.string :name, :null => false
+      t.string :name, :null => false, :unique => true
       t.text :description
       t.string :phone_number
       t.text :address
