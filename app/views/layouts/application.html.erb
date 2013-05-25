@@ -1,76 +1,142 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-      <meta charset="utf-8">
-      <title><%= app_name %></title>
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-      <![endif]-->
-      <%= stylesheet_link_tag "bootstrap" %>
-      <%#= stylesheet_link_tag "bootstrap-ie6.less" %>
-      <style>
-        body{ padding-top: 60px; }
-      </style>
-      <!--[if IE 6]>    
-        <link href="ie6.min.css" rel="stylesheet">
-      <![endif]-->
-    </head>
-    <body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Sticky footer &middot; Twitter Bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <%= stylesheet_link_tag "bootstrap" %>                                         
+    <style type="text/css">
+
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+      /* Custom page CSS
+      -------------------------------------------------- */
+      /* Not required for template or sticky footer method. */
+
+      #wrap > .container {
+        padding-top: 60px;
+      }
+      .container .credit {
+        margin: 20px 0;
+      }
+
+      code {
+        font-size: 80%;
+      }
+
+    </style>
+    <%= stylesheet_link_tag "bootstrap-responsive" %>                                         
+
+  </head>
+
+  <body>
+
+
+    <!-- Part 1: Wrap all page content here -->
+    <div id="wrap">
+
+      <!-- Fixed navbar -->
       <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
           <div class="container">
-            <a class="brand" href="/home"><%= app_name %></a>
-            <div class="nav-collapse">
-              <ul class="nav main-links">
-                <li class="active"><a href="/home">Home</a></li>
-                <li><a href="/assets">assets</a></li>
-                <li><a href="/projects">projects</a></li>
-                <li><a href="/donors">donor</a></li>
-                <li><a href="/suppliers">suppliers</a></li>
-                <li><a href="/manufacturers">manufacturer</a></li>
-                <li><a href="/dispatch_receive" id="dispatch_receive">dispatch/receive </a></li>
-                <%unless admin?%>
-                  <script>
-                    document.getElementById("dispatch_receive").href = '#';
-                    document.getElementById("dispatch_receive").style.color = "grey"
-                  </script>
-                <%end%>
-                <li><a href="/reports">reports</a></li>
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="#">Project name</a>
+            <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <%unless User.current_user.blank?%>
-                          <li><a href="<%=details_url(:id => User.current_user.id)%>"><%=User.current_user.username[0..14]%></a></li>
-                        <%end%>
-                        <li class="divider"></li>
-                        <%if admin?%>
-                          <li><a href="/new_user"><i class="icon-search"></i>add users</a></li>
-                          <li><a href="<%=settings_url(:id => 'edit_users')%>"><i class="icon-search"></i>edit users</a></li>
-                          <li><a href="<%=settings_url(:id => 'remove_users')%>"><i class="icon-search"></i>remove users</a></li>
-                          <li><a href="<%=settings_url(:id => 'assign_roles')%>"><i class="icon-search"></i>assign roles</a></li>
-                          <li class="divider"></li>
-                        <%end%>
-                        <li><a href="/user/logout"><i class="icon-search"></i>Logout</a></li>
-                    </ul>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li class="nav-header">Nav header</li>
+                    <li><a href="#">Separated link</a></li>
+                    <li><a href="#">One more separated link</a></li>
+                  </ul>
                 </li>
               </ul>
-            </div>
+            </div><!--/.nav-collapse -->
           </div>
         </div>
       </div>
 
-      <div class="container">  
-      <section id="modals">
         <%= yield %>
-      </section>
-      </div>
 
-        <%= javascript_include_tag "prototype" %>
-        <%= javascript_include_tag "jquery-1.7.1.min" %>
-        <%= javascript_include_tag "bootstrap" %>
-        <%= javascript_include_tag "dropdown" %>
-        <%= javascript_include_tag "placeholder" %>
-        <%= javascript_include_tag "invoke_placeholder" %>
+
+      <div id="push"></div>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Example courtesy <a href="http://martinbean.co.uk">Martin Bean</a> and <a href="http://ryanfait.com/sticky-footer/">Ryan Fait</a>.</p>
+      </div>
+    </div>
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <%=javascript_include_tag "jquery"%>                                         
+    <%=javascript_include_tag "bootstrap-transition"%>                                         
+    <%=javascript_include_tag "bootstrap-alert"%>                                         
+    <%=javascript_include_tag "bootstrap-modal"%>                                         
+    <%=javascript_include_tag "bootstrap-dropdown"%>                                         
+    <%=javascript_include_tag "bootstrap-scrollspy"%>                                         
+    <%=javascript_include_tag "bootstrap-tab"%>                                         
+    <%=javascript_include_tag "bootstrap-popover"%>                                         
+    <%=javascript_include_tag "bootstrap-tooltip"%>                                         
+    <%=javascript_include_tag "bootstrap-button"%>                                         
+    <%=javascript_include_tag "bootstrap-collapse"%>                                         
+    <%=javascript_include_tag "bootstrap-carousel"%>                                         
+    <%=javascript_include_tag "bootstrap-typeahead"%>                                         
+                                                                                
   </body>
 </html>
+

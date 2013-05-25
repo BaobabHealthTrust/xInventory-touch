@@ -13,28 +13,24 @@
 
 </style>
 
-<div class="page-header">
-  <h1><%=organization_name %> <small>inventory system</small></h1>
-</div>
+<div class="container">                                                   
+  <div class="page-header">                                               
+    <h1><%=organization_name %> <small>inventory system</small></h1>
+  </div>                                                                  
 
-<%= form_tag :controller => 'user', :action => 'login', :method => :post do %> 
-                                                                                
-  <div id = "image-logo">                                                       
-    <%= image_tag("keys.png" ,:id => "keys")%>                                  
-  </div>                                                                        
-                                                                                
-  <section id='modals'>                                              
-  <table>                                                                                
-  <tr>                                                                           
-     <td><%=text_field(:user, :username, :textCase => "lower",:placeholder => "username") %></td>
-  </tr>                                                                          
-  <tr>   
-    <td>                                                                        
-     <%=password_field(:user, :password, :textCase => "lower",
-        :placeholder => "password", :style => "width: 155px;") %>
-     <%= submit_tag "Login" ,:class => "btn btn-primary" , :style => "position: relative;top: -5px;"%> 
-    </td>
-  </tr>                                                                          
-<% end %>                                                                       
-                                                                                
-</section> 
+<div id = "image-logo">                                                 
+<%= image_tag("keys.png" ,:id => "keys")%>                              
+</div>
+<table>                                                                 
+  <tr>                                                                  
+    <td><%=text_field(:user, :username, :textCase => "lower",:placeholder => "username") %></td>
+  </tr>                                                                 
+  <tr>                                                                  
+    <td>                                                                
+      <%=password_field(:user, :password, :textCase => "lower",         
+      :placeholder => "password", :style => "width: 155px;") %>         
+      <%= submit_tag "Login" ,:class => "btn btn-primary" , :style => "position: relative;top: -5px;"%>
+    </td>                                                               
+  </tr>                                                                 
+</table>                                                                
+</div>
