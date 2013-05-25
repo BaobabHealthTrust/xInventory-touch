@@ -12,7 +12,7 @@ class AssetsController < ApplicationController
 
   def search
     @assets = {}
-    Item.order('name ASC').each do |asset|
+    Item.order('name ASC').limit(10).each do |asset|
       @assets[asset.id] = {
         :name => asset.name,
         :category => Category.find(asset.category_type).name,
@@ -249,11 +249,55 @@ class AssetsController < ApplicationController
     redirect_to '/asset_states_search' 
   end
 
+  def live_search
+    render :text => get_datatable(params[:search_str]) and return
+  end
 
 
 
+  private                           
+  
+  
+  def get_datatable(search_str)
+    @html =<<EOF
+      <table id="search_results" class="table table-striped table-bordered table-condensed">
+        <thead>                                                                       
+          <tr id = 'table_head'>                                                        
+            <th id="th1" style="width:200px;">Serial number</th>                        
+            <th id="th3" style="width:200px;">Name</th>                                 
+            <th id="th4" style="width:200px;">Category</th>                             
+            <th id="th5" style="width:200px;">Brand</th>                                
+            <th id="th8" style="width:150px;">Quantity</th>                             
+            <th id="th10" style="width:100px;">&nbsp;</th>                              
+          </tr>                                                                         
+        </thead>                                                                      
+        <tbody id='results'>
+EOF
 
-  private                                                                       
+     items = Item.order("name ASC").where("name LIKE ('%#{search_str}%')").limit(100)
+
+     (items || []).each do |item|
+       asset = get_asset(item.id)
+       @html +=<<EOF
+          <tr>                                                                        
+            <td>#{asset[:serial_number]}</td>                                       
+            <td>#{asset[:name]}</td>                                                
+            <td>#{asset[:category]}</td>                                            
+            <td>#{asset[:brand]}</td>                                               
+            <td>#{asset[:quantity]}</td>                                            
+            <td><a href="#{asset_details_url(:id => item.id)}">Show</a></td>       
+          </tr>
+EOF
+     end
+
+       @html +=<<EOF
+         </tbody>                                                                      
+  </table>
+EOF
+
+    return @html
+  end
+                                              
                                                                                 
   def check_authorized                                                          
     if action_name == 'new' or action_name == 'create' or 

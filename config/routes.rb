@@ -111,6 +111,7 @@ XInventory::Application.routes.draw do
   match 'edit_asset_state/:id' => 'assets#edit_asset_state', :as => :edit_asset_state
   match 'delete_asset_state/:id' => 'assets#delete_asset_state', :as => :delete_asset_state
   post "assets/edit_asset_state"
+  match 'asset_live_search' => 'assets#live_search'
   ########## Donors end #####################
 
   
