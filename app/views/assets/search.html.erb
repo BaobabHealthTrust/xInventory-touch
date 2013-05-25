@@ -1,7 +1,10 @@
-<%=javascript_include_tag "prototype"%>                                         
-<%=javascript_include_tag "jquery_data_table" %>                                
-<%=javascript_include_tag "jquery.dataTables.min" %>                            
-                                                                                
+<%=javascript_include_tag "jquery"%>                                      
+<%=javascript_include_tag "bootstrap-dropdown"%>
+<%=javascript_include_tag "prototype"%>                                   
+<script>jQuery.noConflict();</script>                                     
+<%=javascript_include_tag "jquery_data_table" %>                          
+<%=javascript_include_tag "jquery.dataTables.min" %>
+
 <%= stylesheet_link_tag "demo_table" %>                                         
 <%= stylesheet_link_tag "demo_table_jui" %>                                     
 <%= stylesheet_link_tag "demo_page" %>
@@ -30,7 +33,7 @@
           if(results == 'undefined' || results == '' || results == '"not validate"') {                           
             return;                                                               
           }else{                                                                  
-            document.getElementById('table-cont').innerHTML = results;                                                           
+            document.getElementById('modals').innerHTML = results;                                                           
             dataT();                                                              
           }                                                                       
         }                                                                         
@@ -58,9 +61,7 @@
   </div>
 
 </div>
-
 <section id='modals'>                                              
-  <div id='table-cont'>                                              
   <table id="search_results" class="table table-striped table-bordered table-condensed">
   <thead>                                                                       
   <tr id = 'table_head'>                                                        
@@ -85,7 +86,6 @@
     <%end%>                                                                     
   </tbody>                                                                      
   </table>
-  <div>
 </section> 
 
 <script>                                                                        

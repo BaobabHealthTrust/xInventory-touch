@@ -12,7 +12,7 @@ class AssetsController < ApplicationController
 
   def search
     @assets = {}
-    Item.order('name ASC').limit(30).each do |asset|
+    Item.order('name ASC,created_at DESC').limit(30).each do |asset|
       @assets[asset.id] = {
         :name => asset.name,
         :category => Category.find(asset.category_type).name,
