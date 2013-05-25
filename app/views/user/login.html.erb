@@ -13,14 +13,14 @@
 
 </style>
 
-<div class="container">                                                   
-  <div class="page-header">                                               
-    <h1><%=organization_name %> <small>inventory system</small></h1>
-  </div>                                                                  
+<div class="page-header">                                               
+  <h1><%=organization_name %> <small>inventory system</small></h1>
+</div>                                                                  
 
 <div id = "image-logo">                                                 
 <%= image_tag("keys.png" ,:id => "keys")%>                              
 </div>
+<%= form_tag :controller => 'user', :action => 'login', :method => :post do %> 
 <table>                                                                 
   <tr>                                                                  
     <td><%=text_field(:user, :username, :textCase => "lower",:placeholder => "username") %></td>
@@ -33,4 +33,4 @@
     </td>                                                               
   </tr>                                                                 
 </table>                                                                
-</div>
+<%end%>
