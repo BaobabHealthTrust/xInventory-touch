@@ -274,7 +274,13 @@ class AssetsController < ApplicationController
         <tbody id='results'>
 EOF
 
-     items = Item.order("name ASC").where("name LIKE ('%#{search_str}%')").limit(100)
+     brand_ids = Manufacturer.where("name LIKE ('#{search_str}%%')").map(&:id)
+     brand_ids = [0] if brand_ids.blank?
+      
+     items = Item.order("name ASC").where("name LIKE ('%#{search_str}%')
+     OR serial_number LIKE ('%#{search_str}%') OR description LIKE ('%#{search_str}%')
+     OR brand IN (#{brand_ids.join(',')}) OR version LIKE ('%#{search_str}%')
+     OR model LIKE ('%#{search_str}%') OR vendor LIKE ('%#{search_str}%')").limit(100)
 
      (items || []).each do |item|
        asset = get_asset(item.id)
@@ -284,7 +290,7 @@ EOF
             <td>#{asset[:name]}</td>                                                
             <td>#{asset[:category]}</td>                                            
             <td>#{asset[:brand]}</td>                                               
-            <td>#{asset[:quantity]}</td>                                            
+            <td>#{asset[:current_quantity]}</td>                                            
             <td><a href="#{asset_details_url(:id => item.id)}">Show</a></td>       
           </tr>
 EOF

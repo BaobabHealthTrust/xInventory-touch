@@ -63,14 +63,32 @@ def start
     puts "Suppliers:  #{name.titleize}"
   end
 
+  sites = []
+  csv_location = FasterCSV.read("/home/mwatha/Desktop/statuses.csv")
+  (csv_location || []).each do |line|
+    next if line[5].match(/room/i)
+    sites << line[5].titleize
+  end
+  
+  sites = sites.uniq
+
+  (sites || []).each do |name|
+    site = Site.new()
+    site.name = name.titleize
+    site.save
+    puts "Site:  #{name.titleize}"
+  end
+
   status_on_delivery = StateType.where("name = 'Good condition'")[0].id
   count = csv_text.length
 
   (csv_text || []).each do |line|
     Item.transaction do                                                         
-      item = Item.new()                                                         
+      next if line[0].to_i == 0                                                  
+      item = Item.new()        
+      item.id = line[0].to_i                                                  
       item.name = line[1].titleize                  
-      item.category_type = Category.where("name = ?",category_type[item.name])[0].id
+      item.category_type = Category.where("name = ?",category_type[item.name])[0].id 
       item.brand = Manufacturer.where("name = ?",line[6].titleize)[0].id                           
       item.version = 'Unkown'                         
       item.serial_number = line[3]
@@ -82,7 +100,7 @@ def start
       item.order_number = "Unkown"
       item.current_quantity = 1
       item.bought_quantity = 1
-      item.cost = 0.0
+      item.cost = rand(500.99)
       item.date_of_receipt = line[7].to_date rescue Date.today
       item.delivered_by = "Unkown"                
       item.status_on_delivery = status_on_delivery
@@ -97,23 +115,59 @@ def start
     end
   end
 
-  
+
+
+  #dispatched items.
+
+  csv_location = FasterCSV.read("/home/mwatha/Desktop/statuses.csv")
+  (csv_location || []).each do |line|
+    next unless line[2].match(/item out/i)
+    next if line[1].match(/item/i)
+    item = Item.find(line[1]) rescue nil
+    next if item.blank?
+    dispatched_asset(item,line[4],line[3],line[5],line[8],line[7])
+    puts "dispatched asset ......... #{line[1]}"
+  end
+
 end
 
+def dispatched_asset(item,date_dispatched,dispatcher,location,quantity,reason)
+  DispatchReceive.transaction do
+    asset = item                                        
+    dispatch = DispatchReceive.new()                                         
+    dispatch.asset_id = asset.id                                             
+    dispatch.transaction_type = DispatchReceiveType.find_by_name('Dispatch').id
+    dispatch.encounter_date = date_dispatched.to_date rescue Date.today                 
+    dispatch.approved_by = "User One"               
+    dispatch.responsible_person = dispatcher       
+    dispatch.location_id = get_location(location)                 
+    dispatch.quantity = quantity                       
+    unless reason.blank?                                
+      dispatch.reason = reason                       
+    end
+                                                                      
+    if dispatch.save                                                         
+      curr_state = ItemState.where(:'item_id' => asset.id).first             
+      curr_state.current_state = StateType.where("name ='Good condition'").last.id
+      curr_state.save                                                        
+                                                                            
+      asset.current_quantity -= dispatch.quantity                            
+      asset.current_quantity = 0 if asset.current_quantity < 0
+      asset.save
+    end
+
+  end
+
+end
+
+def get_location(name)
+  Site.where("name = ?", name).first.id rescue 1
+end
 
 def get_project(project_name,donor_project)
   donor = donor_project[project_name]
   Donor.where("name = ?",donor).first
 end
-
-
-
-
-
-
-
-
-
 
 
 

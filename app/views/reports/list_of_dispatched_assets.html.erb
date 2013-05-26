@@ -87,6 +87,7 @@
  function getData() {                                                       
     var start_date = document.getElementById('report_start_date').value;               
     var end_date = document.getElementById('report_end_date').value;               
+    document.getElementById('content-data').innerHTML = "Please wait ....";                                                           
                                                                                 
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
         xmlhttp=new XMLHttpRequest();                                             
@@ -97,10 +98,12 @@
         if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
           var results = xmlhttp.responseText;                                     
           if(results == 'undefined' || results == '' || results == '"not validate"') {                           
+            document.getElementById('content-data').innerHTML = "....";                                                           
             return;                                                               
           }else if(results.length > 0){
             document.getElementById('content-data').innerHTML = results;                                                           
           }else{
+            document.getElementById('content-data').innerHTML = "....";                                                           
             return;
           }                                             
         }                                                                         

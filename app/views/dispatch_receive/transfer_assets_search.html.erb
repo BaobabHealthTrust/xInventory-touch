@@ -1,4 +1,7 @@
+<%=javascript_include_tag "jquery"%>                                            
+<%=javascript_include_tag "bootstrap-dropdown"%>                                
 <%=javascript_include_tag "prototype"%>                                         
+<script>jQuery.noConflict();</script>                                           
 <%=javascript_include_tag "jquery_data_table" %>                                
 <%=javascript_include_tag "jquery.dataTables.min" %>                            
                                                                                 
@@ -6,8 +9,11 @@
 <%= stylesheet_link_tag "demo_table_jui" %>                                     
 <%= stylesheet_link_tag "demo_page" %>
 
+
 <style>
-                                                                                
+  .asset_search_div {                                                           
+    text-align: right;                                                          
+  }                                       
 </style>
 
 <script>
@@ -44,7 +50,7 @@
     $('#search_results').dataTable();                                                  
   }
 
-  function findStudents() {                                                       
+  function findAssets() {                                                       
     var search_str = document.getElementById('search_words').value;               
                                                                                 
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
@@ -58,12 +64,12 @@
           if(results == 'undefined' || results == '' || results == '"not validate"') {                           
             return;                                                               
           }else{                                                                  
-            document.getElementById('results-cont').innerHTML = results;                                                           
+            document.getElementById('modals').innerHTML = results;                                                           
             dataT();                                                              
           }                                                                       
         }                                                                         
       }                                                                           
-      xmlhttp.open("GET","/assets/live_search?search_str="+search_str,true);           
+      xmlhttp.open("GET","/dispatch_live_search?type=transfer&search_str="+search_str,true);
       xmlhttp.send();                                                             
     } 
  
@@ -72,6 +78,12 @@
 
 <div class="page-header">
   <h1>assets <small>select which assets to tranfer to another donor/project</small></h1>
+
+  <div class="asset_search_div">                                                
+    <input type="text" name="search" onkeyup = "javascript:findAssets()"        
+      placeholder = "asset(s) search" id="search_words" />                      
+  </div>
+
 </div>
 
 <section id='modals'>                                              
@@ -95,11 +107,15 @@
       <td><%=asset[:name]%></td>                                    
       <td><%=asset[:category]%></td>                                    
       <td><%=asset[:brand]%></td>                                    
-      <td><%=asset[:quantity]%></td>                                    
+      <td><%=asset[:current_quantity]%></td>                                    
       <td><%=asset[:donor]%></td>                                    
       <td><%=asset[:project]%></td>                                    
       <td style="text-align:center;">
-        <%= check_box("#{asset_id}", nil, options = {:class => 'assets'}) %>
+        <%if asset[:current_quantity].to_f >= 1%>
+          <%= check_box("#{asset_id}", nil, options = {:class => 'assets'}) %>
+        <%else%>
+          &nbsp;
+        <%end%>
       </td>       
     </tr>                                                                       
     <%end%>                                                                     

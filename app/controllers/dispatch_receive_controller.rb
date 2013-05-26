@@ -157,6 +157,10 @@ class DispatchReceiveController < ApplicationController
     @results = get_transfer_results(params[:id])
   end
 
+  def live_search
+    render :text => get_datatable(params[:search_str],params[:type]) and return
+  end
+
   private   
 
   def get_transfer_results(transfer_id)
@@ -175,7 +179,7 @@ class DispatchReceiveController < ApplicationController
   end
 
   def get_assets_by_ids(asset_ids)                                                       
-    assets = Item.where("id IN(?)",asset_ids)                                                 
+    assets = Item.where("id IN(?)",asset_ids).order("current_quantity DESC,name ASC")                                                 
     @assets = {}                             
     (assets || []).each do |asset|                                    
     @assets[asset.id] = {                                                        
@@ -190,7 +194,7 @@ class DispatchReceiveController < ApplicationController
       :donor => Donor.find(asset.donor_id).name,                                
       :purchased_date => asset.purchased_date.strftime('%d %B %Y'),             
       :order_number => asset.order_number,                                      
-      :quantity => asset.current_quantity,                                              
+      :current_quantity => asset.current_quantity,                                              
       :cost => asset.cost,                                                      
       :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),           
       :delivered_by => asset.delivered_by,                                      
@@ -217,7 +221,7 @@ class DispatchReceiveController < ApplicationController
       :donor => Donor.find(asset.donor_id).name,                                
       :purchased_date => asset.purchased_date.strftime('%d %B %Y'),             
       :order_number => asset.order_number,                                      
-      :quantity => asset.current_quantity,                                              
+      :current_quantity => asset.current_quantity,                                              
       :cost => asset.cost,                                                      
       :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),           
       :delivered_by => asset.delivered_by,                                      
@@ -235,7 +239,7 @@ class DispatchReceiveController < ApplicationController
 
   def get_assets
     @assets = {}                                                                
-    Item.order('name ASC').each do |asset|                                      
+    Item.order("current_quantity DESC,name ASC").limit(100).each do |asset|                                      
       @assets[asset.id] = {                                                     
         :name => asset.name,                                                    
         :category => Category.find(asset.category_type).name,                   
@@ -248,7 +252,7 @@ class DispatchReceiveController < ApplicationController
         :donor => Donor.find(asset.donor_id).name,                              
         :purchased_date => asset.purchased_date,                                
         :order_number => asset.order_number,                                    
-        :quantity => asset.current_quantity,                                            
+        :current_quantity => asset.current_quantity,                                            
         :cost => asset.cost,                                                    
         :date_of_receipt => asset.date_of_receipt,                              
         :delivered_by => asset.delivered_by,                                    
@@ -257,6 +261,86 @@ class DispatchReceiveController < ApplicationController
       }                                                                         
     end
     return @assets
+  end
+
+  def get_datatable(search_str,type)
+    @html =<<EOF
+      <table id="search_results" class="table table-striped table-bordered table-condensed">
+        <thead>                                                                       
+          <tr id = 'table_head'>                                                        
+            <th id="th1" style="width:200px;">Serial number</th>                        
+            <th id="th3" style="width:200px;">Name</th>                                 
+            <th id="th4" style="width:200px;">Category</th>                             
+            <th id="th5" style="width:200px;">Brand</th>                                
+            <th id="th8" style="width:150px;">Quantity in store</th>                    
+            <th id="th5" style="width:200px;">Donor</th>                                
+            <th id="th5" style="width:200px;">Project</th>                              
+            <th id="th10" style="width:100px;">&nbsp;</th>
+          </tr>                                                                         
+        </thead>                                                                      
+        <tbody id='results'>
+EOF
+
+     brand_ids = Manufacturer.where("name LIKE ('#{search_str}%%')").map(&:id)
+     brand_ids = [0] if brand_ids.blank?
+      
+     items = Item.where("name LIKE ('%#{search_str}%')
+     OR serial_number LIKE ('%#{search_str}%') OR description LIKE ('%#{search_str}%')
+     OR brand IN (#{brand_ids.join(',')}) OR version LIKE ('%#{search_str}%')
+     OR model LIKE ('%#{search_str}%') 
+     OR vendor LIKE ('%#{search_str}%')").order("current_quantity DESC,name ASC").limit(100)
+
+     (items || []).each do |item|
+       asset = get_asset(item.id)
+       if type == 'dispatch'
+         if asset[:current_quantity].to_f < 1
+           url = nil
+           dispatched_receive = nil
+         else
+           url = dispatch_url(:id => item.id)
+           dispatched_receive = type.titleize
+         end
+       elsif type == 'transfer'
+         url = '#'                                                           
+         dispatched_receive = "<input id='#{item.id}_' class='assets' type='checkbox' name='#{item.id}[]'>"
+       else
+         url = receive_url(:id => item.id)
+         dispatched_receive = type.titleize
+       end
+       @html +=<<EOF
+          <tr>                                                                        
+            <td>#{asset[:serial_number]}</td>                                       
+            <td>#{asset[:name]}</td>                                                
+            <td>#{asset[:category]}</td>                                            
+            <td>#{asset[:brand]}</td>                                               
+            <td>#{asset[:current_quantity]}</td>                                            
+            <td>#{asset[:donor]}</td>                                               
+            <td>#{asset[:project]}</td>                                               
+            <td><a href="#{url}">#{dispatched_receive}</a></td>       
+          </tr>
+EOF
+     end
+
+     if not items.blank? and type == 'transfer'
+       @html +=<<EOF
+        <table style="width: 98%;">                                                   
+           <tr>                                                                       
+            <td>                                                                      
+              <input onclick="submitForm();" type="button" id="signup"                
+                class="btn btn-primary signup_btn" value="Start tranfer" style="width:100%;" />
+            </td>                                                                     
+          </tr>                                                                       
+        </table> 
+EOF
+
+     end
+
+       @html +=<<EOF
+         </tbody>                                                                      
+  </table>
+EOF
+
+    return @html
   end
 
 end

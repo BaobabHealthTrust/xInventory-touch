@@ -73,7 +73,8 @@
  var currDate = new Date();                                                     
  var dateNow =  currDate.getDate();                                             
  var yrNow =  currDate.getFullYear();                                           
- var monthNow =  (currDate.getMonth() + 1);                                     
+ var monthNow =  (currDate.getMonth() + 1);
+ var current_quantity = parseFloat("<%=Item.find(params[:id]).current_quantity%>");                                     
                                                                                 
  function initDate(id){                                                          
     new JsDatePick({                                                            
@@ -127,7 +128,10 @@
     }else if(dispatch_location.value == 'Select dispatch location') {
       alert('Please enter where the asset is being dispatched to');
       return false;
-    }
+    }else if(parseFloat(quantity.value) > current_quantity) {
+      alert('Dispatched quantity is more than current quantity: ' + current_quantity);
+      return false;
+    }  
 
     return true;
   }

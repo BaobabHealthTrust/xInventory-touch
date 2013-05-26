@@ -67,6 +67,7 @@ class ReportsController < ApplicationController
   <table id='search_results' class='table table-striped table-bordered table-condensed'>
   <thead>                                                                       
   <tr id = 'table_head'>                                                        
+    <th id="th3" style="width:200px;">Serial number</th>                                 
     <th id="th3" style="width:200px;">Item</th>                                 
     <th id="th1" style="width:200px;">Donor - From</th>                               
     <th id="th1" style="width:200px;">Project - From</th>                               
@@ -83,6 +84,7 @@ EOF
       (transfer.transfer_transactions).each do |transaction|
         @html +=<<EOF                                                               
       <tr>                                                                        
+      <td>#{Item.find(transaction.asset_id).serial_number}</td>                                                      
       <td>#{Item.find(transaction.asset_id).name}</td>                                                      
       <td>#{Donor.find(transaction.from_donor).name}</td>                                                      
       <td>#{Project.find(transaction.from_project).name}</td>                                                      

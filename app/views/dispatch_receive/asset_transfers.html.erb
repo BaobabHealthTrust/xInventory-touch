@@ -128,11 +128,13 @@ function validateForm(){
       <tr>
         <th style="border-style:solid;border-width:0px 0px 1px 0px;text-align:left;">Name</th>
         <th style="border-style:solid;border-width:0px 0px 1px 0px;text-align:left;">Category</th>
+        <th style="border-style:solid;border-width:0px 0px 1px 0px;text-align:left;">Donor</th>
       </tr>
       <%@assets.each do |id,values|%>
         <tr style="border-style:solid;border-width:0px 0px 1px 0px;">
           <td><%=values[:name]%></td>
           <td><%=values[:category]%></td>
+          <td><%=values[:donor]%></td>
         </tr>
       <%end%>
     </table>
