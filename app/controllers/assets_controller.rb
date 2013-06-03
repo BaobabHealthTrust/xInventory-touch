@@ -64,6 +64,10 @@ class AssetsController < ApplicationController
       [site.name , site.id]
     end
 
+    @currencies = Currencies.order('code ASC').collect do |currency|
+      [currency.code , currency.id]
+    end
+
   end
 
   def create
@@ -83,6 +87,7 @@ class AssetsController < ApplicationController
       item.current_quantity = params[:vendor]['quantity']
       item.bought_quantity = params[:vendor]['quantity']
       item.cost = params[:vendor]['cost']
+      item.currency = params[:vendor]['currency']
       item.date_of_receipt = params[:organisation]['receipt_date'].to_date
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']
@@ -161,6 +166,10 @@ class AssetsController < ApplicationController
       [site.name , site.id]
     end
     
+    @currencies = Currencies.order('code ASC').collect do |currency|
+      [currency.code , currency.id]
+    end
+
   end
 
   def update
@@ -180,6 +189,7 @@ class AssetsController < ApplicationController
       item.current_quantity = params[:vendor]['quantity']
       item.bought_quantity = params[:vendor]['quantity']
       item.cost = params[:vendor]['cost']
+      item.currency = params[:vendor]['currency']
       item.date_of_receipt = params[:organisation]['receipt_date'].to_date
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']

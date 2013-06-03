@@ -42,6 +42,20 @@ asset_states.each do |name,description|
   asset_state.save
 end                             
 
+currencies = [
+['MK','K','Malawi currency'],
+['USD','$','US currency'],
+['GBP','£','British currency']
+]
+
+currencies.each do |code,abbrv,description|
+  c = Currencies.new()
+  c.code = code
+  c.abbreviation = abbrv
+  c.description = description
+  c.save
+end
+
 user_roles = ['admin','superuser','standard']
 user_roles.each do |role|
   r = UserRoleType.new()

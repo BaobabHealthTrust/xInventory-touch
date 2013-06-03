@@ -61,6 +61,7 @@ function validateForm(){
     vendor_date_of_invoice = document.getElementById('vendor_date_of_invoice');                            
     vendor_quantity = document.getElementById('vendor_quantity');                               
     vendor_cost = document.getElementById('vendor_cost');    
+    vendor_currency = document.getElementById('vendor_currency');    
                       
     org_receipt_date = document.getElementById('organisation_receipt_date');                             
     org_delivered_by = document.getElementById('organisation_delivered_by');                             
@@ -106,6 +107,9 @@ function validateForm(){
       return false;                                                             
     }else if(vendor_cost.value == '') {                                                 
       alert("Please enter cost ...");                                      
+      return false;                                                             
+    }else if(vendor_currency.value == 'Select currency') {                                                 
+      alert("Please select currency ...");                                      
       return false;                                                             
     }else if(org_receipt_date.value == '') {                                                 
       alert("Please enter receipt date ...");                                      
@@ -205,7 +209,11 @@ function validateForm(){
       <td><%=text_field(:vendor, :quantity, :placeholder => "Quantity") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :cost, :placeholder => "Cost (MK)") %> </td>
+      <td><%=text_field(:vendor, :cost, :placeholder => "Cost (MK)") %>&nbsp;&nbsp;&nbsp;                                                       
+        <%@currencies.unshift('Select currency') %>
+        <%= select_tag "vendor[currency]", options_for_select(@currencies),
+          :placeholder => "Select currency" %>                                              
+      </td>                                                                       
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
