@@ -87,8 +87,12 @@
  function getData() {                                                       
     var start_date = document.getElementById('report_start_date').value;               
     var end_date = document.getElementById('report_end_date').value;               
+    var donor = document.getElementById('donor').value;
     document.getElementById('content-data').innerHTML = "Please wait ....";                                                           
-                                                                                
+                                                                                  
+    if(donor == 'Select donor')                                                 
+      donor = '';                                                               
+                                                                                                   
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
         xmlhttp=new XMLHttpRequest();                                             
       }else{// code for IE6, IE5                                                  
@@ -108,7 +112,7 @@
           }                                             
         }                                                                         
       }                                                                           
-      xmlhttp.open("GET","/search_for_dispatched_assets?start_date="+start_date + "&end_date=" + end_date,true);           
+      xmlhttp.open("GET","/search_for_dispatched_assets?start_date="+start_date + "&end_date=" + end_date  + "&donor=" + donor,true);           
       xmlhttp.send();                                                             
     }  
 
@@ -122,6 +126,12 @@
 
 <div id = "content-heading">                                                     
   <table style="width: 99%;">
+    <tr>                                                                        
+      <td colspan="2">                                                          
+        <%@donors.unshift('Select donor') %>                                    
+        <%= select_tag "donor", options_for_select(@donors),                    
+          :placeholder => "Select donor" %>                                     
+      </td> 
     <tr>
       <td colspan="2"><%=text_field(:report, :start_date ,:placeholder => "Start date") %></td>
     </tr>

@@ -85,6 +85,11 @@
  function getData() {                                                       
     var start_date = document.getElementById('report_start_date').value;               
     var end_date = document.getElementById('report_end_date').value;               
+    var donor = document.getElementById('donor').value;  
+    
+    if(donor == 'Select donor')
+      donor = '';
+             
     document.getElementById('content-data').innerHTML = "Please wait ....";
 
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
@@ -106,7 +111,7 @@
           }                                             
         }                                                                         
       }                                                                           
-      xmlhttp.open("GET","/search_for_assets_bought_in?start_date="+start_date + "&end_date=" + end_date,true);           
+      xmlhttp.open("GET","/search_for_assets_bought_in?start_date="+start_date + "&end_date=" + end_date + "&donor=" + donor,true);           
       xmlhttp.send();                                                             
     }  
 
@@ -120,6 +125,13 @@
 
 <div id = "content-heading">                                                     
   <table style="width: 99%;">
+    <tr>
+      <td colspan="2">
+        <%@donors.unshift('Select donor') %>                    
+        <%= select_tag "donor", options_for_select(@donors), 
+          :placeholder => "Select donor" %>  
+      </td>
+    </tr>
     <tr>
       <td colspan="2"><%=text_field(:report, :start_date ,:placeholder => "Start date") %></td>
     </tr>

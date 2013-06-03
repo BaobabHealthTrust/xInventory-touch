@@ -2,22 +2,40 @@ class ReportsController < ApplicationController
   def show
   end
 
+  def list_of_items_bought_in
+    @donors = Donor.order("name ASC").collect{|donor|[donor.name,donor.id]}
+  end
+
+  def list_of_dispatched_assets
+    @donors = Donor.order("name ASC").collect{|donor|[donor.name,donor.id]}
+  end
+
+  def stock_balances
+    @donors = Donor.order("name ASC").collect{|donor|[donor.name,donor.id]}
+  end
+
+  def transfers
+    @donors = Donor.order("name ASC").collect{|donor|[donor.name,donor.id]}
+  end
+
   def search_for_dispatched_assets
     start_date = params[:start_date].to_date rescue nil
     end_date = params[:end_date].to_date rescue nil
-    
+    donor = params[:donor].to_i rescue nil
+     
     if start_date.blank? or end_date.blank?
       render :text => '' and return 
     elsif start_date > end_date
       render :text => '' and return 
     end
 
-    render :text => get_dispatched_assets(start_date,end_date) and return
+    render :text => get_dispatched_assets(start_date,end_date,donor) and return
   end
 
   def search_for_assets_bought_in
     start_date = params[:start_date].to_date rescue nil
     end_date = params[:end_date].to_date rescue nil
+    donor = params[:donor].to_i rescue nil
     
     if start_date.blank? or end_date.blank?
       render :text => '' and return 
@@ -25,7 +43,7 @@ class ReportsController < ApplicationController
       render :text => '' and return 
     end
 
-    render :text => get_assets_bought_in(start_date,end_date) and return
+    render :text => get_assets_bought_in(start_date,end_date,donor) and return
   end
 
   def search_for_stock_balances
@@ -168,7 +186,7 @@ EOF
     return @html
   end 
   
-  def get_dispatched_assets(start_date,end_date)
+  def get_dispatched_assets(start_date,end_date,donor)
 	type = DispatchReceiveType.where(:'name' => 'Dispatch').last
     data = DispatchReceive.where("transaction_type = ? AND encounter_date >= ?
            AND encounter_date <= ?",type.id,start_date,end_date)
@@ -197,8 +215,11 @@ EOF
   <tbody id='results'>  
 EOF
 
-    (data).each do |dispatch|  
+    (data).each do |dispatch| 
       asset = Item.find(dispatch.asset_id)
+      unless donor.blank?
+        next if not asset.donor_id == donor
+      end 
       asset_name = asset.name
       location = Site.find(dispatch.location_id).name
       encounter_date = dispatch.encounter_date
@@ -245,10 +266,14 @@ EOF
   end
 
 
-  def get_assets_bought_in(start_date,end_date)
-    type = DispatchReceiveType.where(:'name' => 'Receive').last
-    data = DispatchReceive.where("transaction_type = ? AND encounter_date >= ?
-           AND encounter_date <= ?",type.id,start_date,end_date)
+  def get_assets_bought_in(start_date,end_date,donor)
+    unless donor.blank?
+      data = Item.where("donor_id = ? AND purchased_date >= ? AND purchased_date <= ?",
+        donor,start_date,end_date).order("purchased_date DESC,name ASC")
+    else
+      data = Item.where("purchased_date >= AND purchased_date <= ?",
+        start_date,end_date).order("purchased_date DESC,name ASC")
+    end
 
     return nil if data.blank?
     total_cost = 0
@@ -272,10 +297,9 @@ EOF
   <tbody id='results'>  
 EOF
 
-    (data).each do |dispatch|  
-      asset = Item.find(dispatch.asset_id)
+    (data).each do |asset|  
       asset_name = asset.name
-      location = Site.find(dispatch.location_id).name
+      location = Site.find(asset.location).name
       purchase_date = asset.purchased_date
       donor = Donor.find(asset.donor_id).name
       project = Project.find(asset.project_id).name
