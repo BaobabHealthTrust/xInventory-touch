@@ -187,9 +187,15 @@ EOF
   end 
   
   def get_dispatched_assets(start_date,end_date,donor)
-	type = DispatchReceiveType.where(:'name' => 'Dispatch').last
-    data = DispatchReceive.where("transaction_type = ? AND encounter_date >= ?
-           AND encounter_date <= ?",type.id,start_date,end_date)
+    type = DispatchReceiveType.where(:'name' => 'Dispatch').last
+
+    if donor == 0
+      data = DispatchReceive.where("transaction_type = ? AND encounter_date >= ?
+      AND encounter_date <= ?",type.id,start_date,end_date)
+    else
+      data = DispatchReceive.joins("INNER JOIN items i ON dispatch_receives.asset_id = i.id").where("transaction_type = ? 
+      AND encounter_date >= ? AND encounter_date <= ? AND donor_id = ?",type.id, start_date,end_date,donor)
+    end
 
     return nil if data.blank?
     total_quantity = 0
@@ -217,9 +223,7 @@ EOF
 
     (data).each do |dispatch| 
       asset = Item.find(dispatch.asset_id)
-      unless donor.blank?
-        next if not asset.donor_id == donor
-      end 
+      next if asset.blank?
       asset_name = asset.name
       location = Site.find(dispatch.location_id).name
       encounter_date = dispatch.encounter_date

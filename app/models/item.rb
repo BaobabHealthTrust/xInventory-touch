@@ -1,6 +1,6 @@
 class Item < ActiveRecord::Base
   # attr_accessible :title, :body
-  default_scope where('voided = 0')
+  default_scope where("#{table_name}.voided = 0")
 
   belongs_to :category , :class_name => :Category, :foreign_key => :category_type                                                            
   belongs_to :donor , :class_name => :Donor, :foreign_key => :donor_id                                                           
