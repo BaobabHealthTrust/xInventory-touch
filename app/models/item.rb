@@ -9,5 +9,5 @@ class Item < ActiveRecord::Base
   belongs_to :manufacturer , :class_name => :Manufacturer, :foreign_key => :brand
   belongs_to :site , :class_name => :Site, :foreign_key => :location
   has_one :current_state, :class_name => :ItemState,:foreign_key => :item_id
-  belongs_to :currency, :class_name => :Currencies, :foreign_key => :currency
+  belongs_to :currency, :class_name => :Currencies, :foreign_key => :currency_id
 end

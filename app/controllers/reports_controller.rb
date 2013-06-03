@@ -271,11 +271,11 @@ EOF
 
 
   def get_assets_bought_in(start_date,end_date,donor)
-    unless donor.blank?
+    if donor > 0 
       data = Item.where("donor_id = ? AND purchased_date >= ? AND purchased_date <= ?",
         donor,start_date,end_date).order("purchased_date DESC,name ASC")
     else
-      data = Item.where("purchased_date >= AND purchased_date <= ?",
+      data = Item.where("purchased_date >= ? AND purchased_date <= ?",
         start_date,end_date).order("purchased_date DESC,name ASC")
     end
 
