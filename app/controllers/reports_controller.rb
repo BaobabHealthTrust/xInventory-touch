@@ -310,6 +310,7 @@ EOF
       asset_model = asset.version
       serial_num = asset.serial_number
       total_cost += cost
+      currency = asset.currency.code
     @html +=<<EOF
       <tr>                                                                        
       <td>#{asset_name}</td>                                       
@@ -321,7 +322,7 @@ EOF
       <td>#{supplier}</td>                                       
       <td>#{order_num}</td>                                       
       <td>#{quantity}</td>                                       
-      <td>#{cost}</td>                                       
+      <td>#{cost}&nbsp;#{currency}</td>                                       
     </tr>
 EOF
     end
