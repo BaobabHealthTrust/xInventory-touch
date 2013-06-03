@@ -232,7 +232,7 @@ function validateForm(){
     </tr>                                                                       
     <tr>                                                                        
       <td>
-        <%=text_field(:vendor, :cost, :placeholder => "Cost (MK)",:value => @asset[:cost])%>
+        <%=text_field(:vendor, :cost, :placeholder => "Cost",:value => @asset[:cost])%>
         &nbsp;&nbsp;&nbsp;
         <%@currencies.unshift('Select currency') %>                             
         <%= select_tag "vendor[currency]", options_for_select(@currencies),     
