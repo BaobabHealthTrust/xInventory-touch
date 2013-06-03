@@ -101,6 +101,7 @@ def start
       item.current_quantity = 1
       item.bought_quantity = 1
       item.cost = rand(500.99)
+      item.currency = 2
       item.date_of_receipt = line[7].to_date rescue Date.today
       item.delivered_by = "Unkown"                
       item.status_on_delivery = status_on_delivery
