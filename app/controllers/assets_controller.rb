@@ -87,7 +87,7 @@ class AssetsController < ApplicationController
       item.current_quantity = params[:vendor]['quantity']
       item.bought_quantity = params[:vendor]['quantity']
       item.cost = params[:vendor]['cost']
-      item.currency = params[:vendor]['currency']
+      item.currency_id = params[:vendor]['currency'].to_i
       item.date_of_receipt = params[:organisation]['receipt_date'].to_date
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']
@@ -189,7 +189,7 @@ class AssetsController < ApplicationController
       item.current_quantity = params[:vendor]['quantity']
       item.bought_quantity = params[:vendor]['quantity']
       item.cost = params[:vendor]['cost']
-      item.currency = params[:vendor]['currency']
+      item.currency_id = params[:vendor]['currency'].to_i
       item.date_of_receipt = params[:organisation]['receipt_date'].to_date
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']

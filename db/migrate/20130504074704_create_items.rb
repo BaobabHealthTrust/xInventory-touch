@@ -16,7 +16,7 @@ class CreateItems < ActiveRecord::Migration
       t.float :current_quantity, :null => false
       t.float :bought_quantity, :null => false
       t.float :cost, :null => false
-      t.integer :currency, :null => false
+      t.integer :currency_id, :null => false
       t.date :date_of_receipt, :null => false
       t.string :delivered_by, :null => false
       t.integer :status_on_delivery, :null => false

@@ -90,7 +90,7 @@
     var donor = document.getElementById('donor').value;
     document.getElementById('content-data').innerHTML = "Please wait ....";                                                           
                                                                                   
-    if(donor == 'Select donor')                                                 
+    if(donor == 'All')                                                 
       donor = '';                                                               
                                                                                                    
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
@@ -128,9 +128,9 @@
   <table style="width: 99%;">
     <tr>                                                                        
       <td colspan="2">                                                          
-        <%@donors.unshift('Select donor') %>                                    
+        <%@donors.unshift('All') %>                                    
         <%= select_tag "donor", options_for_select(@donors),                    
-          :placeholder => "Select donor" %>                                     
+          :placeholder => "All" %>                                     
       </td> 
     <tr>
       <td colspan="2"><%=text_field(:report, :start_date ,:placeholder => "Start date") %></td>

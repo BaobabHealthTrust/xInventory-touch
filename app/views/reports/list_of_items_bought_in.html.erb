@@ -87,7 +87,7 @@
     var end_date = document.getElementById('report_end_date').value;               
     var donor = document.getElementById('donor').value;  
     
-    if(donor == 'Select donor')
+    if(donor == 'All')
       donor = '';
              
     document.getElementById('content-data').innerHTML = "Please wait ....";
@@ -127,7 +127,7 @@
   <table style="width: 99%;">
     <tr>
       <td colspan="2">
-        <%@donors.unshift('Select donor') %>                    
+        <%@donors.unshift('All') %>                    
         <%= select_tag "donor", options_for_select(@donors), 
           :placeholder => "Select donor" %>  
       </td>
