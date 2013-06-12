@@ -72,6 +72,48 @@ class ReportsController < ApplicationController
     render :text => get_transferred_assets(start_date,end_date) and return
   end
 
+  def advanced_stock_balances_search  
+    start_date = params[:start_date].to_date rescue nil
+    end_date = params[:end_date].to_date rescue nil
+    
+    if start_date.blank? or end_date.blank?
+      render :text => '' and return 
+    elsif start_date > end_date
+      render :text => '' and return 
+    end
+
+    donor = params[:donor].to_i rescue 0 
+    project = params[:project].to_i rescue 0
+    category = params[:category].to_i rescue 0
+    name = params[:name] 
+
+    donor = nil if donor < 1
+    project = nil if project < 1
+    category = nil if category < 1
+
+    render :text => get_stock_balance_adnvanced(start_date,end_date,
+      donor,project,category,name) and return
+  end
+
+  def advanced_stock_balances
+    @categories = Category.order('name ASC').collect do |category|              
+      [category.name , category.id]                                             
+    end                                                                         
+                                                                                
+    @projects = Project.order('name ASC').collect do |project|                  
+      [project.name , project.id]                                               
+    end                                                                         
+                                                                                
+    @donors = Donor.order('name ASC').collect do |donor|                        
+      [donor.name , donor.id]                                                   
+    end
+
+    @assets = Item.group(:name).order('name ASC').collect do |asset|                        
+      [asset.name , asset.name]                                                   
+    end
+
+  end
+
 
   private
 
@@ -345,4 +387,159 @@ EOF
     return @html
   end
 
+  def get_stock_balance_adnvanced(start_date,end_date,donor = nil , project = nil,category = nil,name=nil)
+    @categories = {}
+
+    if not donor.blank? and not project.blank? and not category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (donor_id = ? AND project_id = ? 
+        AND category_type = ?)",start_date,end_date,donor,project,category)
+    elsif not donor.blank? and project.blank? and category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (donor_id = ?)",start_date,end_date,donor)
+    elsif not donor.blank? and not project.blank? and category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (donor_id = ? AND project_id = ?)",
+        start_date,end_date,donor,project)
+    elsif not donor.blank? and project.blank? and not category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (donor_id = ? AND category_type = ?)",
+        start_date,end_date,donor,category)
+    elsif donor.blank? and not project.blank? and category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (project_id = ?)",
+        start_date,end_date,project)
+    elsif donor.blank? and not project.blank? and not category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (project_id = ? AND category_type = ?)",
+        start_date,end_date,project,category)
+    elsif not donor.blank? and not project.blank? and category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (donor_id = ? AND project_id = ?)",
+        start_date,end_date,donor,project_id)
+    elsif donor.blank? and project.blank? and not category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (category_type = ?)",
+        start_date,end_date,category)
+    elsif donor.blank? and not project.blank? and not category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (project_id = ? AND category_type = ?)",
+        start_date,end_date,project_id,category)
+    elsif not donor.blank? and project.blank? and not category.blank? and name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (donor_id = ? AND category_type = ?)",
+        start_date,end_date,donor,category)
+
+
+
+    elsif donor.blank? and project.blank? and category.blank? and not name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (name = ?)",start_date,end_date,name)
+    elsif donor.blank? and project.blank? and not category.blank? and not name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (name = ? AND category_type = ?)",
+        start_date,end_date,name,category)
+    elsif donor.blank? and not project.blank? and category.blank? and not name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (name = ? AND project_id = ?)",
+        start_date,end_date,name,project)
+    elsif not donor.blank? and project.blank? and category.blank? and not name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (name = ? AND donor_id = ?)",
+        start_date,end_date,name,donor)
+    elsif donor.blank? and not project.blank? and not category.blank? and not name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (name = ? AND project_id = ? AND category_type = ?)",
+        start_date,end_date,name,project,category)
+    elsif not donor.blank? and project.blank? and not category.blank? and not name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (name = ? AND donor_id = ? AND category_type = ?)",
+        start_date,end_date,name,donor,category)
+    elsif not donor.blank? and not project.blank? and not category.blank? and not name == 'All (asset name)'
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=? AND (name = ? AND donor_id = ? AND project_id = ?
+        AND category_type =?)",start_date,end_date,name,donor,project,category)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    else
+      assets = Item.where("purchased_date >= ? 
+        AND purchased_date <=?",start_date,end_date)
+
+    end
+
+    (assets || []).each do |asset|
+      if  @categories[asset.category.name].blank?
+        @categories[asset.serial_number] = {
+          :bought => asset.bought_quantity , :category => asset.category.name,
+          :current_quantity => asset.current_quantity , :asset_name => asset.name, 
+          :donor => asset.donor.name, :project => asset.project.name
+        } 
+      end
+
+    end
+
+    @html =<<EOF
+  <table id='search_results' class='table table-striped table-bordered table-condensed'>
+  <thead>                                                                       
+  <tr id = 'table_head'>                                                        
+    <th id="th3" style="width:200px;">Serial number</th>                                 
+    <th id="th3" style="width:200px;">Item</th>                                 
+    <th id="th3" style="width:200px;">Category</th>                                 
+    <th id="th3" style="width:200px;">Donor</th>                                 
+    <th id="th3" style="width:200px;">Project</th>                                 
+    <th id="th1" style="width:200px;">Bought</th>                        
+    <th id="th5" style="width:200px;">Balance</th>                                
+  </tr>                                                                         
+  </thead>                                                                      
+  <tbody id='results'>  
+EOF
+
+    bought_total = 0 ; balance_total = 0
+
+    (@categories || {}).each do | serial_number , values |  
+    bought_total+= values[:bought]
+    balance_total+= values[:current_quantity]
+    @html +=<<EOF
+      <tr>                                                                        
+      <td>#{serial_number}</td>                                       
+      <td>#{values[:asset_name]}</td>                                       
+      <td>#{values[:category]}</td>                                       
+      <td>#{values[:donor]}</td>                                       
+      <td>#{values[:project]}</td>                                       
+      <td>#{values[:bought]}</td>                                       
+      <td>#{values[:current_quantity]}</td>                                       
+    </tr>
+EOF
+    end
+
+    @html +=<<EOF
+        <tr>                                                                        
+          <td style="font-weight:bold;font-size:14px;">Total</td>                                       
+          <td>&nbsp;</td>                                       
+          <td>&nbsp;</td>                                       
+          <td>&nbsp;</td>                                       
+          <td>&nbsp;</td>                                       
+          <td style="font-weight:bold;font-size:14px;">#{bought_total}</td>                                       
+          <td style="font-weight:bold;font-size:14px;">#{balance_total}</td>                                       
+        </tr>
+      </tbody>                                                                      
+  </table>                                                                      
+EOF
+
+    return @html
+  end 
+  
 end
