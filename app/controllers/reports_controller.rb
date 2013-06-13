@@ -482,7 +482,7 @@ EOF
 
     (assets || []).each do |asset|
       if  @categories[asset.category.name].blank?
-        @categories[asset.serial_number] = {
+        @categories[asset.serial_number] = {:purchased_date => asset.purchased_date.strftime('%d-%b-%Y'),
           :bought => asset.bought_quantity , :category => asset.category.name,
           :current_quantity => asset.current_quantity , :asset_name => asset.name, 
           :donor => asset.donor.name, :project => asset.project.name
@@ -497,11 +497,12 @@ EOF
   <tr id = 'table_head'>                                                        
     <th id="th3" style="width:200px;">Serial number</th>                                 
     <th id="th3" style="width:200px;">Item</th>                                 
+    <th id="th3" style="width:200px;">Purchased date</th>                                 
     <th id="th3" style="width:200px;">Category</th>                                 
     <th id="th3" style="width:200px;">Donor</th>                                 
     <th id="th3" style="width:200px;">Project</th>                                 
-    <th id="th1" style="width:200px;">Bought</th>                        
-    <th id="th5" style="width:200px;">Balance</th>                                
+    <th id="th1" style="width:200px;">Quantity in</th>                        
+    <th id="th5" style="width:200px;">Quantity out</th>                                
   </tr>                                                                         
   </thead>                                                                      
   <tbody id='results'>  
@@ -516,6 +517,7 @@ EOF
       <tr>                                                                        
       <td>#{serial_number}</td>                                       
       <td>#{values[:asset_name]}</td>                                       
+      <td>#{values[:purchased_date]}</td>                                       
       <td>#{values[:category]}</td>                                       
       <td>#{values[:donor]}</td>                                       
       <td>#{values[:project]}</td>                                       
@@ -528,6 +530,7 @@ EOF
     @html +=<<EOF
         <tr>                                                                        
           <td style="font-weight:bold;font-size:14px;">Total</td>                                       
+          <td>&nbsp;</td>                                       
           <td>&nbsp;</td>                                       
           <td>&nbsp;</td>                                       
           <td>&nbsp;</td>                                       
