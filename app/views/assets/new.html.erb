@@ -6,6 +6,18 @@
 
   .asset-details { width: 100%; }                                                                          
 
+  #asset_serial_num {
+    width: 132px;
+  }
+
+  #vendor_cost {
+    width: 70px;
+  }
+
+  #vendor_currency {
+    width: 122px;
+  }
+
 </style>
 
 
@@ -130,6 +142,27 @@ function validateForm(){
   return true;                                                                  
 }  
 
+function getSerialNumber() {                                                           
+    var serial_num = document.getElementById('asset_serial_num');               
+                                                                                  
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results) {                           
+            serial_num.value = results;
+          }                                                                     
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/serial_number_generator",true); 
+      xmlhttp.send();                                                             
+    }
+
+
 </script>
 
 
@@ -150,7 +183,9 @@ function validateForm(){
       <td><%=text_field(:asset, :name, :placeholder => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :serial_num, :placeholder => "Serial number") %></td>
+      <td><%=text_field(:asset, :serial_num, 
+        :placeholder => "Serial number") %>
+      &nbsp;<input type="button" value="Generate" onclick="javascript:getSerialNumber();" /></td>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :model ,:placeholder => "Model") %> </td>

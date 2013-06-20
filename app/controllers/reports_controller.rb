@@ -135,6 +135,7 @@ class ReportsController < ApplicationController
     <th id="th1" style="width:200px;">Project - To</th>                               
     <th id="th1" style="width:200px;">Densination</th>                               
     <th id="th1" style="width:200px;">Date of Transfer</th>                               
+    <th id="th1" style="width:200px;">Returned</th>                               
   </tr>                                                                         
   </thead>                                                                      
   <tbody id='results'>                            
@@ -152,6 +153,7 @@ EOF
       <td>#{Project.find(transaction.to_project).name}</td>                                                      
       <td>#{Site.find(transaction.to_location).name}</td>                                                      
       <td>#{transfer.transfer_date}</td>                                                      
+      <td>#{transfer.returned}</td>                                                      
     </tr>                                                                       
 EOF
                                                                            

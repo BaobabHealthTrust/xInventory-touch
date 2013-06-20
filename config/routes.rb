@@ -2,6 +2,12 @@ XInventory::Application.routes.draw do
 
   match 'home' => 'home#index'
 
+  ########## fleet_management starts #####################
+  match "/fleet_management" => "fleet_management#index"
+
+  ########## fleet_management ends #####################
+
+
   ########## Users start #####################
   get "user/logout"
   post "user/login"
@@ -112,6 +118,7 @@ XInventory::Application.routes.draw do
   match 'delete_asset_state/:id' => 'assets#delete_asset_state', :as => :delete_asset_state
   post "assets/edit_asset_state"
   match 'asset_live_search' => 'assets#live_search'
+  match 'serial_number_generator' => 'assets#serial_number_generator'
   ########## Donors end #####################
 
   

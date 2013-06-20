@@ -263,10 +263,17 @@ class AssetsController < ApplicationController
     render :text => get_datatable(params[:search_str]) and return
   end
 
-
+  def serial_number_generator
+    render :text => get_serial_number and return
+  end
 
   private                           
   
+  def get_serial_number
+    chars = ('A'..'Z').to_a + (0..9).to_a
+    size = 16
+    return (0...size).collect { chars[Kernel.rand(chars.length)] }.join
+  end
   
   def get_datatable(search_str)
     @html =<<EOF
