@@ -133,7 +133,6 @@ class ReportsController < ApplicationController
     <th id="th1" style="width:200px;">Project - From</th>                               
     <th id="th1" style="width:200px;">Donor - To</th>                               
     <th id="th1" style="width:200px;">Project - To</th>                               
-    <th id="th1" style="width:200px;">Densination</th>                               
     <th id="th1" style="width:200px;">Date of Transfer</th>                               
     <th id="th1" style="width:200px;">Returned</th>                               
   </tr>                                                                         
@@ -142,6 +141,7 @@ class ReportsController < ApplicationController
 EOF
                                                        
     (transfers).each do |transfer| 
+      index = 1
       (transfer.transfer_transactions).each do |transaction|
         @html +=<<EOF                                                               
       <tr>                                                                        
@@ -151,12 +151,32 @@ EOF
       <td>#{Project.find(transaction.from_project).name}</td>                                                      
       <td>#{Donor.find(transaction.to_donor).name}</td>                                                      
       <td>#{Project.find(transaction.to_project).name}</td>                                                      
-      <td>#{Site.find(transaction.to_location).name}</td>                                                      
       <td>#{transfer.transfer_date}</td>                                                      
-      <td>#{transfer.returned}</td>                                                      
+EOF
+      unless transaction.returned
+        @html+=<<EOF
+      <td>#{transaction.returned}</td>                                                      
+EOF
+      else  
+        @html+=<<EOF
+      <td>#{transaction.returned}&nbsp;&nbsp;<input type="button" value="+" id="b_#{index}" onclick="showRow(this)"/></td> 
+EOF
+      end
+        @html+=<<EOF
     </tr>                                                                       
 EOF
-                                                                           
+      if transaction.returned
+        @html+=<<EOF
+          <tr id="hidden_#{index}" class="hidden_tr" style="display: none; paddding-left:10px;">
+            <td colspan = '8' id="hidden_td_#{index}">
+              <b>asset name:</b>&nbsp;#{transaction.reimbursed_record.asset.name}&nbsp;
+              <b>serial number:</b>&nbsp;#{transaction.reimbursed_record.asset.serial_number}
+            </td>
+          </tr>
+EOF
+      end
+      
+        index+=1                
       end                                                                         
     end                                                                         
                                                                                 

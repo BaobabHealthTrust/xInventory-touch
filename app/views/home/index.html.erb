@@ -29,7 +29,7 @@
   color: #404040;
   font-family: Verdana,Tahoma,Arial;
   font-size: 12px;
-  width: 450px;
+  width: 700px;
   background-color: #F6F6F6;
   border: 1px solid #E4E4E4;
   color: #505050;
@@ -45,7 +45,21 @@
 }
 </style> 
 
+<%= javascript_include_tag "Highcharts-3.0.2/js/jquery.min" %>
+<script language="javascript">
+jQuery.noConflict();
 
+var fetched_data = {};
+
+function showSummary() {
+  jQuery('#summary').empty();
+  jQuery('#summary').empty().load('/summary');
+}
+
+</script>
+
+
+<body onload="showSummary();">
   <div class="page-header">                                                     
     <h1><%=organization_name %> <small>inventory system</small></h1>              
   </div>                                                                        
@@ -56,24 +70,12 @@
   </div>
 
   <div id = "content-right">
-    <div id = "latest-outcomes">Latest stats</div>
+    <div id = "latest-outcomes">Latest stats  (past 12 months)</div>
       <p/>
-      <ul>
-        <li>
-          <a href="#">Total registered assets</a>(<%=@total_registered_assets%>)
-          <p/>
-          <p>Total registered number of assets</p>
-        </li><br />
-        <li>
-          <a href="#">Available assets</a>&nbsp;(<%=@total_available_assets%>)
-          <p/>
-          <p>Total number of assets available in store</p>
-        </li><br />
-        <li>
-          <a href="#">Total number of missing assets</a>&nbsp;(<%=@total_missing_assets%>)
-          <p/>
-          <p>Total number of missing assets</p>
-        </li><br />
-      </ul>
+  
+
+    <div id="summary"></div>
+  
   </div>
 
+</body>

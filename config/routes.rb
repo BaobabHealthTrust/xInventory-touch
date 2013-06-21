@@ -1,10 +1,14 @@
 XInventory::Application.routes.draw do
 
+
+  ########## home starts #####################
   match 'home' => 'home#index'
+  match 'summary' => 'home#summary'
+  match 'get_summary' => 'home#get_summary'
+  ########## home ends #####################
 
   ########## fleet_management starts #####################
   match "/fleet_management" => "fleet_management#index"
-
   ########## fleet_management ends #####################
 
 
@@ -50,6 +54,10 @@ XInventory::Application.routes.draw do
   match 'process_transfer' => 'dispatch_receive#process_transfer'
   match 'transfer_results/:id' => 'dispatch_receive#transfer_results', :as => :transfer_results
   match 'dispatch_live_search' => 'dispatch_receive#live_search'
+  match 'borrowed_assets' => 'dispatch_receive#borrowed_assets'
+  match 'available_asset_list/:id' => 'dispatch_receive#asset_list', :as => :available_asset_list
+  match 'reimburse/:id/:reimbursed_id' => 'dispatch_receive#reimburse', :as => :reimburse
+  post "dispatch_receive/reimburse_create"
   ########## dispatch_receive end #####################
 
   ########## Donors #####################

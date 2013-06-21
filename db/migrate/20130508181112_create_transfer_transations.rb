@@ -8,8 +8,7 @@ class CreateTransferTransations < ActiveRecord::Migration
       t.integer :from_location, :null => false                                  
       t.integer :to_project, :null => false                                     
       t.integer :to_donor, :null => false                                       
-      t.integer :to_location, :null => false
-      t.boolean :returned, :null => false, :default => true                      
+      t.boolean :returned, :null => false, :default => false
       t.boolean :voided, :null => false, :default => false                      
       t.text :void_reason, :null => true
 

@@ -1,0 +1,83 @@
+<style>
+
+  #left th {
+    text-align: right;
+  }
+
+  #left td {
+    padding-left: 10px;
+  }
+
+  #right td {
+    text-align: left;
+    padding-left: 10px;
+  }
+
+</style>
+
+<div class="page-header">                                                       
+  <h1>reimburse <small>asset</small></h1>              
+</div>
+
+<table style="width: 100%;border-style:solid;border-width:1px;">
+  <tr>
+    <td>
+
+      <table style="width: 100%;">
+        <tr>
+          <td style="vertical-align:top;width:40%;">
+            <table style="width: 100%;" id = 'left'>
+              <tr>
+                <th>Serial number</th><td><%=@selected_asset[:serial_number]%></td>
+              </tr>
+              <tr>
+                <th>Name</th><td><%=@selected_asset[:name]%></td>
+              </tr>
+              <tr>
+                <th>Brand</th><td><%=@selected_asset[:brand]%></td>
+              </tr>
+              <tr>
+                <th>Category</th><td><%=@selected_asset[:category]%></td>
+              </tr>
+              <tr>
+                <th>Donor</th><td><%=@selected_asset[:donor]%></td>
+              </tr>
+              <tr>
+                <th>Project</th><td><%=@selected_asset[:project]%></td>
+              </tr>
+              <tr>
+                <th>Quantity</th><td><%=@selected_asset[:quantity]%></td>
+              </tr>
+            </table>
+          </td>
+          <td style="text-align: center;width:10%;">
+            <%= image_tag("arrow.jpeg" ,:style => "width: 85px;")%>
+          </td>
+          <td style="text-align: right; vertical-align:top;width:40%;">
+            <table style="width: 100%;" id='right'>
+              <tr>
+                <th>Donor</th><td><%=@borrowed_asset[:donor]%></td>
+              </tr>
+              <tr>
+                <th>Project</th><td><%=@borrowed_asset[:project]%></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+
+    </td>
+  </tr>
+  <%= form_tag :controller => 'dispatch_receive', :action => 'reimburse_create', :method => :post do %>
+    <input type="hidden" name = "borrowed_asset" value="<%=@borrowed_asset[:asset_id]%>" />
+    <input type="hidden" name = "selected_asset" value="<%=@selected_asset[:asset_id]%>" />
+    <input type="hidden" name = "transfer_transation" value="<%=@transfer_transation_id%>" />
+    <tr>
+      <td style="padding-top: 25px;">
+        <input type="submit" value="Reimburse" style="width: 100%;" 
+          class="btn btn-primary buttons" />
+      </td>
+    </tr>
+  <%end%>
+</table>

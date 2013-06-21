@@ -2,11 +2,98 @@ class DispatchReceiveController < ApplicationController
   skip_before_filter  :verify_authenticity_token , :only => ['asset_transfers','process_transfer']
   before_filter :check_authorized
 
-  def index
+  def reimburse_create
+    Reimbursed.transaction do 
+      reimburse = Reimbursed.new
+      reimburse.transfer_transation_id = params[:transfer_transation]
+      reimburse.reimbursed_item_id = params[:selected_asset]
+      reimburse.reimbursed_date = Date.today
+      if reimburse.save
+        selected_asset = TransferTransations.find(params[:transfer_transation])
+        selected_asset.returned = true
+        if selected_asset.save
+          asset = Item.find(params[:selected_asset])
+          asset.donor_id = selected_asset.from_donor
+          asset.project_id = selected_asset.from_project
+          asset.save
+        end
+      end
+    end
+    redirect_to "/borrowed_assets" and return
+  end
+
+  def reimburse
+    transfer_transation = TransferTransations.find(params[:id])
+    @borrowed_asset = {                                                     
+      :project => Project.find(transfer_transation.from_project).name,                        
+      :donor => Donor.find(transfer_transation.from_donor).name,                              
+      :asset_id => transfer_transation.asset_id
+    }          
+
+    @transfer_transation_id = params[:id]
+    asset = Item.find(params[:reimbursed_id])
+    @selected_asset = {                                                     
+      :name => asset.name,                                                    
+      :category => Category.find(asset.category_type).name,                   
+      :brand => Manufacturer.find(asset.brand).name,                          
+      :version => asset.version,                                              
+      :model => asset.model,                                                  
+      :serial_number => asset.serial_number,                                  
+      :supplier => Supplier.find(asset.vendor).name,                          
+      :project => Project.find(asset.project_id).name,                        
+      :donor => Donor.find(asset.donor_id).name,                              
+      :purchased_date => asset.purchased_date,                                
+      :order_number => asset.order_number,                                    
+      :quantity => asset.current_quantity,                                    
+      :cost => asset.cost,                                                    
+      :date_of_receipt => asset.date_of_receipt,                              
+      :delivered_by => asset.delivered_by,                                    
+      :status_on_delivery => StateType.find(asset.status_on_delivery).name,   
+      :location => Site.find(asset.location).name,
+      :asset_id => asset.id
+    }          
+
+  end
+
+  def asset_list
+    @transfer_transation = TransferTransations.find(params[:id])
+    @asset = Item.find(@transfer_transation.asset_id)
+    @assets = {}
+
+    asset_borrowed = TransferTransations.where("returned = 0").map(&:asset_id)
+    asset_borrowed = [0] if asset_borrowed.blank?
+
+    (Item.where("current_quantity > 0 AND category_type = ? AND id <> ? 
+        AND donor_id <> ? AND project_id <> ? AND id NOT IN(?)",@asset.category_type,@asset.id,
+        @transfer_transation.from_donor,@transfer_transation.from_project,asset_borrowed) || []).each do |asset|
+      @assets[asset.id] = {                                                     
+        :name => asset.name,                                                    
+        :category => Category.find(asset.category_type).name,                   
+        :brand => Manufacturer.find(asset.brand).name,                          
+        :version => asset.version,                                              
+        :model => asset.model,                                                  
+        :serial_number => asset.serial_number,                                  
+        :supplier => Supplier.find(asset.vendor).name,                          
+        :project => Project.find(asset.project_id).name,                        
+        :donor => Donor.find(asset.donor_id).name,                              
+        :purchased_date => asset.purchased_date,                                
+        :order_number => asset.order_number,                                    
+        :quantity => asset.current_quantity,                                    
+        :cost => asset.cost,                                                    
+        :date_of_receipt => asset.date_of_receipt,                              
+        :delivered_by => asset.delivered_by,                                    
+        :status_on_delivery => StateType.find(asset.status_on_delivery).name,   
+        :location => Site.find(asset.location).name                             
+      }          
+    end
+  end
+
+  def borrowed_assets
+    @borrowed_assets = get_transferred_assets
   end
   
   def transfer_assets_search
-    @assets = get_assets                                                        
+    @assets = get_assets(options = {:current_quantity => "> 0"})                                                        
   end
 
   def search
@@ -97,11 +184,11 @@ class DispatchReceiveController < ApplicationController
     @status = StateType.order('name ASC').collect do |state|                    
       [state.name , state.id]                                                   
     end
-    
+=begin
     @locations = Site.order('name ASC').collect do |site|                        
       [site.name , site.id]                                                     
     end 
-    
+=end
      @projects = Project.order('name ASC').collect do |project|                  
       [project.name , project.id]                                               
     end                                                                         
@@ -109,8 +196,6 @@ class DispatchReceiveController < ApplicationController
     @donors = Donor.order('name ASC').collect do |donor|                        
       [donor.name , donor.id]                                                   
     end  
-
-
 
     @asset_ids = params[:selected_assets].split(',') rescue [3]
     @assets = get_assets_by_ids(@asset_ids)
@@ -133,13 +218,11 @@ class DispatchReceiveController < ApplicationController
           transfer_transaction.from_location = asset.location
           transfer_transaction.to_project = params[:transfer]['project']
           transfer_transaction.to_donor = params[:transfer]['donor']
-          transfer_transaction.to_location = params[:transfer]['location']
           transfer_transaction.save
 
           #now we up the asset info to reflect the transfer
           asset.project_id = params[:transfer]['project']
           asset.donor_id = params[:transfer]['donor'] 
-          asset.location = params[:transfer]['location']
           asset.save
         end
       end
@@ -237,9 +320,15 @@ class DispatchReceiveController < ApplicationController
     end                                                                       
   end
 
-  def get_assets
-    @assets = {}                                                                
-    Item.order("current_quantity DESC,name ASC").limit(100).each do |asset|                                      
+  def get_assets(options = {})
+    @assets = {}             
+    if options.blank?                                                   
+      assets = Item.order("current_quantity DESC,name ASC").limit(100)                                      
+    else
+      assets = Item.order("current_quantity DESC,name ASC").where("current_quantity > 0").limit(100)
+    end
+      
+    (assets || []).each do |asset|      
       @assets[asset.id] = {                                                     
         :name => asset.name,                                                    
         :category => Category.find(asset.category_type).name,                   
@@ -343,4 +432,52 @@ EOF
     return @html
   end
 
+  def get_transferred_assets
+    transfers = Transfer.joins("INNER JOIN transfer_transations t ON
+      t.transfer_id = transfers.id").where("returned = 0").group(:transfer_id)
+
+    return nil if transfers.blank?
+    
+    @html =<<EOF                                                                
+  <table id='search_results' class='table table-striped table-bordered table-condensed'>
+  <thead>                                                                       
+  <tr id = 'table_head'>                                                        
+    <th id="th3" style="width:200px;">Serial number</th>                                 
+    <th id="th3" style="width:200px;">Item</th>                                 
+    <th id="th1" style="width:200px;">Donor - From</th>                               
+    <th id="th1" style="width:200px;">Project - From</th>                               
+    <th id="th1" style="width:200px;">Current donor</th>                               
+    <th id="th1" style="width:200px;">Current project</th>                               
+    <th id="th1" style="width:200px;">Date of Transfer</th>                               
+    <th id="th1" style="width:200px;">&nbsp;</th>                               
+  </tr>                                                                         
+  </thead>                                                                      
+  <tbody id='results'>                            
+EOF
+                                                       
+    (transfers).each do |transfer| 
+      (transfer.transfer_transactions).each do |transaction|
+        next if transaction.returned
+        @html +=<<EOF                                                               
+      <tr>                                                                        
+      <td>#{Item.find(transaction.asset_id).serial_number}</td>                                                      
+      <td>#{Item.find(transaction.asset_id).name}</td>                                                      
+      <td>#{Donor.find(transaction.from_donor).name}</td>                                                      
+      <td>#{Project.find(transaction.from_project).name}</td>                                                      
+      <td>#{Donor.find(transaction.to_donor).name}</td>                                                      
+      <td>#{Project.find(transaction.to_project).name}</td>                                                      
+      <td>#{transfer.transfer_date}</td>                                                      
+      <td><a href="#{available_asset_list_url(:id => transaction.id)}">Select</a></td>                                                      
+    </tr>                                                                       
+EOF
+      end                                                                         
+    end                                                                         
+                                                                                
+    @html +=<<EOF                                                               
+      </tbody>                                                                      
+  </table>                                                                      
+EOF
+                                                                                
+    return @html
+  end 
 end

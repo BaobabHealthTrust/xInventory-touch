@@ -1,0 +1,94 @@
+<%=javascript_include_tag "jquery"%>                                      
+<%=javascript_include_tag "bootstrap-dropdown"%>
+<%=javascript_include_tag "prototype"%>                                   
+<script>jQuery.noConflict();</script>                                     
+<%=javascript_include_tag "jquery_data_table" %>                          
+<%=javascript_include_tag "jquery.dataTables.min" %>
+
+<%= stylesheet_link_tag "demo_table" %>                                         
+<%= stylesheet_link_tag "demo_table_jui" %>                                     
+<%= stylesheet_link_tag "demo_page" %>
+
+<style>
+                                                                                
+</style>
+
+<script>
+
+  function dataT(){                                                               
+    jQuery('#search_results').dataTable();                                                  
+  }
+
+  function findAssets() {                                                       
+    var search_str = document.getElementById('search_words').value;               
+                                                                                
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results == 'undefined' || results == '' || results == '"not validate"') {                           
+            return;                                                               
+          }else{                                                                  
+            document.getElementById('modals').innerHTML = results;                                                           
+            dataT();                                                              
+          }                                                                       
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/asset_live_search?search_str="+search_str,true);           
+      xmlhttp.send();                                                             
+    } 
+ 
+</script>
+
+<style>
+  .asset_search_div {
+    text-align: right;
+  }
+
+  
+</style>
+
+<div class="page-header">
+  <h1>reimburse <small>asset</small></h1>
+  
+  <!--div class="asset_search_div">
+    <input type="text" name="search" onkeyup = "javascript:findAssets()"
+      placeholder = "asset(s) search" id="search_words" />
+  </div-->
+
+</div>
+<section id='modals'>                                              
+  <table id="search_results" class="table table-striped table-bordered table-condensed">
+  <thead>                                                                       
+  <tr id = 'table_head'>                                                        
+    <th id="th1" style="width:200px;">Serial number</th>                           
+    <th id="th3" style="width:200px;">Name</th>                           
+    <th id="th4" style="width:200px;">Category</th>                            
+    <th id="th5" style="width:200px;">Brand</th>                          
+    <th id="th8" style="width:150px;">Quantity</th>                                  
+    <th id="th10" style="width:100px;">&nbsp;</th>                               
+  </tr>                                                                         
+  </thead>                                                                      
+  <tbody id='results'>                                                          
+    <%(@assets || []).each do |asset_id,asset| %>                                    
+    <tr>                                                                        
+      <td><%=asset[:serial_number]%></td>                                            
+      <td><%=asset[:name]%></td>                                    
+      <td><%=asset[:category]%></td>                                    
+      <td><%=asset[:brand]%></td>                                    
+      <td><%=asset[:quantity]%></td>                                    
+      <td><a href="<%=reimburse_url(:id => @transfer_transation.id, 
+        :reimbursed_id => asset_id)%>">Reimburse</a></td>       
+    </tr>                                                                       
+    <%end%>                                                                     
+  </tbody>                                                                      
+  </table>
+</section> 
+
+<script>                                                                        
+  dataT();                                                                      
+</script>

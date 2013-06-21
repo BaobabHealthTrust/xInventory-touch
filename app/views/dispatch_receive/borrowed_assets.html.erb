@@ -1,0 +1,56 @@
+<%=javascript_include_tag "prototype"%>                                         
+<%=javascript_include_tag "jquery_data_table" %>                                
+<%=javascript_include_tag "jquery.dataTables.min" %>                            
+                                                                                
+<%= stylesheet_link_tag "demo_table" %>                                         
+<%= stylesheet_link_tag "demo_table_jui" %>                                     
+<%= stylesheet_link_tag "demo_page" %>
+
+<style>
+                                                                                
+</style>
+
+<script>
+
+  function dataT(){                                                               
+    $('#search_results').dataTable();                                                  
+  }
+
+  function findStudents() {                                                       
+    var search_str = document.getElementById('search_words').value;               
+                                                                                
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results == 'undefined' || results == '' || results == '"not validate"') {                           
+            return;                                                               
+          }else{                                                                  
+            document.getElementById('results-cont').innerHTML = results;                                                           
+            dataT();                                                              
+          }                                                                       
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/assets/live_search?search_str="+search_str,true);           
+      xmlhttp.send();                                                             
+    } 
+ 
+</script>
+
+
+<div class="page-header">
+  <h1>borrowed <small>assets search</small></h1>
+</div>
+
+<section id='modals'>                                              
+  <%=@borrowed_assets.html_safe rescue 'No borrowed asset(s)'%>
+</section> 
+
+
+<script>                                                                        
+  dataT();                                                                      
+</script>

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title></title>
+
+    <%= javascript_include_tag "Highcharts-3.0.2/js/jquery.min.js" %>
+    <%= javascript_include_tag "dateformat"%>
+	 <script type="text/javascript">
+
+  loadGraph();
+
+  function loadGraph() {
+    $(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: loadCategories()
+            },
+            yAxis: {
+                title: {
+                    text: 'Current asset quantity (CQ)'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: dataG()
+        });
+    });
+    
+ }
+ 
+ 
+  function dataG() {
+    var graph = [];
+    for(var key in fetched_data) {
+      graph.push({name: key, data: fetched_data[key]});
+    }
+    return graph
+  }
+
+  function loadCategories() {
+    var start_date = new Date();
+    year = start_date.getFullYear();
+    month = start_date.getMonth();
+    day = start_date.getDate();
+
+    start_year = year - 1;
+    start_month = month;
+    start_day = day;
+
+    categories = []; c = 0;
+
+    while(c < 13) {
+      var newdate = new Date(start_year,start_month,1);
+      yr = dateFormat(newdate,'mmmm, yy')
+      categories.push(yr);
+      if(start_month == 12){
+        start_year = year;
+        start_month = 0;
+      } 
+      start_month+=1;
+      c+=1
+    }
+
+    return categories;
+  }
+
+  function getValues() {
+     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results) {                           
+            fetched_data = {};                                                
+            results = JSON.parse(results);                                    
+            for(var key in results) {                                         
+              fetched_data[key] = results[key];                               
+            }                                                                 
+          }                                                                     
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/get_summary",true);           
+      xmlhttp.send()
+  }
+
+
+  getValues();
+
+  </script>
+
+  <style>
+     .highcharts-button {                                                      
+         display: none;                                                         
+      }
+  </style>
+
+
+	</head>
+	<body>
+<%= javascript_include_tag "Highcharts-3.0.2/js/highcharts" %>
+<%= javascript_include_tag "Highcharts-3.0.2/js/modules/exporting" %>
+
+<div id="container" style="width: 100%; height: 90%; margin: 0 auto"></div>
+
+	</body>
+</html>
+   
+<script>
+  function removeHighcharts() {                                                 
+    tspan = document.getElementsByTagName('tspan');                             
+    for(var i = 0; i < tspan.length; i++){                                      
+      if(tspan[i].innerHTML == 'Highcharts.com'){                               
+        tspan[i].innerHTML = null;                                              
+        break;                                                                  
+      }                                                                         
+    }                                                                           
+                                                                                
+  }
+
+  setInterval("removeHighcharts();",300);
+</script>

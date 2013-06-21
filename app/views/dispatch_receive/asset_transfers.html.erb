@@ -91,7 +91,6 @@ function validateForm(){
   tdate = document.getElementById("transfer_date");
   approved_by = document.getElementById("transfer_approved_by");
   reason = document.getElementById("transfer_reason");
-  transfer_location = document.getElementById("transfer_location");
   
   if(project.value == 'Select project'){
     alert('Please select a project');
@@ -104,9 +103,6 @@ function validateForm(){
     return false
   }else if(approved_by.value ==''){
     alert('Please enter the name of the person who approved the transfer');
-    return false
-  }else if(transfer_location.value == 'Select location'){
-    alert('Please select transfer location');
     return false
   }
         
@@ -182,14 +178,6 @@ function validateForm(){
             <%=text_area("transfer[reason]", nil ,
               :placeholder => "Reason for transfer",
               :rows => 5, :cols => 5) %> 
-          </p>
-        </li><br />
-        <li>
-          <a href="#">Transfer Location</a>
-          <p/>
-          <p><%@locations.unshift('Select location') %>                                
-             <%= select_tag "transfer[location]", options_for_select(@locations),          
-                :placeholder => "Select location" %>
           </p>
         </li><br />
         <li>
