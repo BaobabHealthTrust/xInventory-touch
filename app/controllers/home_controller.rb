@@ -41,14 +41,13 @@ class HomeController < ApplicationController
     names = [
       'J2 Touchsreen','Laptop','Ribbons','Usb Scanner',
       'Step Down Transformer',"Router","Mobile Phone",
-      "Lcd Monitor","Cisco Network Switch"
+      "Lcd Monitor","Cisco Network Switch","Batteries"
     ]
 
     start_date = (Date.today - 12.month)
     end_date = Date.today
 
-    assets = Item.order(:purchased_date).where("name IN(?) AND purchased_date >= ?
-      AND purchased_date <= ?", names,start_date,end_date)
+    assets = Item.order(:purchased_date).where("name IN(?)",names)
 
     (assets || []).each do |asset|
       if @items[asset.name].blank?        
