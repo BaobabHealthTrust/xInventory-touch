@@ -43,22 +43,16 @@
   border-bottom: 1px dotted #696969;
   color: #EE8206;
 }
-</style> 
 
-<%= javascript_include_tag "Highcharts-3.0.2/js/jquery.min" %>
-<script language="javascript">
-jQuery.noConflict();
-
-var fetched_data = {};
-
-function showSummary() {
-  jQuery('#summary').empty();
-  jQuery('#summary').empty().load('/summary');
+#summary {
+  max-height: 400px;
+  overflow: auto;
 }
 
-</script>
+</style> 
 
-
+<body>
+  
   <div class="page-header">                                                     
     <h1><%=organization_name %> <small>inventory system</small></h1>              
   </div>                                                                        
@@ -69,14 +63,15 @@ function showSummary() {
   </div>
 
   <div id = "content-right">
-    <div id = "latest-outcomes">Latest stats  (past 12 months)</div>
+    <div id = "latest-outcomes">Available assets</div>
       <p/>
   
 
-    <div id="summary"></div>
+    <div id="summary">
+      <%= render "summary"%>
+    </div>
   
   </div>
 
-<script>
-  showSummary();
-</script>
+</body>
+

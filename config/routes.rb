@@ -3,8 +3,6 @@ XInventory::Application.routes.draw do
 
   ########## home starts #####################
   match 'home' => 'home#index'
-  match 'summary' => 'home#summary'
-  match 'get_summary' => 'home#get_summary'
   ########## home ends #####################
 
   ########## fleet_management starts #####################
