@@ -63,9 +63,8 @@ class DispatchReceiveController < ApplicationController
     asset_borrowed = TransferTransations.where("returned = 0").map(&:asset_id)
     asset_borrowed = [0] if asset_borrowed.blank?
 
-    (Item.where("current_quantity > 0 AND category_type = ? AND id <> ? 
-        AND donor_id <> ? AND project_id <> ? AND id NOT IN(?)",@asset.category_type,@asset.id,
-        @transfer_transation.from_donor,@transfer_transation.from_project,asset_borrowed) || []).each do |asset|
+    (Item.where("current_quantity > 0 AND category_type = ?", 
+    @asset.category_type) || []).each do |asset|
       @assets[asset.id] = {                                                     
         :name => asset.name,                                                    
         :category => Category.find(asset.category_type).name,                   
@@ -282,7 +281,8 @@ class DispatchReceiveController < ApplicationController
       :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),           
       :delivered_by => asset.delivered_by,                                      
       :status_on_delivery => StateType.find(asset.status_on_delivery).name,     
-      :location => Site.find(asset.location).name ,                             
+      :location => Site.find(asset.location).name ,                            
+      :expiry_date => asset.expiry_date , 
       :asset_id => asset.id                                                     
     }                 
     end
@@ -310,6 +310,7 @@ class DispatchReceiveController < ApplicationController
       :delivered_by => asset.delivered_by,                                      
       :status_on_delivery => StateType.find(asset.status_on_delivery).name,     
       :location => Site.find(asset.location).name ,                             
+      :expiry_date => asset.expiry_date , 
       :asset_id => asset.id                                                     
     }                                                                           
   end

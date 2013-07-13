@@ -30,6 +30,7 @@ class AssetsController < ApplicationController
         :date_of_receipt => asset.date_of_receipt,
         :delivered_by => asset.delivered_by,
         :status_on_delivery => StateType.find(asset.status_on_delivery).name,
+        :expiry_date => asset.expiry_date,
         :location => Site.find(asset.location).name
       }
     end
@@ -207,7 +208,7 @@ class AssetsController < ApplicationController
       end
 
       if item.save 
-        curr_state = ItemState.where(:'item_id' => item.id)                                  
+        curr_state = ItemState.where(:'item_id' => item.id)[0]                                  
         curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
         curr_state.save 
         flash[:notice] = 'Successfully updated.'                                  

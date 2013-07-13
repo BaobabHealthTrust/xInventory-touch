@@ -69,6 +69,7 @@
     <th id="th3" style="width:200px;">Name</th>                           
     <th id="th4" style="width:200px;">Category</th>                            
     <th id="th5" style="width:200px;">Brand</th>                          
+    <th id="th5" style="width:200px;">Expiry date</th>                          
     <th id="th8" style="width:150px;">Quantity</th>                                  
     <th id="th10" style="width:100px;">&nbsp;</th>                               
   </tr>                                                                         
@@ -80,6 +81,7 @@
       <td><%=asset[:name]%></td>                                    
       <td><%=asset[:category]%></td>                                    
       <td><%=asset[:brand]%></td>                                    
+      <td><%=asset[:expiry_date].to_date.strftime('%B - %Y') rescue 'N/A'%></td>                                    
       <td><%=asset[:quantity]%></td>                                    
       <td><a href="<%=asset_details_url(:id => asset_id)%>">Show</a></td>       
     </tr>                                                                       

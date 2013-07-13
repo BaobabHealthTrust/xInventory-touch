@@ -59,6 +59,30 @@
     });                                                                         
   };   
 
+
+ function dateThree(id){                                                          
+    yrNow = parseInt("<%=@asset[:expiry_date].to_date.year rescue Date.today.year%>");
+    monthNow = parseInt("<%=@asset[:expiry_date].to_date.month rescue Date.today.month%>");
+    dateNow = parseInt("<%=@asset[:expiry_date].to_date.day rescue Date.today.day %>");
+
+    new JsDatePick({                                                            
+      useMode:2,                                                                
+      target: id ,                                                              
+      dateFormat:"%d-%M-%Y",                                                    
+      selectedDate:{                                                            
+        day: dateNow,                                                           
+        month: monthNow,                                                        
+        year: yrNow                                                             
+      },                                                                        
+      cellColorScheme:"beige",                                                  
+      dateFormat:"%d-%m-%Y",                                                    
+      imgPath:"img/",                                                           
+      weekStartDay:1                                                            
+    });                                                                         
+  };   
+
+
+
 function submitForm() {                                                         
   if(validateForm())                                                            
     document.getElementsByTagName('form')[0].submit();                          
@@ -297,4 +321,5 @@ function validateForm(){
 <script>                                                                        
   dateOne('organisation_receipt_date');                                                         
   dateTwo('vendor_date_of_invoice');                                                         
+  dateThree('asset_expiry_date');                                                         
 </script> 
