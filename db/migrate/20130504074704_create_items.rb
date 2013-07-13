@@ -20,6 +20,7 @@ class CreateItems < ActiveRecord::Migration
       t.date :date_of_receipt, :null => false
       t.string :delivered_by, :null => false
       t.integer :status_on_delivery, :null => false
+      t.date :expiry_date, :null => true
       t.integer :location, :null => false
       t.boolean :voided, :null => false, :default => false
       t.text :void_reason, :null => true

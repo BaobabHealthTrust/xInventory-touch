@@ -13,6 +13,7 @@ XInventory::Application.routes.draw do
 
 
   ########## Users start #####################
+  match 'login' => 'user#login'
   get "user/logout"
   post "user/login"
   match 'edit_user/:id' => 'user#edit', :as => :edit_user
@@ -188,5 +189,5 @@ XInventory::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
-  root :to => 'user#login'
+  root :to => 'home#index'
 end

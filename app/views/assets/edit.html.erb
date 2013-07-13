@@ -193,6 +193,11 @@ function validateForm(){
           :placeholder => "Manufacturer" %>                                              
       </td>                                                                     
     </tr>                                                                       
+    <tr>                                                               
+      <% expiry_date = @asset[:expiry_date].to_date.strftime('%d-%m-%Y') rescue nil %>         
+      <td><%=text_field(:asset, :expiry_date ,:placeholder => "Expiry date",
+             :value => expiry_date) %> </td>
+    </tr>
     <tr>                                                                        
       <td><hr /></td>   
     </tr>                                                                       

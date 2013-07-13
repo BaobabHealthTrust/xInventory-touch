@@ -4,7 +4,7 @@ class UserController < ApplicationController
   def check_authorized
     if action_name == 'new' or action_name == 'index'
        unless admin?                                                               
-        redirect_to '/home'                                                       
+        redirect_to '/'                                                       
       end
     end
   end
@@ -14,7 +14,7 @@ class UserController < ApplicationController
       user = User.find_by_username params[:user]["username"]                   
       if user and user.password_matches?(params[:user]["password"]) 
         session[:user_id] = user.id                                             
-        redirect_to "/home"                                                         
+        redirect_to "/"                                                         
       else                                                                      
         flash[:error] = 'That username and/or password was not valid.'          
       end                                                                       
@@ -29,7 +29,7 @@ class UserController < ApplicationController
 
   def logout
     reset_session
-    redirect_to '/'
+    redirect_to '/login'
   end
   
   def assign_role

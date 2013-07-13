@@ -92,6 +92,12 @@ class AssetsController < ApplicationController
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
+
+      asset_lifespan = (params[:asset]['lifespan']).to_i rescue 0
+      if asset_lifespan > 0
+        item.expiry_date = (Date.today + asset_lifespan.year)
+      end
+
       if item.save
         curr_state = ItemState.new()                                  
         curr_state.item_id = item.id
@@ -194,6 +200,12 @@ class AssetsController < ApplicationController
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
+
+      asset_expiry_date = (params[:asset]['expiry_date']).to_date rescue nil
+      if asset_expiry_date
+        item.expiry_date = asset_expiry_date
+      end
+
       if item.save 
         curr_state = ItemState.where(:'item_id' => item.id)                                  
         curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
@@ -355,6 +367,7 @@ EOF
       :status_on_delivery => StateType.find(asset.status_on_delivery).name,
       :location => Site.find(asset.location).name , 
       :asset_id => asset.id,
+      :expiry_date => asset.expiry_date,
       :current_state => StateType.find(asset.current_state.current_state).name
     }
   end
