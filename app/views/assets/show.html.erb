@@ -1,9 +1,5 @@
 <style>
 
-  .buttons {
-    width: 400px !important;
-  }
-
   .sidebar-nav {
     font-size: 12px;
     padding-bottom: 40px;
@@ -60,6 +56,43 @@
   margin-left: 12px;                                                            
   margin-right: 12px;                                                           
 }
+
+.admin-buttons td {
+}
+
+.admin-buttons table {
+  width: 95%;
+  margin: 5px;
+}
+
+.admin-buttons a {
+  background-color: grey;                                                     
+  border-bottom: 1px outset #EEEEEE;                                          
+  border-style: outset;                                                       
+  border-top: 1px outset #EEEEEE;                                             
+  color: white;                                                               
+  display: block;                                                             
+  padding: 10px;                                                              
+  text-align: center;                                                         
+  text-decoration: none;                                                      
+                                                                              
+                                                                              
+  background-color: rgb(0, 116, 204);                                         
+  background-image: -moz-linear-gradient(center top , rgb(0, 136, 204), rgb(0, 85, 204));
+  background-repeat: repeat-x;                                                
+  border-bottom-color: rgba(0, 0, 0, 0.25);                                   
+  border-left-color-ltr-source: physical;                                     
+  border-left-color-rtl-source: physical;                                     
+  border-left-color-value: rgba(0, 0, 0, 0.1);                                
+  border-right-color-ltr-source: physical;                                    
+  border-right-color-rtl-source: physical;                                    
+  border-right-color-value: rgba(0, 0, 0, 0.1);                               
+  border-top-color: rgba(0, 0, 0, 0.1);                                       
+                                                                              
+  font-size: 1.3em;                                                           
+  width: 95%; 
+}
+
 </style>
 
   <div class="page-header">                                                       
@@ -133,15 +166,22 @@
 
   </div>
   
-  <div style="padding-top:10px;float:right;">
+  </div>
+
+  <div class="admin-buttons">
+    <%if admin? %>                                                          
     <table>
-      <tr><%if admin? %>                                                          
-        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Edit</a>&nbsp;&nbsp;</td>
-        <td><a href="<%=delete_asset_url(:id => @asset[:asset_id])%>">Delete</a>&nbsp;&nbsp;</td>                               
-        <%end%>                                                                   
-        <td><a href="/asset_search">Back</a></td>                    
+      <tr> 
+        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Dispatch</a></td>
+        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Receive</a></td>
+        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Transfer</a></td>
+      </tr> 
+      <tr>
+        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Reimburse</a></td>
+        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Edit</a></td>
+        <td><a href="<%=delete_asset_url(:id => @asset[:asset_id])%>">Delete</a></td>                               
       </tr> 
     </table>
-  </div>
+    <%end%>                                                                   
   </div>
 

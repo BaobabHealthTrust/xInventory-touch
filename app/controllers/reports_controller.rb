@@ -1,5 +1,6 @@
 class ReportsController < ApplicationController
-  def show
+  def index
+    render :layout => "index"
   end
 
   def list_of_items_bought_in

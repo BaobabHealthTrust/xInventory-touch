@@ -1,77 +1,111 @@
-<style>    
-  #latest-outcomes ul {
-    color: #505050;
-    line-height: 1.5em;
-  }        
+<style>
+   div {
+    -moz-user-select: none;
+  }
 
-  #content-right a {
-    color: green;
+  .scan-barcode div {
+    padding-left: 10px;
+  }
+
+  .description {
+    float: left;
+    width: 65%;
+    margin-left: 10px;
+  }
+
+  .menu-buttons {
+    padding: 10px;
+    float: right;
+    width: 30%;
+    margin-right: 10px;
+    border-style: solid;
+    border-width: 0px 0px 0px 1px;
+  }
+
+  .menu-buttons a {
+    width: 95%;
+    line-height: 50px;
+  }
+
+  .buttons {
+    background-color: grey;                                                     
+    border-bottom: 1px outset #EEEEEE;                                          
+    border-style: outset;                                                       
+    border-top: 1px outset #EEEEEE;                                             
+    color: white;                                                               
+    display: block;                                                             
+    padding: 10px;                                               
+    text-align: center;                                                         
     text-decoration: none;
-    font-family: Verdana,Tahoma,Arial;
-    font-size: 10px;
-    font-weight: normal;
-  } 
-                                                            
-  #content-right li {
-    line-height: 0.5em;
+
+
+    background-color: rgb(0, 116, 204);
+    background-image: -moz-linear-gradient(center top , rgb(0, 136, 204), rgb(0, 85, 204));
+    background-repeat: repeat-x;
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: rgba(0, 0, 0, 0.1);
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: rgba(0, 0, 0, 0.1);
+    border-top-color: rgba(0, 0, 0, 0.1);
+
+    font-size: 1.3em;
   }
 
 
-#content-left {
-  color: #404040;
-  font-family: Verdana,Tahoma,Arial;
-  font-size: 12px;
-  width: 450px;
-  float: left;
-}
-
-#content-right {
-  color: #404040;
-  font-family: Verdana,Tahoma,Arial;
-  font-size: 12px;
-  width: 700px;
-  background-color: #F6F6F6;
-  border: 1px solid #E4E4E4;
-  color: #505050;
-  line-height: 1.5em;
-  margin-bottom: 10px;
-  padding: 6px;
-  float: right;
-}
-
-#latest-outcomes {
-  border-bottom: 1px dotted #696969;
-  color: #EE8206;
-}
-
-#summary {
-  max-height: 400px;
-  overflow: auto;
-}
-
-</style> 
-
-<body>
-  
-  <div class="page-header">                                                     
-    <h1><%=organization_name %> <small>inventory system</small></h1>              
-  </div>                                                                        
+</style>
 
 
-  <div id = "content-left">
-    <%=render(:inline => print_content(about_organization))%>
-  </div>
+<div class="scan-barcode">
+  <form id='barcodeForm' action="/find_by_barcode">                               
+    <%= text_field_tag :barcode, '', {:id => 'barcode', :class => 'touchscreenTextInput' } %>
+    <%= submit_tag "Submit", :style => "display:none" %>                        
+    <div style="color:gray">scan a barcode</div>                                
+  </form>
+</div>
 
-  <div id = "content-right">
-    <div id = "latest-outcomes">Available assets</div>
-      <p/>
-  
 
-    <div id="summary">
-      <%= render "summary"%>
+<div class="main-container">
+
+  <div class="description">
+    <div class="page-header">                                                     
+      <h1><%=organization_name %> <small>inventory system</small></h1>            
+    </div>                                                                        
+                                                                                
+                                                                                
+    <div id = "description-content">                                                     
+      <%=render(:inline => print_content(about_organization))%>                   
     </div>
-  
   </div>
 
-</body>
+  <div class="menu-buttons">
+    <p>                                                                           
+      <%= link_to "assets", '/assets', :class => 'buttons' %>
+    </p>
 
+    <p>                                                                           
+      <%= link_to "projects", '/projects', :class => 'buttons' %>
+    </p>
+
+    <p>                                                                           
+      <%= link_to "donors", '/donors', :class => 'buttons' %>
+    </p>
+
+    <p>                                                                           
+      <%= link_to "suppliers", '/suppliers', :class => 'buttons' %>
+    </p>
+
+    <p>                                                                           
+      <%= link_to "manufactures", '/manufacturers', :class => 'buttons' %>
+    </p>
+
+    <p>                                                                           
+      <%= link_to "reports", '/reports', :class => 'buttons' %>
+    </p>
+
+
+  </div>
+
+</div>

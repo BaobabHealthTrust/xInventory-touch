@@ -1,37 +1,30 @@
-<style>
-  .buttons {                                                                    
-    width: 100% !important;                                                    
-  }                                                                              
-</style>
 
 <div class="page-header">
   <h1>reports <small>....</small></h1>
 </div>
 
-<section id='modals'>                                              
+<div class='menu-buttons'>                                              
   <p>                                                                           
-    <%= link_to "List of items bought in", '/items_bought_in', 
-        :class => 'btn btn-primary btn-large buttons' %>
+    <%= link_to "List of items bought in", '/items_bought_in', :class => 'buttons' %>
   </p>                                                                          
                                                                                 
   <p>                                                                           
-    <%= link_to "List of dispatched assets", '/dispatched_assets' , 
-        :class => 'btn btn-primary btn-large buttons' %>
+    <%= link_to "List of dispatched assets", '/dispatched_assets' , :class => 'buttons' %>
   </p>                                                                          
                                                                                 
   <p>                                                                           
     <%= link_to "Itemized list of stock balances per Donor/Site/project", '/stock_balances', 
-      :class => 'btn btn-primary btn-large buttons' %>
+      :class => 'buttons' %>
   </p>
   
   <p>                                                                           
     <%= link_to "Item(s) transferred between Donor/project", '/transfers', 
-      :class => 'btn btn-primary btn-large buttons' %>
+      :class => 'buttons' %>
   </p>
   
   <p>                                                                           
     <%= link_to "Advanced stock balances", '/advanced_stock_balances', 
-      :class => 'btn btn-primary btn-large buttons' %>
+      :class => 'buttons' %>
   </p>
   
-</section> 
+</div> 

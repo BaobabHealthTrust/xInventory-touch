@@ -1,0 +1,77 @@
+<style>
+
+.suggestion_results {
+  margin: 5px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+ }
+
+.suggestion-container {
+  overflow: auto; 
+  height: 61%;
+}
+
+.suggestions {
+  width: 100%;
+}
+
+.suggestions th {
+  padding-left: 5px;
+  text-align: left;
+}
+
+.suggestions td {
+  text-align: left;
+}
+
+.table-header {
+  text-align: left;
+}
+
+.buttons {
+  width: 97.4% !important;
+}
+
+</style>
+
+<script>
+
+function selectAsset(id) {
+  document.location = "/asset_details/" + id;
+}
+
+</script>
+
+<div class="page-header">
+  <h1>Found assets</h1>
+</div>
+
+<br />
+
+<div class="suggestion-container menu-buttons">
+<%
+  color = 'white'
+  (@assets || []).each do |asset|
+    if color == 'white'
+      color = 'lightgray'
+    else
+      color = 'white'
+    end
+%>
+<div class="suggestion_results">
+  <a href="javascript:selectAsset('<%=asset[:asset_id]%>');" class='buttons'>
+  <table class="suggestions strip_<%=color%>">
+    <tr>
+      <th>Name:</th><td><%=asset[:name]%></td>
+      <th>Category:</th><td><%=asset[:category]%></td>
+    </tr>
+    <tr>
+      <th>Model:</th><td><%=asset[:model]%></td>
+      <th>Serial number:</th><td><%=asset[:serial_number]%></td>
+    </tr>
+  </table></a>
+</div>
+<%end%>
+
+</div>
+

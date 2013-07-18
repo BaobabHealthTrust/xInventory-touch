@@ -1,6 +1,14 @@
 class AssetsController < ApplicationController
   before_filter :check_authorized
 
+  def index
+    render :layout => 'index'
+  end
+
+  def find_by_barcode
+    render :text => params[:barcode].to_s and return
+  end
+
   def show
     @asset = get_asset(params[:id])
 
@@ -8,31 +16,31 @@ class AssetsController < ApplicationController
       [state.name , state.id]                                                   
     end 
 
+    render :layout => 'menu'
+  end
+
+  def search_results
+    @assets = []
+    (Item.where("id IN(?)",params[:id].split(','))|| []).each do |item|
+      @assets << get_asset(item.id)
+    end
+    render :layout => 'index'
   end
 
   def search
-    @assets = {}
-    Item.order('name ASC,created_at DESC').limit(30).each do |asset|
-      @assets[asset.id] = {
-        :name => asset.name,
-        :category => Category.find(asset.category_type).name,
-        :brand => Manufacturer.find(asset.brand).name,
-        :version => asset.version,
-        :model => asset.model,
-        :serial_number => asset.serial_number,
-        :supplier => Supplier.find(asset.vendor).name,
-        :project => Project.find(asset.project_id).name,
-        :donor => Donor.find(asset.donor_id).name,
-        :purchased_date => asset.purchased_date,
-        :order_number => asset.order_number,
-        :quantity => asset.current_quantity,
-        :cost => asset.cost,
-        :date_of_receipt => asset.date_of_receipt,
-        :delivered_by => asset.delivered_by,
-        :status_on_delivery => StateType.find(asset.status_on_delivery).name,
-        :expiry_date => asset.expiry_date,
-        :location => Site.find(asset.location).name
-      }
+    if request.post?
+      asset_ids = Item.where("serial_number 
+        LIKE (?)","%#{params[:identifier]}%").map(&:id)
+
+      if asset_ids.length == 1
+        redirect_to :action => :show, :id => asset_ids.first
+        return
+      elsif asset_ids.length > 1
+        redirect_to :action => :search_results, :id => asset_ids[0..99].join(',')
+        return
+      else
+        @notfound  = true
+      end
     end
   end
 

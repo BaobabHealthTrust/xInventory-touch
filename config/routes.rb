@@ -126,6 +126,9 @@ XInventory::Application.routes.draw do
   post "assets/edit_asset_state"
   match 'asset_live_search' => 'assets#live_search'
   match 'serial_number_generator' => 'assets#serial_number_generator'
+  match '/find_by_barcode' => 'assets#find_by_barcode'
+  post 'assets/search'
+  match '/search_results' => 'assets#search_results'
   ########## Donors end #####################
 
   

@@ -1,6 +1,10 @@
 class SuppliersController < ApplicationController
   before_filter :check_authorized
 
+  def index
+    render :layout => 'index'
+  end
+
   def show
     @supplier = Supplier.find(params[:id])
   end

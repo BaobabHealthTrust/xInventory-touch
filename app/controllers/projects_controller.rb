@@ -1,6 +1,10 @@
 class ProjectsController < ApplicationController
   before_filter :check_authorized
 
+  def index
+    render :layout => 'index'
+  end
+
   def show
     @project = Project.find(params[:id])
     @donor = Donor.find(@project.donor)

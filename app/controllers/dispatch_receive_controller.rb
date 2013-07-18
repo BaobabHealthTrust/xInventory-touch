@@ -2,6 +2,10 @@ class DispatchReceiveController < ApplicationController
   skip_before_filter  :verify_authenticity_token , :only => ['asset_transfers','process_transfer']
   before_filter :check_authorized
 
+  def index
+    render :layout => 'index'
+  end
+
   def reimburse_create
     Reimbursed.transaction do 
       reimburse = Reimbursed.new

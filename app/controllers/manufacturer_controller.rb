@@ -1,6 +1,10 @@
 class ManufacturerController < ApplicationController
   before_filter :check_authorized
-  
+
+  def index
+    render :layout => 'index'
+  end
+    
   def show
     @manufacturer = Manufacturer.find(params[:id])
   end
