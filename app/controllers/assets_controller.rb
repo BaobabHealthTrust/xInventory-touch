@@ -75,6 +75,13 @@ class AssetsController < ApplicationController
         return
       else
         @notfound  = true
+        if params[:dispatching] == 'true'
+          redirect_to :action => :search, :dispatching => true
+        elsif params[:transferring] == 'true'
+          redirect_to :action => :search, :transfer => true
+        elsif not params[:reimbursing].blank?
+          redirect_to :action => :search, :reimbursing => params[:reimbursing]
+        end
       end
     end
   end
@@ -278,7 +285,7 @@ class AssetsController < ApplicationController
     asset.voided = true
     asset.void_reason = 'removed by user'
     asset.save
-    redirect_to '/asset_search'
+    redirect_to '/assets'
   end
 
   def search_categories
