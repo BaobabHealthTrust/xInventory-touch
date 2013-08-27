@@ -17,4 +17,12 @@
   <%= text_field_tag :identifier, nil , :field_type => 'number' , 
     :helpText => "Enter serial number/barcode <font style='color:red;'>#{text}</font>",
     :placeholder => "Enter serial number/barcode" %>
+
+  <%if params[:dispatching] == 'true'%>
+    <input type='hidden' name="dispatching" value="true" />
+  <%elsif params[:transfer] == 'true'%>
+    <input type='hidden' name="transferring" value="true" />
+  <%elsif not params[:reimbursing].blank?%>
+    <input type='hidden' name="reimbursing" value="<%=params[:reimbursing]%>" />
+  <%end%>
 <%end%>

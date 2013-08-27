@@ -1,0 +1,24 @@
+
+<script>
+  var tt_cancel_destination="/"
+</script>
+
+
+<form action = "/dispatch_receive/init_transfer" method="get">
+  <%= text_field_tag "transfer[date]", nil,                            
+    {:id => "start_date",                                                   
+    :field_type => 'date',
+    :maxDate => "#{Date.today.to_date}",
+    :helpText => "Transfer date"} %>
+
+  <%= select_tag "transfer[donor_to]", options_for_select(@donors), 
+      :helpText => "Donor transferring to" %>
+      
+  <%= select_tag "transfer[project_to]", options_for_select(@projects), 
+      :helpText => "Project transferring to" %>
+      
+  <%=text_field(:transfer, :approved_by ,:helpText => "Approved By") %>
+
+  <%= submit_tag value="Submit"%>
+
+</form>

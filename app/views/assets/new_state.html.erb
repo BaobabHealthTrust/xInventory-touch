@@ -1,43 +1,16 @@
-<%#= javascript_include_tag "bootstrap-datepicker" %>
-<%#= stylesheet_link_tag "datepicker" %>
 
 <style>
-  .content-details { text-align: center; }                                                                          
-
-  .asset-details { width: 100%; }                                                                          
-
 </style>
 
 
 <script>
-
-function submitForm() {                                                         
-  if(validateForm())                                                            
-    document.getElementsByTagName('form')[0].submit();                          
-                                                                                
-}                                                                               
-                                                                                
-function validateForm(){                                                        
-    state_name = document.getElementById('state_name');                      
-
-    if(state_name.value == '') {                                                     
-      alert("Please enter state name ...");                                     
-      return false;                                                             
-    }                                                                           
-  return true;                                                                  
-}  
-
+  tt_cancel_destination = '/assets'
 </script>
 
 
 
-<div class="page-header">
-  <h1>asset <small>create asset status</small></h1>
-</div>
-
 <siection id='modals'>                                              
   <div class="content-details">
-  <div>                                                                         
     <%if flash[:notice]%>                                                       
       <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
     <%elsif flash[:error]%>                                                     
@@ -49,28 +22,10 @@ function validateForm(){
   <table class="asset-details">                                              
   <tbody>                                                                       
     <tr>                                                                        
-      <td>&nbsp;</td>                                                           
+      <td><%=text_field(:state, :name, :helpText => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:state, :name, :placeholder => "Name") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_area_tag("state[description]", nil, :placeholder => "Description") %></td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <input onclick="submitForm();" type="button" id="signup" 
-          class="btn btn-primary signup_btn" value="Register" style="width:100%;" />
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
+      <td><%=text_area_tag("state[description]", nil, :helpText => "Description") %></td>
     </tr>                                                                       
   </tbody>                                                                      
  </table>

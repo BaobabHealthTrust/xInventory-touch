@@ -2,7 +2,8 @@ class ManufacturerController < ApplicationController
   before_filter :check_authorized
 
   def index
-    render :layout => 'index'
+    @page_title = "<h1>Manufacturers <small>....</small></h1>"
+    render :layout => 'imenu'
   end
     
   def show

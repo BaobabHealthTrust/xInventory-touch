@@ -1,0 +1,18 @@
+
+<script>
+  var tt_cancel_destination="/"
+</script>
+
+<form method ='get' action = "init_dispatch">
+  <%= text_field_tag "quantity", nil,                            
+    {:id => "quantity",                                                   
+    :field_type => 'number',
+    :min => 1,:max => @item.current_quantity ,
+    :helpText => "Select quantity"} %>
+
+  <%= select_tag "state", options_for_select(@states),
+    :helpText => "Asset current state" %>                                              
+
+ 
+<input type="hidden" name="asset_id" value="<%=@item.id%>" /> 
+</form>

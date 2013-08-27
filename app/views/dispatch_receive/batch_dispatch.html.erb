@@ -1,0 +1,19 @@
+
+<script>
+  var tt_cancel_destination="/"
+</script>
+
+
+<form method = "get" action = "init_dispatch">
+  <%= text_field_tag "dispatch[date]", nil,                            
+    {:id => "start_date",                                                   
+    :field_type => 'date',
+    :maxDate => "#{Date.today.to_date}",
+    :helpText => "Dispatch date"} %>
+
+  <%= select_tag "dispatch[site]", options_for_select(@sites), :helpText => "Dispatching to" %> 
+
+  <%=text_field(:dispatch, :approved_by ,:helpText => "Approved By") %>
+   
+  <%=text_field(:dispatch, :received_by ,:helpText => "Received By") %>   
+</form>

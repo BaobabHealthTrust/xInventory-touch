@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <title>Home</title>
+    <style type="text/css">
+      body {
+        background-color: #fff;
+        margin: 20px;
+        font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+        overflow: hidden;
+        color: #000;
+        -moz-user-select: none;
+      }
+
+      .buttons-table td {
+        text-align: center;
+      }
+
+      .buttons-table img {
+        width: 128px;
+        height: 128px;
+      }
+
+      .page-title {
+        font-size: 25px;
+        font-weight: bold;
+        position: absolute;
+        vertical-align: middle;
+      }
+
+      #logo {
+         height: 80px;
+         float: right;
+      }
+    </style>
+
+    <script type="text/javascript">
+      function showMsg(msg){
+        alert(msg);
+      }
+      function ajaxRequest(control, url){
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+          handleAjaxRequest(control, httpRequest);
+        };
+        try {
+          httpRequest.open('GET', url, true);
+          httpRequest.send(null);
+        } catch(e){
+        }
+      }
+
+      function handleAjaxRequest(control, aXMLHttpRequest) {
+        if (!aXMLHttpRequest) return;
+
+        if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+
+          var result = aXMLHttpRequest.responseText;
+
+          if (control != null){
+            control.innerHTML = result;
+          } else {
+            eval(result);
+
+            window.location.reload();
+          }
+        }
+
+      }
+    </script>
+
+    <%= csrf_meta_tag %>
+  </head>
+  <body>
+    <table width="100%" cellspacing="0" cellpadding="10">
+      <tr>
+        <td style="width: 100px; border-bottom: 1px solid #5496ef;">
+          <font class="page-title"><%=@page_title.html_safe rescue nil%></font>
+          <%= image_tag("baobab-tree.jpg" ,:id => "logo")%>
+        </td>
+      </tr>
+
+       </table>
+</body>
+</html>

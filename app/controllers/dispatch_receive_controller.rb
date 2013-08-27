@@ -6,6 +6,110 @@ class DispatchReceiveController < ApplicationController
     render :layout => 'index'
   end
 
+  def batch_transfer
+    @projects = Project.order('name ASC').collect do |r|                        
+      [r.name , r.id]                                                     
+    end 
+    @donors = Donor.order('name ASC').collect do |r|                        
+      [r.name , r.id]                                                     
+    end 
+  end
+
+  def init_transfer
+    session[:assets_to_transfer] = {
+      :transfer_date => params[:transfer]['date'],
+      :donor_to => params[:transfer]['donor_to'],
+      :project_to => params[:transfer]['project_to'],
+      :approved_by => params[:transfer]['approved_by'],
+      :assets => [] } if  session[:assets_to_transfer].blank?
+
+      if not session[:assets_to_transfer].blank? and not params[:asset_id].blank?
+         asset = Item.find(params[:asset_id])
+         session[:assets_to_transfer][:assets] << asset.id
+         session[:assets_to_transfer][:assets] = session[:assets_to_transfer][:assets].uniq
+      end
+
+    @page_title=<<EOF
+<form id="barcodeForm" action="/find_asset_to_dispatch_by_barcode">
+<input id="barcode" class="touchscreenTextInput" 
+type="text" value="" name="barcode" placeholder = "Scan barcode to add asset">
+<input type="hidden" name="transferring" value="true" />
+<input type="submit" value="Submit" style="display:none" name="commit">
+</form>
+EOF
+
+    render :layout => 'imenu'
+  end
+
+  def batch_dispatch
+    @sites = Site.order('name ASC').collect do |site|                        
+      [site.name , site.id]                                                     
+    end 
+    session[:assets_to_dispatch] = nil
+  end
+
+  def create
+    session[:assets_to_dispatch] = {
+      :dispatch_date => params[:dispatch]['date'],
+      :dispatch_site => Site.find(params[:dispatch]['site']).name,
+      :approved_by => params[:dispatch]['approved_by'],
+      :received_by => params[:dispatch]['received_by'],
+      :current_state => {},
+      :assets => {} } if session[:assets_to_dispatch].blank?
+
+      if not session[:assets_to_dispatch].blank? and not params[:quantity].blank?
+         asset = Item.find(params[:asset_id])
+         if asset.current_quantity.to_f >= params[:quantity].to_f  
+           session[:assets_to_dispatch][:assets][asset] = params[:quantity]
+           session[:assets_to_dispatch][:current_state][asset] = params[:state]
+         end
+      end
+
+    @page_title=<<EOF
+<form id="barcodeForm" action="/find_asset_to_dispatch_by_barcode">
+<input id="barcode" class="touchscreenTextInput" 
+type="text" value="" name="barcode" placeholder = "Scan barcode to add asset">
+<input type="submit" value="Submit" style="display:none" name="commit">
+</form>
+EOF
+
+    render :layout => 'imenu'
+  end
+
+  def find_asset_to_dispatch_by_barcode
+    @item = Item.find_by_serial_number(params[:barcode])
+    @states = StateType.all.collect do |state|
+      [state.name, state.name]
+    end
+
+    if @item.blank? and params[:transferring] == 'true'
+      redirect_to :action => :create and return
+    elsif not @item.blank? and params[:transferring] == 'true'
+      redirect_to :action => :init_transfer,:asset_id => @item.id and return
+    elsif not @item.blank? and not params[:reimbursing].blank?
+      session[:assets_to_reimburse] = {:asset_id => []} if session[:assets_to_reimburse].blank?
+      session[:assets_to_reimburse][:asset_id] << @item.id
+      session[:assets_to_reimburse][:asset_id] = session[:assets_to_reimburse][:asset_id].uniq
+      redirect_to available_asset_list_url(:id => params[:reimbursing]) and return
+    elsif @item.blank? and not params[:reimbursing].blank?
+      redirect_to available_asset_list_url(:id => params[:reimbursing]) and return
+    end
+
+    if @item.blank?
+      redirect_to :action => :create and return
+    end
+  end
+
+  def transfer
+    @projects = Project.order('name ASC').collect do |project|                        
+      [project.name , project.id]                                                     
+    end 
+
+    @donors = Donor.order('name ASC').collect do |donor|                        
+      [donor.name , donor.id]                                                     
+    end 
+  end
+
   def reimburse_create
     Reimbursed.transaction do 
       reimburse = Reimbursed.new
@@ -92,7 +196,9 @@ class DispatchReceiveController < ApplicationController
   end
 
   def borrowed_assets
+    @page_title = "<h1>borrowed <small>assets</small></h1>"
     @borrowed_assets = get_transferred_assets
+    render :layout => 'imenu'
   end
   
   def transfer_assets_search
@@ -241,10 +347,126 @@ class DispatchReceiveController < ApplicationController
 
   def transfer_results
     @results = get_transfer_results(params[:id])
+    @page_title = "<h1>transferred asset(s)</h1>"
+    render :layout => 'imenu'
   end
 
   def live_search
     render :text => get_datatable(params[:search_str],params[:type]) and return
+  end
+
+  def create_batch_dispatch
+    (session[:assets_to_dispatch][:assets] || {}).each do |asset, quantity|
+      Item.transaction do
+        dispatch = DispatchReceive.new()                                         
+        dispatch.asset_id = asset.id                                             
+        dispatch.transaction_type = DispatchReceiveType.find_by_name('Dispatch').id
+        dispatch.encounter_date = session[:assets_to_dispatch][:dispatch_date]
+        dispatch.approved_by = session[:assets_to_dispatch][:approved_by]                  
+        dispatch.responsible_person = session[:assets_to_dispatch][:received_by]         
+        dispatch.location_id = Site.find_by_name(session[:assets_to_dispatch][:dispatch_site]).id 
+        dispatch.quantity = quantity
+=begin
+        unless params[:dispatch]['reason'].blank?                                
+         dispatch.reason = params[:dispatch]['reason']                          
+        end                                                                      
+=end
+        if dispatch.save                                                         
+          curr_state = ItemState.where(:'item_id' => asset.id).first             
+          curr_state.current_state = StateType.find_by_name(session[:assets_to_dispatch][:current_state][asset]).id
+          curr_state.save                                                        
+                                                                                
+          asset.current_quantity -= dispatch.quantity                            
+          asset.save
+        end
+      end
+    end
+    redirect_to '/'
+  end
+
+  def create_batch_transfer
+    asset_ids = session[:assets_to_transfer][:assets]
+    Transfer.transaction do
+      @transfer = Transfer.new()
+      @transfer.transfer_date = session[:assets_to_transfer][:transfer_date]
+      @transfer.save
+      (asset_ids).each do |assets_id|
+        asset = Item.find(assets_id)
+        TransferTransations.transaction do
+          transfer_transaction = TransferTransations.new()
+          transfer_transaction.transfer_id = @transfer.id
+          transfer_transaction.asset_id = asset.id
+          transfer_transaction.from_project = asset.project_id
+          transfer_transaction.from_donor = asset.donor_id
+          transfer_transaction.from_location = asset.location
+          transfer_transaction.to_project = session[:assets_to_transfer][:project_to]
+          transfer_transaction.to_donor = session[:assets_to_transfer][:donor_to]
+          transfer_transaction.save
+
+          #now we update the asset info to reflect the transfer
+          asset.project_id = session[:assets_to_transfer][:project_to]
+          asset.donor_id = session[:assets_to_transfer][:donor_to]
+          asset.save
+        end
+      end
+    end
+   
+   if @transfer                                                             
+     flash[:notice] = 'Successfully transfered.'                                
+    else                                                                      
+      flash[:error] = 'Something went wrong - did not transfer.'                
+    end
+
+    redirect_to '/'
+  end
+
+  def borrowed_assets_reimburse
+    @transfer =  Transfer.find(params[:id])
+
+    @page_title=<<EOF
+<form id="barcodeForm" action="/find_asset_to_dispatch_by_barcode">
+<input id="barcode" class="touchscreenTextInput" 
+type="text" value="" name="barcode" placeholder = "Scan barcode to add asset">
+<input type="hidden" name="reimbursing" value="#{params[:id]}" />
+<input type="submit" value="Submit" style="display:none" name="commit">
+</form>
+EOF
+
+    render :layout => 'imenu'
+  end
+
+  def batch_reimburse_create
+    asset_ids = session[:assets_to_reimburse][:asset_id]
+    #session[:assets_to_reimburse] = nil
+
+    transfer_transactions = TransferTransations.where("returned = 0 AND transfer_id = ?", params[:transfer_id])
+    transfer_transactions_batch = {}
+
+    (transfer_transactions || {}).each_with_index do |t, i|
+      transfer_transactions_batch[t] = asset_ids[i]
+    end
+
+    (transfer_transactions_batch || {}).each do |transfer_transaction, asset_id|
+      next if asset_id.blank?
+      Reimbursed.transaction do 
+        reimburse = Reimbursed.new
+        reimburse.transfer_transation_id = transfer_transaction.id
+        reimburse.reimbursed_item_id = asset_id
+        reimburse.reimbursed_date = Date.today
+        if reimburse.save
+          transfer_transaction.returned = true
+          if transfer_transaction.save
+            asset = Item.find(asset_id)
+            asset.donor_id = transfer_transaction.from_donor
+            asset.project_id = transfer_transaction.from_project
+            asset.save
+          end
+        end
+      end
+    end
+    
+    session[:assets_to_reimburse] = nil
+    redirect_to "/borrowed_assets" and return
   end
 
   private   
@@ -447,35 +669,31 @@ EOF
   <table id='search_results' class='table table-striped table-bordered table-condensed'>
   <thead>                                                                       
   <tr id = 'table_head'>                                                        
-    <th id="th3" style="width:200px;">Serial number</th>                                 
-    <th id="th3" style="width:200px;">Item</th>                                 
+    <th id="th1" style="width:200px;">Date of Transfer</th>                               
     <th id="th1" style="width:200px;">Donor - From</th>                               
     <th id="th1" style="width:200px;">Project - From</th>                               
     <th id="th1" style="width:200px;">Current donor</th>                               
     <th id="th1" style="width:200px;">Current project</th>                               
-    <th id="th1" style="width:200px;">Date of Transfer</th>                               
     <th id="th1" style="width:200px;">&nbsp;</th>                               
   </tr>                                                                         
   </thead>                                                                      
   <tbody id='results'>                            
 EOF
                                                        
-    (transfers).each do |transfer| 
-      (transfer.transfer_transactions).each do |transaction|
-        next if transaction.returned
+    (transfers || []).each do |transfer| 
+      transaction = (transfer.transfer_transactions)[0]
         @html +=<<EOF                                                               
       <tr>                                                                        
-      <td>#{Item.find(transaction.asset_id).serial_number}</td>                                                      
-      <td>#{Item.find(transaction.asset_id).name}</td>                                                      
+      <td>#{transfer.transfer_date}</td>                                                      
       <td>#{Donor.find(transaction.from_donor).name}</td>                                                      
       <td>#{Project.find(transaction.from_project).name}</td>                                                      
       <td>#{Donor.find(transaction.to_donor).name}</td>                                                      
       <td>#{Project.find(transaction.to_project).name}</td>                                                      
-      <td>#{transfer.transfer_date}</td>                                                      
-      <td><a href="#{available_asset_list_url(:id => transaction.id)}">Select</a></td>                                                      
+      <td style="text-align:center; vertical-align: middle;">
+        <a class="btn" href="#{available_asset_list_url(:id => transfer.id)}">Select</a>
+      </td>                                                      
     </tr>                                                                       
 EOF
-      end                                                                         
     end                                                                         
                                                                                 
     @html +=<<EOF                                                               
@@ -484,5 +702,6 @@ EOF
 EOF
                                                                                 
     return @html
-  end 
+  end
+   
 end

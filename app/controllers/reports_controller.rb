@@ -1,6 +1,7 @@
 class ReportsController < ApplicationController
   def index
-    render :layout => "index"
+    @page_title = "<h1>reports <small>....</small></h1>"
+    render :layout => "imenu"
   end
 
   def list_of_items_bought_in

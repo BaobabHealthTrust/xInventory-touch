@@ -2,14 +2,21 @@ class ProjectsController < ApplicationController
   before_filter :check_authorized
 
   def index
-    render :layout => 'index'
+    @page_title = "<h1>projects <small>....</small></h1>"
+    render :layout => 'imenu'
   end
 
   def show
     @project = Project.find(params[:id])
-    @donor = Donor.find(@project.donor)
+    @donor = @project.donor
+    @page_title = "<h1>project <small>details</small></h1>"
+    render :layout => 'imenu'
   end
 
+  def found
+    @project = Project.where(:name => params[:project])[0]
+    redirect_to :action => :show ,:id => @project.id
+  end
 
   def new
     @donors = ['Select donor', nil]
@@ -33,15 +40,13 @@ class ProjectsController < ApplicationController
   end
 
   def search
-    @projects = {}
-
-    (Project.all || []).each do |project|
-      @projects[project.id] = {:name => project.name,
-        :donor => Donor.find(project.donor).name,
-        :date_create => project.created_at,
-        :project_id => project.id }
-    end
   end
+
+  def find_by_name                                                              
+    @projects = Project.where("name LIKE(?)",                                        
+      "%#{params[:search_str]}%").group(:name).limit(10).map{|item|[[item.name]]}
+    render :text => "<li></li><li>" + @projects.join("</li><li>") + "</li>"       
+  end 
 
   def edit_project_details 
     @project = Project.find(params[:id])

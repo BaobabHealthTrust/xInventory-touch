@@ -1,0 +1,134 @@
+<style>
+.main-table {
+  width: 99%;
+  margin: 10px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.main-table th {
+  font-weight: bold;
+  text-align: left;
+}
+
+.left-div {
+  float: left;
+  background-color: white;
+  width: 70%;
+  height: 530px;
+  overflow: auto;
+}
+
+.right-div {
+  float: right;
+  background-color: white;
+  width: 28%;
+}
+
+.asset-div {
+  background-color: white;
+  height: 390px;
+  overflow: auto;
+}
+
+.asset-table {
+  margin: 10px;
+  width: 99%;
+  font-size: 15px;
+  text-align: left;
+  padding-left: 10px;
+}
+
+#barcode {
+  font-size: 20px;
+  height: 70px;
+  width: 500px;
+}
+</style>
+
+<%= javascript_include_tag 'ToolKit/barcode' %>
+
+
+<br />
+
+
+<div class="left-div">
+
+<table class="main-table">
+
+<tr>
+  <th>Dispatching date</th>
+  <td>
+    <%=session[:assets_to_dispatch][:dispatch_date].to_date.strftime('%d %B, %Y')%>
+  </td>
+</tr>
+
+<tr>
+  <th>Location</th>
+  <td>
+    <%=session[:assets_to_dispatch][:dispatch_site]%>
+  </td>
+</tr>
+<tr>
+  <th>Approved By</th>
+  <td>
+    <%=session[:assets_to_dispatch][:approved_by]%>
+  </td>
+</tr>
+<tr>
+  <th>Received By</th>
+  <td>
+    <%=session[:assets_to_dispatch][:received_by]%>
+  </td>
+</tr>
+
+</table>
+<hr />
+
+<div class="asset-div">
+  <table class="asset-table">
+   <%unless session[:assets_to_dispatch][:assets].blank? %>
+     <tr>
+       <th>Asset</th>
+       <th style="text-align: right; padding-right: 10px;">Quantity</th>
+       <th>Current asset state</th>
+     </tr>
+   <%end%>
+
+   <%(session[:assets_to_dispatch][:assets] || []).each do |asset, quantity| %>
+    <tr>
+      <td><%=asset.name%></td>
+      <td style="text-align: right; padding-right: 10px;"><%=quantity%></td>
+      <td><%=session[:assets_to_dispatch][:current_state][asset]%></td>
+    </tr>
+    <%end%>
+    <%if session[:assets_to_dispatch][:assets].blank? %>
+      <tr>
+        <td colspan="2" style="text-align: center;">
+          Select assets to dispatch
+        </td>
+      </tr>
+    <%end%>
+  </table>
+</div>
+
+
+</div>
+
+<div class="right-div">
+
+<p>
+  <a class="buttons" href="/asset_search?dispatching=true">Add asset</a>
+</p>
+
+<p>&nbsp;</p>
+
+<p>
+  <%if session[:assets_to_dispatch][:assets].blank? %>
+    <a class="buttons" href="#">Dispatch</a>
+  <%else%>
+    <a class="buttons" href="/create_batch_dispatch">Dispatch</a>
+  <%end%>
+</p>
+
+</div>

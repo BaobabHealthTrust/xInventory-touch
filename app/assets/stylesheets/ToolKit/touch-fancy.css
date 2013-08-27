@@ -20,6 +20,10 @@ body{
     overflow: hidden;
 }
 
+div {
+    -moz-user-select:none;
+}
+
 form{
     z-index:0;
 }
@@ -43,7 +47,7 @@ form{
     border-left:none;
     border-right:none;
     border-bottom: 1px solid silver;
-    width:928px;
+    width:99.5%;
     font-family:"Nimbus Sans L","Arial Narrow",sans-serif;
     font-size:2.2em;
     background:none;
@@ -93,7 +97,7 @@ form{
     height: 80px;
     position: absolute;
     top: 670px;
-    width:  98%;
+    width:  98.7%;
     padding-right: 20px;
     /*  z-index:10;*/
 }
@@ -157,7 +161,7 @@ form{
     border-radius: 15px;
     padding: 5px;
     background-color: #fff;
-    width: 935px;
+    width: 95%;
 }
 
 .buttonLine{
@@ -184,7 +188,7 @@ form{
     left: 0px;
     z-index: 1;
     height: 670px;
-    width: 998px;
+    width: 99%;
     overflow: hidden;
 }
 
@@ -210,7 +214,7 @@ form{
     border: 1px solid black;
     margin-left:25px;
     background: #F0F0F0;
-    width:935px;
+    width:96.5%;
     border-radius: 10px;
     padding: 5px;
 }
@@ -355,74 +359,74 @@ button span {
 
 
 button, button.blue { 
-    background:url(/assets/buttons/btn_right_blue.png) right no-repeat;
+    background:url(../images/buttons/btn_right_blue.png) right no-repeat;
     font-size:1.3em;
     /*line-height:57px;*/
     min-width:75px;
 }
 button span, button.blue span { 
-    background:url(/assets/buttons/btn_left_blue.png) left no-repeat;
+    background:url(../images/buttons/btn_left_blue.png) left no-repeat;
     height:57px;
     line-height:57px;
     color:#fff;
 }
 button:hover, button:hover.blue {
-    background:url(/assets/buttons/btn_right_hover_blue.png) right no-repeat;
+    background:url(../images/buttons/btn_right_hover_blue.png) right no-repeat;
 }
 button:hover span, button:hover.blue span {
-    background:url(/assets/buttons/btn_left_hover_blue.png) left no-repeat;
+    background:url(../images/buttons/btn_left_hover_blue.png) left no-repeat;
 }
 
 button.red { 
-    background:url(/assets/buttons/btn_right_red.png) right no-repeat;
+    background:url(../images/buttons/btn_right_red.png) right no-repeat;
 }
 button.red span { 
-    background:url(/assets/buttons/btn_left_red.png) left no-repeat;
+    background:url(../images/buttons/btn_left_red.png) left no-repeat;
 }
 button:hover.red {
-    background:url(/assets/buttons/btn_right_hover_red.png) right no-repeat;
+    background:url(../images/buttons/btn_right_hover_red.png) right no-repeat;
 }
 button:hover.red span {
-    background:url(/assets/buttons/btn_left_hover_red.png) left no-repeat;
+    background:url(../images/buttons/btn_left_hover_red.png) left no-repeat;
 }
 
 button.green { 
-    background:url(/assets/buttons/btn_right_green.png) right no-repeat;
+    background:url(../images/buttons/btn_right_green.png) right no-repeat;
 }
 button.green span { 
-    background:url(/assets/buttons/btn_left_green.png) left no-repeat;
+    background:url(../images/buttons/btn_left_green.png) left no-repeat;
 }
 button:hover.green  {
-    background:url(/assets/buttons/btn_right_hover_green.png) right no-repeat;
+    background:url(../images/buttons/btn_right_hover_green.png) right no-repeat;
 }
 button:hover.green span {
-    background:url(/assets/buttons/btn_left_hover_green.png) left no-repeat;
+    background:url(../images/buttons/btn_left_hover_green.png) left no-repeat;
 }
 
 button.gray { 
-    background:url(/assets/buttons/btn_right_gray.png) right no-repeat;
+    background:url(../images/buttons/btn_right_gray.png) right no-repeat;
 }
 button.gray span { 
-    background:url(/assets/buttons/btn_left_gray.png) left no-repeat;
+    background:url(../images/buttons/btn_left_gray.png) left no-repeat;
 }
 button:hover.gray {
-    background:url(/assets/buttons/btn_right_hover_gray.png) right no-repeat;
+    background:url(../images/buttons/btn_right_hover_gray.png) right no-repeat;
 }
 button:hover.gray span {
-    background:url(/assets/buttons/btn_left_hover_gray.png) left no-repeat;
+    background:url(../images/buttons/btn_left_hover_gray.png) left no-repeat;
 }
 
 button.dark { 
-    background:url(/assets/buttons/btn_right_dark.png) right no-repeat;
+    background:url(../images/buttons/btn_right_dark.png) right no-repeat;
 }
 button.dark span { 
-    background:url(/assets/buttons/btn_left_dark.png) left no-repeat;
+    background:url(../images/buttons/btn_left_dark.png) left no-repeat;
 }
 button:hover.dark {
-    background:url(/assets/buttons/btn_right_hover_dark.png) right no-repeat;
+    background:url(../images/buttons/btn_right_hover_dark.png) right no-repeat;
 }
 button:hover.dark span {
-    background:url(/assets/buttons/btn_left_hover_dark.png) left no-repeat;
+    background:url(../images/buttons/btn_left_hover_dark.png) left no-repeat;
 }
 
 
@@ -454,10 +458,10 @@ button:hover.dark span {
 }
 #scrollUp{
     top: 0px;
-    background-image: url(/assets/arrow-up.png);
+    background-image: url(../images/arrow-up.png);
 }
 #scrollDown{
-    background-image: url(/assets/arrow-down.png);
+    background-image: url(../images/arrow-down.png);
     bottom: 0px;
 }
 
@@ -702,7 +706,7 @@ button:hover.dark span {
     font-size:1.3em;
     margin-left:25px;
     padding-top:5px;
-    width:942px;
+    width:99%;
     border-bottom:2px dotted;
 }  
 
@@ -711,9 +715,12 @@ button:hover.dark span {
 .NumbersOnlyWithDecimal,
 .NumbersOnly,
 .DatesOnly { height: 330px !important }
-.NoKeyboard, .NoControls { height: 520px !important } 
-.NoKeyboard .inputFrameClass { height: 440px !important } 
-.NoKeyboard .options { height: 395px !important } 
+
+.NoKeyboard, .NoControls { height: 660px !important }
+
+.NoKeyboard .inputFrameClass { height: 595px !important }
+
+.NoKeyboard .options { height: 552px !important }
 
 #footer button, div.buttonsDiv button {
     margin-top: 10px;
@@ -824,53 +831,53 @@ button {
 }
 
 .NoKeyboard #keyboard {
-    display: none;
+    display: none !important;
 }
 
 button:active.blue span {
-    background:url(/assets/buttons/btn_left_yellow.png) left no-repeat;
+    background:url(../images/buttons/btn_left_yellow.png) left no-repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
 
 button:active.blue {
-    background:url(/assets/buttons/btn_right_yellow.png) right no-repeat;
+    background:url(../images/buttons/btn_right_yellow.png) right no-repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
 
 button:active.green span {
-    background:url(/assets/buttons/btn_left_yellow.png) left no-repeat;
+    background:url(../images/buttons/btn_left_yellow.png) left no-repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
 
 button:active.green {
-    background:url(/assets/buttons/btn_right_yellow.png) right no-repeat;
+    background:url(../images/buttons/btn_right_yellow.png) right no-repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
 
 button:active.red span {
-    background:url(/assets/buttons/btn_left_yellow.png) left no-repeat;
+    background:url(../images/buttons/btn_left_yellow.png) left no-repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
 
 button:active.red {
-    background:url(/assets/buttons/btn_right_yellow.png) right no-repeat;
+    background:url(../images/buttons/btn_right_yellow.png) right no-repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
 
 button:active span {
-    background:url(/assets/buttons/btn_left_yellow.png) left no-repeat;
+    background:url(../images/buttons/btn_left_yellow.png) left no-repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
 
 button:active {
-    background:url(/assets/buttons/btn_right_yellow.png) right no-repeat;
+    background:url(../images/buttons/btn_right_yellow.png) right no-repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
@@ -886,20 +893,20 @@ button:active {
     border: 5px outset #000;
     padding: 9px;
     cursor: pointer;
-    background:url(/assets/btn_blue.png) right repeat;
+    background:url(../images/btn_blue.png) right repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
     border-radius: 12px;
 }
 
 .btn:hover {
-    background:url(/assets/btn_blue_hover.png) right repeat;
+    background:url(../images/btn_blue_hover.png) right repeat;
     -moz-user-select:none;
     -moz-user-focus:disabled;
 }
 
 .btn:active {
-    background:url(/assets/btn_yellow.png) right repeat;
+    background:url(../images/btn_yellow.png) right repeat;
     border: 3px inset #000;
 }
 

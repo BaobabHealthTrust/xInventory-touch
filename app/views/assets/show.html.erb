@@ -36,7 +36,7 @@
   margin-left: 10px;
   margin-top: 10px;
   font-family: Tahoma,Verdana,Arial;
-  font-size: 11px; 
+  font-size: 20px; 
   width: 98%;
   text-align: left;
 }
@@ -52,52 +52,24 @@
 }
 
 .xool_information {                                                           
-  font-size: 11px;                                                              
+  font-size: 18px;                                                              
   margin-left: 12px;                                                            
   margin-right: 12px;                                                           
 }
 
 .admin-buttons td {
+  line-height: 40px;
 }
 
 .admin-buttons table {
-  width: 95%;
+  width: 98%;
   margin: 5px;
 }
 
 .admin-buttons a {
-  background-color: grey;                                                     
-  border-bottom: 1px outset #EEEEEE;                                          
-  border-style: outset;                                                       
-  border-top: 1px outset #EEEEEE;                                             
-  color: white;                                                               
-  display: block;                                                             
-  padding: 10px;                                                              
-  text-align: center;                                                         
-  text-decoration: none;                                                      
-                                                                              
-                                                                              
-  background-color: rgb(0, 116, 204);                                         
-  background-image: -moz-linear-gradient(center top , rgb(0, 136, 204), rgb(0, 85, 204));
-  background-repeat: repeat-x;                                                
-  border-bottom-color: rgba(0, 0, 0, 0.25);                                   
-  border-left-color-ltr-source: physical;                                     
-  border-left-color-rtl-source: physical;                                     
-  border-left-color-value: rgba(0, 0, 0, 0.1);                                
-  border-right-color-ltr-source: physical;                                    
-  border-right-color-rtl-source: physical;                                    
-  border-right-color-value: rgba(0, 0, 0, 0.1);                               
-  border-top-color: rgba(0, 0, 0, 0.1);                                       
-                                                                              
-  font-size: 1.3em;                                                           
-  width: 95%; 
 }
 
 </style>
-
-  <div class="page-header">                                                       
-    <h1>asset <small>details</small></h1>                                         
-  </div> 
 
   <div class="well sidebar-nav">
 
@@ -130,21 +102,13 @@
     <table class="xool_information">
       <tr>
         <td style="font-weight:bold;">Order/Invoice number:&nbsp;</td><td><%=@asset[:order_number]%></td>
-      </tr>                     
-      <tr>
-        <td style="font-weight:bold;">Purchased date&nbsp;</td><td><%=@asset[:purchased_date]%></td>
-      </tr>                     
-      <tr>
-        <td style="font-weight:bold;">Cost:&nbsp;</td><td><%=@asset[:cost]%></td>
+        <td style="font-weight:bold;text-align:right;">Purchased date&nbsp;</td><td><%=@asset[:purchased_date]%></td>
+        <td style="font-weight:bold;text-align:right;">Cost:&nbsp;</td><td><%=@asset[:cost]%></td>
       </tr>                     
       <tr>
         <td style="font-weight:bold;">Bought in quantity:&nbsp;</td><td><%=@asset[:bought_quantity]%></td>
-      </tr>                     
-      <tr>
-        <td style="font-weight:bold;">Current quantity:&nbsp;</td><td><%=@asset[:current_quantity]%></td>
-      </tr>                     
-      <tr>
-        <td style="font-weight:bold;">Delivered by:&nbsp;</td><td><%=@asset[:delivered_by]%></td>
+        <td style="font-weight:bold;text-align:right;">Current quantity:&nbsp;</td><td><%=@asset[:current_quantity]%></td>
+        <td style="font-weight:bold;text-align:right;">Delivered by:&nbsp;</td><td><%=@asset[:delivered_by]%></td>
       </tr>                     
       <tr>
         <td style="font-weight:bold;">Status on delivery&nbsp;</td><td><%=@asset[:status_on_delivery]%></td>
@@ -155,11 +119,8 @@
            <%@status.unshift(@asset[:current_state]) %>                          
               <%= select_tag "asset[status]", options_for_select(@status),
               :placeholder => "Delivery status" %>                                  
-      </td> 
-        </td>
-      </tr>                     
-      <tr>
-        <td style="font-weight:bold;">Location&nbsp;</td><td><%=@asset[:location]%></td>
+        </td> 
+        <td style="font-weight:bold;text-align:right;">Location:&nbsp;</td><td><%=@asset[:location]%></td>
       </tr>                     
     </table>                                                                     
 
@@ -172,14 +133,13 @@
     <%if admin? %>                                                          
     <table>
       <tr> 
-        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Dispatch</a></td>
-        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Receive</a></td>
-        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Transfer</a></td>
+        <td><a class="buttons" href="<%=dispatch_url(:id => @asset[:asset_id])%>">Dispatch</a></td>
+        <td><a class="buttons" href="<%=receive_url(:id => @asset[:asset_id])%>">Receive</a></td>
+        <td><a class="buttons" href="<%=transfer_url(:id => @asset[:asset_id])%>">Transfer</a></td>
       </tr> 
       <tr>
-        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Reimburse</a></td>
-        <td><a href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Edit</a></td>
-        <td><a href="<%=delete_asset_url(:id => @asset[:asset_id])%>">Delete</a></td>                               
+        <td><a class="buttons" href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Edit</a></td>
+        <td><a class="buttons" href="<%=delete_asset_url(:id => @asset[:asset_id])%>">Delete</a></td>                               
       </tr> 
     </table>
     <%end%>                                                                   

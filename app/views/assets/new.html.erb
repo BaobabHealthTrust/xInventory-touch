@@ -1,146 +1,27 @@
-<%#= javascript_include_tag "bootstrap-datepicker" %>
-<%#= stylesheet_link_tag "datepicker" %>
 
 <style>
-  .content-details { text-align: center; }                                                                          
 
-  .asset-details { width: 100%; }                                                                          
-
-  #asset_serial_num {
-    width: 132px;
+  .tt_controls_lifespan_in_years #num, #char, #qwerty, #plus, #apostrophe, #star, 
+      #Unknown, #abc, #date, #slash, #minus, #comma, #percent, #decimal {
+    display: none;
   }
 
-  #vendor_cost {
-    width: 70px;
+  .tt_controls_qauntity #num, #char, #qwerty, #plus, #apostrophe, #star, #abc, 
+      #Unknown, #date, #slash, #minus, #comma, #percent, #decimal {
+    display: none;
   }
 
-  #vendor_currency {
-    width: 122px;
+  .tt_controls_cost #num, #char, #qwerty, #plus, #apostrophe, #star, #abc, 
+      #Unknown, #date, #slash, #minus, #comma, #percent {
+    display: none;
   }
 
 </style>
 
 
-<%= stylesheet_link_tag "DatePicker/jsDatePick_ltr.min" %>                      
-<%= javascript_include_tag "DatePicker/jsDatePick.min.1.3" %>                   
-                                                                                
 <script>                                                                        
- var currDate = new Date();                                                     
- var dateNow =  currDate.getDate();                                             
- var yrNow =  currDate.getFullYear();                                           
- var monthNow =  (currDate.getMonth() + 1);
 
- function initDate(id){                                                          
-    new JsDatePick({                                                            
-      useMode:2,                                                                
-      target: id ,                                               
-      dateFormat:"%d-%M-%Y",                                                    
-      selectedDate:{                                                            
-        day: dateNow,                                                           
-        month: monthNow,                                                        
-        year: yrNow                                                             
-      },                                                                        
-      yearsRange:[2000,yrNow],                                                  
-      limitToToday: true,                                                       
-      cellColorScheme:"beige",                                                  
-      dateFormat:"%d-%m-%Y",                                                    
-      imgPath:"img/",                                                           
-      weekStartDay:1                                                            
-    });                                                                         
-  };  
-
-
-
-function submitForm() {                                                         
-  if(validateForm())                                                            
-    document.getElementsByTagName('form')[0].submit();                          
-                                                                                
-}                                                                               
-                                                                                
-function validateForm(){                                                        
-    asset_name = document.getElementById('asset_name');                      
-    serial_num = document.getElementById('asset_serial_num');                        
-    model = document.getElementById('asset_model');                            
-    version = document.getElementById('asset_version');                            
-    asset_category = document.getElementById('asset_category');                               
-    asset_manufacturer = document.getElementById('asset_manufacturer');                          
-
-    work_project = document.getElementById('work_project');                             
-    work_donor = document.getElementById('work_donor');                             
-                                                                                
-    vendor_supplier = document.getElementById('vendor_supplier');                      
-    vendor_invoice_num = document.getElementById('vendor_invoice_num');                        
-    vendor_date_of_invoice = document.getElementById('vendor_date_of_invoice');                            
-    vendor_quantity = document.getElementById('vendor_quantity');                               
-    vendor_cost = document.getElementById('vendor_cost');    
-    vendor_currency = document.getElementById('vendor_currency');    
-                      
-    org_receipt_date = document.getElementById('organisation_receipt_date');                             
-    org_delivered_by = document.getElementById('organisation_delivered_by');                             
-    org_delivery_status = document.getElementById('organisation_delivery_status');                             
-    org_current_status = document.getElementById('organisation_current_status');                             
-    org_store_location = document.getElementById('organisation_location');                             
-
-    if(asset_name.value == '') {                                                     
-      alert("Please enter asset name ...");                                     
-      return false;                                                             
-    }else if(serial_num.value == '') {                                               
-      alert("Please enter asset serial number ...");                                       
-      return false;                                                             
-    }else if(model.value == '') {                                         
-      alert("Please enter asset model ...");                                           
-      return false;                                                             
-    }else if(version.value == '') {                                         
-      alert("Please enter asset version ...");                                           
-      return false;                                                             
-    }else if(asset_category.value == 'Select asset category') {                                                 
-      alert("Please select asset category ...");                                      
-      return false;                                                             
-    }else if(asset_manufacturer.value == 'Select manufacturer') {                                                 
-      alert("Please select asset manufacturer ...");                                      
-      return false;                                                             
-    }else if(work_project.value == 'Select project') {                                                 
-      alert("Please select project ...");                                      
-      return false;                                                             
-    }else if(work_donor.value == 'Select donor') {                                                 
-      alert("Please select donor ...");                                      
-      return false;                                                             
-    }else if(vendor_supplier.value == 'Select a supplier') {                                                 
-      alert("Please select a supplier ...");                                      
-      return false;                                                             
-    }else if(vendor_invoice_num.value == '') {                                                 
-      alert("Please enter invoice number ...");                                      
-      return false;                                                             
-    }else if(vendor_date_of_invoice.value == '') {                                                 
-      alert("Please enter invoice date ...");                                      
-      return false;                                                             
-    }else if(vendor_quantity.value == '') {                                                 
-      alert("Please enter quantity ...");                                      
-      return false;                                                             
-    }else if(vendor_cost.value == '') {                                                 
-      alert("Please enter cost ...");                                      
-      return false;                                                             
-    }else if(vendor_currency.value == 'Select currency') {                                                 
-      alert("Please select currency ...");                                      
-      return false;                                                             
-    }else if(org_receipt_date.value == '') {                                                 
-      alert("Please enter receipt date ...");                                      
-      return false;                                                             
-    }else if(org_delivered_by.value == '') {                                                 
-      alert("Please enter the name of delivery person ...");                                      
-      return false;                                                             
-    }else if(org_delivery_status.value == 'Select delivery status') {                                                 
-      alert("Please select delivery status ...");                                      
-      return false;                                                             
-    }else if(org_current_status.value == 'Select current status') {                                                 
-      alert("Please select Item current status ...");                                      
-      return false;                                                             
-    }else if(org_store_location.value == 'Select store room location') {                                                 
-      alert("Please select store room location ...");                                      
-      return false;                                                             
-    }                                                                           
-  return true;                                                                  
-}  
+tt_cancel_destination = '/assets'
 
 function getSerialNumber() {                                                           
     var serial_num = document.getElementById('asset_serial_num');               
@@ -162,6 +43,23 @@ function getSerialNumber() {
       xmlhttp.send();                                                             
     }
 
+  function nameSuggestions() {                                    
+    url = "/assets/find_by_name?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
+
+  function modelSuggestions() {                                    
+    url = "/assets/find_by_model?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
+
+  function versionSuggestions() {                                    
+    url = "/assets/find_by_model?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
 
 </script>
 
@@ -177,123 +75,107 @@ function getSerialNumber() {
   <table class="asset-details">                                              
   <tbody>                                                                       
     <tr>                                                                        
-      <td>&nbsp;</td>                                                           
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:asset, :name, :placeholder => "Name") %> </td>
+      <td><%=text_field(:asset, :name, 
+        :tt_onLoad => 'nameSuggestions();', 
+        :allowFreeText => true ,                           
+        :ajaxURL => '',:helpText => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :serial_num, 
-        :placeholder => "Serial number") %>
-      &nbsp;<input type="button" value="Generate" onclick="javascript:getSerialNumber();" /></td>
+        :helpText => "Serial number") %>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :model ,:placeholder => "Model") %> </td>
+      <td><%=text_field(:asset, :model ,
+        :tt_onLoad => 'modelSuggestions();', :allowFreeText => true ,                                                
+        :ajaxURL => '', :helpText => "Model") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :version ,:placeholder => "Version") %> </td>
+      <td><%=text_field(:asset, :version ,
+          :tt_onLoad => 'versionSuggestions();', :allowFreeText => true ,
+          :ajaxURL => '', :helpText => "Version") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>   
-        <%@categories.unshift('Select asset category') %>                                                                  
         <%= select_tag "asset[category]", options_for_select(@categories),
-          :placeholder => "Category" %>                                              
+          :helpText => "Category" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%@manufacturers.unshift('Select manufacturer') %>                                                                  
         <%= select_tag "asset[manufacturer]", options_for_select(@manufacturers),
-          :placeholder => "Manufacturer" %>                                              
+          :helpText => "Manufacturer" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :lifespan ,:placeholder => "Lifespan in years") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
+      <td><%=text_field(:asset, :lifespan ,:field_type => 'number',
+           :helpText => "Lifespan in years") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%@projects.unshift('Select project') %>                                                                  
         <%= select_tag "work[project]", options_for_select(@projects),
-          :placeholder => "Project" %>                                              
+          :helpText => "Project" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%@donors.unshift('Select donor') %>                                                                  
         <%= select_tag "work[donor]", options_for_select(@donors),
-          :placeholder => "Donor" %>                                              
+          :helpText => "Donor" %>                                              
       </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%@suppliers.unshift('Select a supplier') %>                                                                  
         <%= select_tag "vendor[supplier]", options_for_select(@suppliers),
-          :placeholder => "Supplier" %>                                              
+          :helpText => "Supplier" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :invoice_num, :placeholder => "Invoice number") %> </td>
+      <td><%=text_field(:vendor, :invoice_num, :helpText => "Invoice number") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :date_of_invoice,  :placeholder => "Invoice date") %> </td>
+      <td><%=text_field(:vendor, :date_of_invoice,  
+          :helpText => "Invoice date", :field_type => 'date',                 
+          :maxDate => "#{Date.today.to_date}") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :quantity, :placeholder => "Quantity") %> </td>
+      <td><%=text_field(:vendor, :quantity, :field_type => 'number',
+          :helpText => "Quantity") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :cost, :placeholder => "Cost") %>&nbsp;&nbsp;&nbsp;                                                       
-        <%@currencies.unshift('Select currency') %>
+      <td><%=text_field(:vendor, :cost, :helpText => "Cost",:field_type => 'number') %>
+
         <%= select_tag "vendor[currency]", options_for_select(@currencies),
-          :placeholder => "Select currency" %>                                              
+          :helpText => "Select ocost currency" %>                                              
       </td>                                                                       
     </tr>                                                                       
     <tr>                                                                        
       <td><hr /></td>   
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:organisation, :receipt_date, :placeholder => "Date of receipt") %> </td>
+      <td><%=text_field(:organisation, :receipt_date, 
+          :helpText => "Date of receipt",:field_type => 'date',                                                      
+          :maxDate => "#{Date.today.to_date}") %> 
+      </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:organisation, :delivered_by, :placeholder => "Delivered by") %> </td>
+      <td><%=text_field(:organisation, :delivered_by, :helpText => "Delivered by") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%@status.unshift('Select delivery status') %>                                                                  
         <%= select_tag "organisation[delivery_status]", options_for_select(@status),
-          :placeholder => "Delivery status" %>                                              
+          :helpText => "Delivery status" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%@status.unshift('Select current status') %>                                                                  
         <%= select_tag "organisation[current_status]", options_for_select(@status),
-          :placeholder => "Current status" %>                                              
+          :helpText => "Current status" %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
-        <%@location.unshift('Select store room location') %>                                                                  
         <%= select_tag "organisation[location]", options_for_select(@location),
-          :placeholder => "Select store room location" %>                                              
+          :helpText => "Select store room location" %>                                              
       </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <input onclick="submitForm();" type="button" id="signup" 
-          class="btn btn-primary signup_btn" value="Register" style="width:100%;" />
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
     </tr>                                                                       
   </tbody>                                                                      
  </table>
@@ -302,9 +184,3 @@ function getSerialNumber() {
 </div>                                                      
 </section> 
 
-<script>
-  var dates = ['organisation_receipt_date','vendor_date_of_invoice']
-  for(var i = 0; i < dates.length; i++) {
-    initDate(dates[i]);
-  }
-</script>

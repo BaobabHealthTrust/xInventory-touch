@@ -49,23 +49,21 @@
   word-wrap: break-word;
   vertical-align: top;
   color: #404040;
+  font-size: 20px;                                                              
 }
 
 .demographics td{
   vertical-align: top;
+  font-size: 20px;                                                              
 }
 
 .xool_information {                                                           
-  font-size: 11px;                                                              
+  font-size: 18px;                                                              
   margin-left: 12px;                                                            
   margin-right: 12px;                                                           
 }
 </style>
 
-
-<div class="page-header">
-  <h1>project <small>details</small></h1>
-</div>
 
 <section id='modals'>                                              
 
@@ -92,13 +90,13 @@
     </p>
   </div>
   
-  <div style="padding-top:10px;float:right;">                                   
-    <table>                                                                     
+  <div style="padding-top:10px;">                                   
+    <table style="width: 100%;">                                                                     
       <tr><%if admin? %>                                                        
-        <td><a href="<%=edit_project_details_url(:id => @project.id)%>">Edit</a>&nbsp;&nbsp;</td>
-        <td><a href="<%=delete_project_url(:id => @project.id)%>">Delete</a>&nbsp;&nbsp;</td>
+        <td><a class="buttons" href="<%=edit_project_details_url(:id => @project.id)%>">Edit</a></td>
+        <td><a class="buttons" href="<%=delete_project_url(:id => @project.id)%>">Delete</a></td>
         <%end%>                                                                 
-        <td><a href="/projects_search">Back</a></td>                               
+        <td><a class="buttons" href="/projects_search">Back</a></td>                               
       </tr>                                                                     
     </table>                                                                    
   </div>

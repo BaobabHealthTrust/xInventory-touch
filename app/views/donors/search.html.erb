@@ -1,73 +1,25 @@
-<%=javascript_include_tag "prototype"%>                                         
-<%=javascript_include_tag "jquery_data_table" %>                                
-<%=javascript_include_tag "jquery.dataTables.min" %>                            
-                                                                                
-<%= stylesheet_link_tag "demo_table" %>                                         
-<%= stylesheet_link_tag "demo_table_jui" %>                                     
-<%= stylesheet_link_tag "demo_page" %>
 
-<style>
-                                                                                
-</style>
+
 
 <script>
+    var tt_cancel_show='/donors';
 
-  function dataT(){                                                               
-    $('#search_results').dataTable();                                                  
+    function set_ajaxURL_for_suggestions() {
+    url = "/donors/find_by_name?search_str=";
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);
+    listSuggestions(tstCurrentPage);
   }
 
-  function findStudents() {                                                       
-    var search_str = document.getElementById('search_words').value;               
-                                                                                
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
-        xmlhttp=new XMLHttpRequest();                                             
-      }else{// code for IE6, IE5                                                  
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
-      }                                                                           
-      xmlhttp.onreadystatechange=function() {                                     
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
-          var results = xmlhttp.responseText;                                     
-          if(results == 'undefined' || results == '' || results == '"not validate"') {                           
-            return;                                                               
-          }else{                                                                  
-            document.getElementById('results-cont').innerHTML = results;                                                           
-            dataT();                                                              
-          }                                                                       
-        }                                                                         
-      }                                                                           
-      xmlhttp.open("GET","/assets/live_search?search_str="+search_str,true);           
-      xmlhttp.send();                                                             
-    } 
- 
 </script>
 
+<%= form_tag :action => 'found', :method => :post  do %>
 
-<div class="page-header">
-  <h1>donors <small>search</small></h1>
-</div>
+  <%= text_field_tag :project, nil, 
+    {:field_type => 'alpha', 
+     :helpText => 'Enter name', 
+     :tt_onLoad => 'set_ajaxURL_for_suggestions();',
+     :ajaxURL => '' 
+    }
+  %>
 
-<section id='modals'>                                              
-  <table id="search_results" class="table table-striped table-bordered table-condensed">
-  <thead>                                                                       
-  <tr id = 'table_head'>                                                        
-    <th id="th1" style="width:75%;">Name</th>                           
-    <th id="th2" style="width:20%;">Abbreviation</th>                           
-    <th id="th10" style="width:5%;">&nbsp;</th>                               
-  </tr>                                                                         
-  </thead>                                                                      
-  <tbody id='results'>                                                          
-    <%(@donors || []).each do |donor| %>                                    
-    <tr>                                                                        
-      <td><%=donor.try(:name)%></td>                                            
-      <td><%=donor.try(:abbreviation)%></td>                                    
-      <td><a href="<%=donor_details_url(:id => donor.try(:id))%>">Show</a></td>       
-    </tr>                                                                       
-    <%end%>                                                                     
-  </tbody>                                                                      
-  </table>
-</section> 
-
-
-<script>                                                                        
-  dataT();                                                                      
-</script>
+<%end%>

@@ -45,7 +45,6 @@ XInventory::Application.routes.draw do
   ########## dispatch_receive start #####################
   match 'dispatch_receive' => 'dispatch_receive#index'
   match 'search/:id' => 'dispatch_receive#search', :as => :assets_to
-  match 'search/:id' => 'dispatch_receive#search', :as => :assets_to
   match 'dispatch/:id' => 'dispatch_receive#dispatch_asset', :as => :dispatch
   match 'receive/:id' => 'dispatch_receive#receive_asset', :as => :receive
   match 'selected_assets' => 'dispatch_receive#asset_transfers', :as => :selected_assets
@@ -54,9 +53,19 @@ XInventory::Application.routes.draw do
   match 'transfer_results/:id' => 'dispatch_receive#transfer_results', :as => :transfer_results
   match 'dispatch_live_search' => 'dispatch_receive#live_search'
   match 'borrowed_assets' => 'dispatch_receive#borrowed_assets'
-  match 'available_asset_list/:id' => 'dispatch_receive#asset_list', :as => :available_asset_list
+  match 'available_asset_list/:id' => 'dispatch_receive#borrowed_assets_reimburse', :as => :available_asset_list
   match 'reimburse/:id/:reimbursed_id' => 'dispatch_receive#reimburse', :as => :reimburse
   post "dispatch_receive/reimburse_create"
+  match 'transfer/:id' => 'dispatch_receive#transfer', :as => :transfer
+  match 'batch_dispatch' => 'dispatch_receive#batch_dispatch'
+  #post  'dispatch_receive/create'
+  match 'init_dispatch' => "dispatch_receive#create"
+  match '/find_asset_to_dispatch_by_barcode' => 'dispatch_receive#find_asset_to_dispatch_by_barcode'
+  match '/create_batch_dispatch' => 'dispatch_receive#create_batch_dispatch'
+  match '/batch_transfer' => 'dispatch_receive#batch_transfer'
+  get  'dispatch_receive/init_transfer'
+  match '/create_batch_transfer' => 'dispatch_receive#create_batch_transfer'
+  match '/batch_reimburse_create' => 'dispatch_receive#batch_reimburse_create'
   ########## dispatch_receive end #####################
 
   ########## Donors #####################
@@ -68,6 +77,8 @@ XInventory::Application.routes.draw do
   match 'edit_donor_details/:id' => 'donors#edit_donor_details', :as => :edit_donor_details
   post "donors/edit_donor_details"
   match 'delete_donor/:id' => 'donors#delete', :as => :delete_donor
+  get 'donors/find_by_name'
+  post "donors/found"
   ########## Donors end #####################
 
   ########## Projects #####################
@@ -79,6 +90,8 @@ XInventory::Application.routes.draw do
   post "projects/edit_project_details"
   match 'edit_project_details/:id' => 'projects#edit_project_details', :as => :edit_project_details
   match 'delete_project/:id' => 'projects#delete', :as => :delete_project
+  get 'projects/find_by_name'
+  post "projects/found"
   ########## Projects end #####################
 
   ########## Suppliers #####################
@@ -129,6 +142,9 @@ XInventory::Application.routes.draw do
   match '/find_by_barcode' => 'assets#find_by_barcode'
   post 'assets/search'
   match '/search_results' => 'assets#search_results'
+  get 'assets/find_by_name'
+  get 'assets/find_by_model'
+  get 'assets/find_by_version'
   ########## Donors end #####################
 
   

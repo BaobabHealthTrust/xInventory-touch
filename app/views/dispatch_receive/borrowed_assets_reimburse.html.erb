@@ -1,0 +1,109 @@
+<style>
+  .main-container {
+    height: 485px;
+  }
+
+  .left-div {
+    height: 484px;
+    overflow: auto;
+    float: left;
+    width: 48%;
+  }
+
+  .right-div {
+    height: 484px;
+    overflow: auto;
+    float: right;
+    width: 48%;
+  }
+
+  .button-container a {
+    width: 300px;
+  }
+  
+  .button-container {
+    border-style: solid;
+    border-width: 1px 0px 0px 0px;
+  }
+
+  .left-div table td {
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+  }
+  
+  .right-div table td {
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+  }
+  
+  #barcode {
+    font-size: 20px;
+    height: 70px;
+    width: 500px;
+  }
+
+</style>
+
+
+<%= javascript_include_tag 'ToolKit/barcode' %>
+
+
+<div class="main-container">
+
+  <div class="left-div">
+    <table style="width: 99%;text-align: left;padding-left: 5px;">
+      <tr>
+        <th>Serial number</th>
+        <th>Asset</th>
+        <th>Donor</th>
+        <th>Project</th>
+      </tr>
+      <%(@transfer.transfer_transactions || []).each do |transaction| 
+        next if transaction.returned
+      %>
+        <tr>
+          <td><%=Item.find(transaction.asset_id).serial_number%></td>
+          <td><%=Item.find(transaction.asset_id).name%></td>
+          <td><%=Item.find(transaction.asset_id).donor.name%></td>
+          <td><%=Item.find(transaction.asset_id).project.name%></td>
+        </tr>
+      <%end%>
+    </table>
+  </div>
+
+  <div class="right-div">
+    <table style="width: 99%;text-align: left;padding-left: 5px;">
+      <tr>
+        <th>Serial number</th>
+        <th>Asset</th>
+        <th>Donor</th>
+        <th>Project</th>
+      </tr>
+      <%(session[:assets_to_reimburse][:asset_id] || []).each do |asset_id| %>
+        <tr>
+          <td><%=Item.find(asset_id).serial_number%></td>
+          <td><%=Item.find(asset_id).name%></td>
+          <td><%=Item.find(asset_id).donor.name%></td>
+          <td><%=Item.find(asset_id).project.name%></td>
+        </tr>
+      <%end unless session[:assets_to_reimburse].blank?%>
+    </table>
+  </div>
+
+</div>
+
+<div class="button-container">
+  <table style="width: 100%;">
+    <tr>
+      <td>
+      <%if session[:assets_to_reimburse].blank?%>
+        <a class="buttons" href="#">Reimburse</a></td>
+      <%else%>
+        <a class="buttons" href="/batch_reimburse_create?transfer_id=<%=@transfer.id%>">Reimburse</a></td>
+      <%end%>
+      <td style="float: right;">
+        <a class="buttons" href="/asset_search?reimbursing=<%=params[:id]%>">Add asset</a>
+      </td>
+    </tr>
+  </table>
+</div>

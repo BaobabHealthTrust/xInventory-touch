@@ -18,8 +18,6 @@
     float: right;
     width: 30%;
     margin-right: 10px;
-    border-style: solid;
-    border-width: 0px 0px 0px 1px;
   }
 
   .menu-buttons a {
@@ -27,7 +25,7 @@
     line-height: 50px;
   }
 
-  .buttons {
+  .buttons { /*
     background-color: grey;                                                     
     border-bottom: 1px outset #EEEEEE;                                          
     border-style: outset;                                                       
@@ -51,20 +49,20 @@
     border-right-color-value: rgba(0, 0, 0, 0.1);
     border-top-color: rgba(0, 0, 0, 0.1);
 
-    font-size: 1.3em;
+    font-size: 1.3em; */
   }
 
 
 </style>
 
 
-<div class="scan-barcode">
+<!--div class="scan-barcode">
   <form id='barcodeForm' action="/find_by_barcode">                               
-    <%= text_field_tag :barcode, '', {:id => 'barcode', :class => 'touchscreenTextInput' } %>
-    <%= submit_tag "Submit", :style => "display:none" %>                        
+    <%#= text_field_tag :barcode, '', {:id => 'barcode', :class => 'touchscreenTextInput' } %>
+    <%#= submit_tag "Submit", :style => "display:none" %>                        
     <div style="color:gray">scan a barcode</div>                                
   </form>
-</div>
+</div-->
 
 
 <div class="main-container">
@@ -86,6 +84,18 @@
     </p>
 
     <p>                                                                           
+      <%= link_to "dispatch asset(s)", '/batch_dispatch', :class => 'buttons' %>
+    </p>
+
+    <p>                                                                           
+      <%= link_to "transfer asset(s)", '/batch_transfer', :class => 'buttons' %>
+    </p>
+
+    <p>                                                                           
+      <%= link_to "reimburse asset(s)", '/borrowed_assets', :class => 'buttons' %>
+    </p>
+
+    <!--p>                                                                           
       <%= link_to "projects", '/projects', :class => 'buttons' %>
     </p>
 
@@ -103,7 +113,7 @@
 
     <p>                                                                           
       <%= link_to "reports", '/reports', :class => 'buttons' %>
-    </p>
+    </p-->
 
 
   </div>

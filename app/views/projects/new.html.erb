@@ -1,44 +1,12 @@
-<%#= javascript_include_tag "bootstrap-datepicker" %>
-<%#= stylesheet_link_tag "datepicker" %>
-
 <style>
-  .content-details { text-align: center; }                                                                          
-
-  .asset-details { width: 100%; }                                                                          
-
 </style>
 
 
 <script>
-
-function submitForm() {                                                         
-  if(validateForm())                                                            
-    document.getElementsByTagName('form')[0].submit();                          
-                                                                                
-}                                                                               
-                                                                                
-function validateForm(){                                                        
-  project_name = document.getElementById('project_name');                      
-  project = document.getElementById('project_donor');                      
-
-  if(project_name.value == '') {                                                     
-    alert("Please enter project name ...");                                     
-    return false;                                                             
-  }else if(project.value == 'Select donor') {                                                     
-    alert("Please select a project donor ...");                                     
-    return false;   
-  }
-                                                            
-  return true;                                                                  
-}  
-
+tt_cancel_destination = '/projects'
 </script>
 
 
-
-<div class="page-header">
-  <h1>project <small>create a project</small></h1>
-</div>
 
 <siection id='modals'>                                              
   <div class="content-details">
@@ -54,10 +22,7 @@ function validateForm(){
   <table class="asset-details">                                              
   <tbody>                                                                       
     <tr>                                                                        
-      <td>&nbsp;</td>                                                           
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:project, :name, :placeholder => "Name") %> </td>
+      <td><%=text_field(:project, :name, :helpText => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>
@@ -67,22 +32,7 @@ function validateForm(){
       </td>   
     </tr>                                                                       
     <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_area_tag("project[description]", nil, :placeholder => "Description") %></td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <input onclick="submitForm();" type="button" id="signup" 
-          class="btn btn-primary signup_btn" value="Register" style="width:100%;" />
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
+      <td><%=text_area_tag("project[description]", nil, :helpText => "Description") %></td>
     </tr>                                                                       
   </tbody>                                                                      
  </table>

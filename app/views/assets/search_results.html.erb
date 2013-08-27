@@ -8,7 +8,7 @@
 
 .suggestion-container {
   overflow: auto; 
-  height: 61%;
+  height: 526px;
 }
 
 .suggestions {
@@ -29,7 +29,7 @@
 }
 
 .buttons {
-  width: 97.4% !important;
+  width: 90% !important;
 }
 
 </style>
@@ -37,14 +37,16 @@
 <script>
 
 function selectAsset(id) {
-  document.location = "/asset_details/" + id;
+  <%if params[:dispatching] == 'true'%>
+    document.location = "/find_asset_to_dispatch_by_barcode?barcode=" + id;
+  <%elsif not params[:reimbursing].blank?%>
+    document.location = "/find_asset_to_dispatch_by_barcode?barcode=" + id + "&reimbursing=<%=params[:reimbursing]%>";
+  <%else%>
+    document.location = "/asset_details/" + id;
+  <%end%>
 }
 
 </script>
-
-<div class="page-header">
-  <h1>Found assets</h1>
-</div>
 
 <br />
 
@@ -57,9 +59,17 @@ function selectAsset(id) {
     else
       color = 'white'
     end
+
+    if params[:dispatching] == 'true'
+      id = asset[:serial_number]
+    elsif not params[:reimbursing].blank?
+      id = asset[:serial_number]
+    else
+      id = asset[:asset_id]
+    end
 %>
 <div class="suggestion_results">
-  <a href="javascript:selectAsset('<%=asset[:asset_id]%>');" class='buttons'>
+  <a href="javascript:selectAsset('<%=id%>');" class='buttons'>
   <table class="suggestions strip_<%=color%>">
     <tr>
       <th>Name:</th><td><%=asset[:name]%></td>

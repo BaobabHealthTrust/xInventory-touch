@@ -1,0 +1,34 @@
+<style>
+</style>
+
+<script>
+</script>
+
+
+    <%= form_tag :action => 'process_transfer', :method => :post  do %> 
+    <table class="xool_information dispatch_receive">
+      <tr>
+        <td style="font-weight:bold;">Dispatch date&nbsp;</td>
+        <td><%=text_field(:transfer, :date, :field_type => 'date',
+        :helpText => "Transfer date") %></td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">Status:&nbsp;</td>
+        <td>
+           <%= select_tag "transfer[project]", options_for_select(@projects),
+             :helpText => "Which project are you transferring to" %>
+        </td>
+      </tr>                     
+      <tr>
+        <td style="font-weight:bold;">location:&nbsp;</td>
+        <td>
+          <%= select_tag "transfer[donor]", options_for_select(@donors), 
+              :helpText => "Which donor are you transferring to" %>
+        </td>
+      </tr>                     
+      <tr>                     
+        <td colspan='2'><hr /></td>
+      </tr>                     
+    </table>                                                                     
+    <input type="hidden" name="assets_ids" value="<%=params[:id]%>" />
+    <%end%>

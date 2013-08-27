@@ -2,7 +2,8 @@ class AssetsController < ApplicationController
   before_filter :check_authorized
 
   def index
-    render :layout => 'index'
+    @page_title = "<h1>assets <small>....</small></h1>"
+    render :layout => 'imenu'
   end
 
   def find_by_barcode
@@ -16,7 +17,8 @@ class AssetsController < ApplicationController
       [state.name , state.id]                                                   
     end 
 
-    render :layout => 'menu'
+    @page_title = "asset details"
+    render :layout => 'imenu'
   end
 
   def search_results
@@ -24,7 +26,8 @@ class AssetsController < ApplicationController
     (Item.where("id IN(?)",params[:id].split(','))|| []).each do |item|
       @assets << get_asset(item.id)
     end
-    render :layout => 'index'
+    @page_title = "<h1>Found assets</h1>"
+    render :layout => 'imenu'
   end
 
   def search
@@ -33,10 +36,35 @@ class AssetsController < ApplicationController
         LIKE (?)","%#{params[:identifier]}%").map(&:id)
 
       if asset_ids.length == 1
-        redirect_to :action => :show, :id => asset_ids.first
+        if params[:dispatching] == 'true'
+          redirect_to :controller => :dispatch_receive, 
+            :action => :find_asset_to_dispatch_by_barcode,
+            :barcode => Item.find(asset_ids.first).serial_number
+        elsif params[:transferring] == 'true'
+          redirect_to :controller => :dispatch_receive, 
+            :action => :find_asset_to_dispatch_by_barcode,:transferring => true,
+            :barcode => Item.find(asset_ids.first).serial_number
+        elsif not params[:reimbursing].blank?
+          redirect_to :controller => :dispatch_receive, 
+            :action => :find_asset_to_dispatch_by_barcode,:reimbursing => params[:reimbursing],
+            :barcode => Item.find(asset_ids.first).serial_number
+        else
+          redirect_to :action => :show, :id => asset_ids.first
+        end
         return
       elsif asset_ids.length > 1
-        redirect_to :action => :search_results, :id => asset_ids[0..99].join(',')
+        if params[:dispatching] == 'true'
+          redirect_to :action => :search_results, :dispatching => true,
+            :id => asset_ids[0..99].join(',')
+        elsif params[:transferring] == 'true'
+          redirect_to :action => :search_results, :transferring => true,
+            :id => asset_ids[0..99].join(',')
+        elsif not params[:reimbursing].blank?
+          redirect_to :action => :search_results, :reimbursing => params[:reimbursing],
+            :id => asset_ids[0..99].join(',')
+        else
+          redirect_to :action => :search_results, :id => asset_ids[0..99].join(',')
+        end
         return
       else
         @notfound  = true
@@ -117,7 +145,7 @@ class AssetsController < ApplicationController
         flash[:error] = 'Something went wrong - did not create.'                  
       end
     end
-    redirect_to '/create_new_asset'
+    redirect_to '/'
   end
 
   def new_category
@@ -288,6 +316,26 @@ class AssetsController < ApplicationController
     render :text => get_serial_number and return
   end
 
+  ######################## create a new asset ###############################
+  def find_by_version
+    @assets = Item.where("version LIKE(?)", 
+      "%#{params[:search_str]}%").group(:version).limit(10).map{|item|[[item.version]]}     
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+  end
+
+  def find_by_model
+    @assets = Item.where("model LIKE(?)", 
+      "%#{params[:search_str]}%").group(:model).limit(10).map{|item|[[item.model]]}     
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+  end
+
+  def find_by_name
+    @assets = Item.where("name LIKE(?)", 
+      "%#{params[:search_str]}%").group(:name).limit(10).map{|item|[[item.name]]}     
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+  end
+  ######################## create a new asset ###############################
+ 
   private                           
   
   def get_serial_number
