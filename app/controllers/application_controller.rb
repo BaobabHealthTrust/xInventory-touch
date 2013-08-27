@@ -6,7 +6,14 @@ class ApplicationController < ActionController::Base
   def admin?                                                                    
     User.current_user.user_roles.map(&:role).include?('admin')                  
   end
-                                                                                 
+
+  def print_and_redirect(print_url, redirect_url, message = "Printing, please wait...")
+    @print_url = print_url                                                      
+    @redirect_url = redirect_url                                                
+    @message = message                                                          
+    render :template => 'print/print', :layout => nil                           
+  end
+                                                                                  
   protected                                                                     
                                                                                 
   def perform_basic_auth                                                        

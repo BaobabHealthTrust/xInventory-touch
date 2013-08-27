@@ -8,6 +8,7 @@ class CreateItems < ActiveRecord::Migration
       t.string :version, :null => false
       t.string :model, :null => false
       t.string :serial_number, :unique => true, :null => false
+      t.string :barcode, :unique => true, :null => false
       t.integer :vendor, :null => false
       t.integer :project_id, :null => false
       t.integer :donor_id, :null => false

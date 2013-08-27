@@ -77,7 +77,9 @@ EOF
   end
 
   def find_asset_to_dispatch_by_barcode
-    @item = Item.find_by_serial_number(params[:barcode])
+    @item = Item.where("(barcode = ? OR serial_number = ?)",
+      params[:barcode],params[:barcode])[0] rescue nil
+
     @states = StateType.all.collect do |state|
       [state.name, state.name]
     end

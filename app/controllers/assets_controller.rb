@@ -7,7 +7,14 @@ class AssetsController < ApplicationController
   end
 
   def find_by_barcode
-    render :text => params[:barcode].to_s and return
+    @item = Item.where("(barcode = ? OR serial_number = ?)",                    
+      params[:barcode],params[:barcode])[0] rescue nil
+
+    if @item
+      redirect_to :action => :show, :id => @item.id
+    else
+      redirect_to :action => :index
+    end
   end
 
   def show
@@ -32,8 +39,8 @@ class AssetsController < ApplicationController
 
   def search
     if request.post?
-      asset_ids = Item.where("serial_number 
-        LIKE (?)","%#{params[:identifier]}%").map(&:id)
+      asset_ids = Item.where("serial_number = ? OR barcode = ?",
+        params[:identifier],params[:identifier]).map(&:id)
 
       if asset_ids.length == 1
         if params[:dispatching] == 'true'
@@ -129,6 +136,7 @@ class AssetsController < ApplicationController
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
+      item.barcode = assign_barcode
 
       asset_lifespan = (params[:asset]['lifespan']).to_i rescue 0
       if asset_lifespan > 0
@@ -140,12 +148,22 @@ class AssetsController < ApplicationController
         curr_state.item_id = item.id
         curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
         curr_state.save 
-        flash[:notice] = 'Successfully created.'                                  
+        print_and_redirect("/print_barcode/#{item.id}", "/assets") and return
       else                                                                        
         flash[:error] = 'Something went wrong - did not create.'                  
       end
     end
-    redirect_to '/'
+    redirect_to '/assets'
+  end
+  
+  def print_barcode
+    print_string = Item.find(params[:id]).barcode_label 
+    send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false, 
+      :filename=>"#{params[:id]}#{rand(10000)}.lbl", :disposition => "inline")
+  end
+
+  def print_asset_barcode
+    print_and_redirect("/print_barcode/#{params[:id]}", "/asset_details/#{params[:id]}") and return
   end
 
   def new_category
@@ -427,6 +445,12 @@ EOF
       :expiry_date => asset.expiry_date,
       :current_state => StateType.find(asset.current_state.current_state).name
     }
+  end
+
+  def assign_barcode
+    last_barcode = Item.select("MAX(barcode) barcode")[0].try(:barcode) rescue 'BHT'
+    number = last_barcode.sub("BHT",'').to_i 
+    return "BHT#{(number + 1).to_s.rjust(10,"0")}"
   end
 
 end

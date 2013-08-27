@@ -140,6 +140,7 @@
       <tr>
         <td><a class="buttons" href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Edit</a></td>
         <td><a class="buttons" href="<%=delete_asset_url(:id => @asset[:asset_id])%>">Delete</a></td>                               
+        <td><a class="buttons" href="/print_asset_barcode/<%=@asset[:asset_id]%>">Barcode (print)</a></td>                               
       </tr> 
     </table>
     <%end%>                                                                   

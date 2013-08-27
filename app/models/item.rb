@@ -10,4 +10,18 @@ class Item < ActiveRecord::Base
   belongs_to :site , :class_name => :Site, :foreign_key => :location
   has_one :current_state, :class_name => :ItemState,:foreign_key => :item_id
   belongs_to :currency, :class_name => :Currencies, :foreign_key => :currency_id
+
+
+ def barcode_label
+   label = ZebraPrinter::StandardLabel.new                                     
+   label.font_size = 2                                                         
+   label.font_horizontal_multiplier = 2                                        
+   label.font_vertical_multiplier = 2                                          
+   label.left_margin = 50                                                      
+   label.draw_barcode(50,180,0,1,5,15,120,false,"#{self.barcode}") 
+   label.draw_multi_text("#{self.name.titleize}")                      
+   label.draw_multi_text("#{self.barcode}")
+   label.print(1)
+ end
+
 end

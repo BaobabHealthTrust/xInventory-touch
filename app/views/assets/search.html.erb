@@ -1,3 +1,14 @@
+<script>
+tt_cancel_destination = '/assets'
+<%if params[:dispatching] == 'true'%>
+  tt_cancel_destination = '/init_dispatch';
+<%elsif params[:transfer] == 'true'%>
+  tt_cancel_destination = '/dispatch_receive/init_transfer';
+<%elsif not params[:reimbursing].blank?%>
+  tt_cancel_destination = '/available_asset_list/' + "<%=params[:reimbursing]%>";
+<%end%>
+</script>
+
 <style>                                                                         
                                                                                 
 #date {         

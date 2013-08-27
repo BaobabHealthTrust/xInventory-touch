@@ -82,7 +82,7 @@ function getSerialNumber() {
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :serial_num, 
-        :helpText => "Serial number") %>
+        :helpText => "Serial number", :textCase => "upper") %>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :model ,
@@ -144,7 +144,7 @@ function getSerialNumber() {
       <td><%=text_field(:vendor, :cost, :helpText => "Cost",:field_type => 'number') %>
 
         <%= select_tag "vendor[currency]", options_for_select(@currencies),
-          :helpText => "Select ocost currency" %>                                              
+          :helpText => "Select currency" %>                                              
       </td>                                                                       
     </tr>                                                                       
     <tr>                                                                        
