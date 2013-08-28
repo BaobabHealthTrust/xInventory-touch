@@ -24,7 +24,7 @@ class AssetsController < ApplicationController
       [state.name , state.id]                                                   
     end 
 
-    @page_title = "asset details"
+    @page_title = "asset details<br />Expiry date: #{@asset[:expiry_date].to_date.strftime('%d %B, %Y') rescue 'N/A'}"
     render :layout => 'imenu'
   end
 
@@ -457,7 +457,7 @@ EOF
   def assign_barcode
     last_barcode = Item.select("MAX(barcode) barcode")[0].try(:barcode) rescue 'BHT'
     number = last_barcode.sub("BHT",'').to_i 
-    return "BHT#{(number + 1).to_s.rjust(10,"0")}"
+    return "BHT#{(number + 1).to_s.rjust(6,"0")}"
   end
 
 end

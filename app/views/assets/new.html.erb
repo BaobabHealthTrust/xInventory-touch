@@ -1,6 +1,6 @@
 
 <style>
-
+/*
   .tt_controls_lifespan_in_years #num, #char, #qwerty, #plus, #apostrophe, #star, 
       #Unknown, #abc, #date, #slash, #minus, #comma, #percent, #decimal {
     display: none;
@@ -10,11 +10,11 @@
       #Unknown, #date, #slash, #minus, #comma, #percent, #decimal {
     display: none;
   }
-
-  .tt_controls_cost #num, #char, #qwerty, #plus, #apostrophe, #star, #abc, 
-      #Unknown, #date, #slash, #minus, #comma, #percent {
-    display: none;
+*/
+  .tt_controls_cost #decimal {
+    display: inline;
   }
+
 
 </style>
 
@@ -24,7 +24,7 @@
 tt_cancel_destination = '/assets'
 
 function getSerialNumber() {                                                           
-    var serial_num = document.getElementById('asset_serial_num');               
+    var serial_num = $('touchscreenInput'+tstCurrentPage);               
                                                                                   
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
         xmlhttp=new XMLHttpRequest();                                             
@@ -61,6 +61,18 @@ function getSerialNumber() {
     listSuggestions(tstCurrentPage);                                            
   }
 
+  function setButton() {
+    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
+    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
+    $('buttons').innerHTML += serialNum;
+  }
+
+  function removeButton() {
+    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
+    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
+    $('buttons').innerHTML =  $('buttons').innerHTML.replace(serialNum,'');
+  }
+
 </script>
 
 
@@ -81,8 +93,8 @@ function getSerialNumber() {
         :ajaxURL => '',:helpText => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :serial_num, 
-        :helpText => "Serial number", :textCase => "upper") %>
+      <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();", 
+        :helpText => "Serial number", :textCase => "upper",:tt_onUnLoad => "removeButton();") %>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :model ,
@@ -107,8 +119,8 @@ function getSerialNumber() {
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :lifespan ,:field_type => 'number',
-           :helpText => "Lifespan in years") %> </td>
+      <td><%=text_field(:asset, :lifespan ,:tt_pageStyleClass => "Numeric NumbersOnly",
+        :field_type => 'number',:helpText => "Lifespan in years") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
@@ -137,11 +149,12 @@ function getSerialNumber() {
           :maxDate => "#{Date.today.to_date}") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :quantity, :field_type => 'number',
-          :helpText => "Quantity") %> </td>
+      <td><%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 ,
+          :tt_pageStyleClass => "Numeric NumbersOnly", :helpText => "Quantity") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :cost, :helpText => "Cost",:field_type => 'number') %>
+      <td><%=text_field(:vendor, :cost, :helpText => "Cost", :absoluteMin => 1,
+        :field_type => 'number',:tt_pageStyleClass => "Numeric NumbersOnly") %>
 
         <%= select_tag "vendor[currency]", options_for_select(@currencies),
           :helpText => "Select currency" %>                                              

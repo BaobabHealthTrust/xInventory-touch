@@ -1,9 +1,45 @@
 <style>
+  .tt_controls_cost #decimal {                                                  
+    display: inline;                                                            
+  }  
 
 </style>
 
 <script>                                                                        
 tt_cancel_destination = '/asset_details/' + "<%=params[:id]%>";
+
+  function getSerialNumber() {                                                           
+    var serial_num = $('touchscreenInput'+tstCurrentPage);                      
+                                                                                  
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results) {                                                         
+            serial_num.value = results;                                         
+          }                                                                     
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/serial_number_generator",true);                      
+      xmlhttp.send();                                                             
+    }
+
+  function setButton() {                                                        
+    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
+    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
+    $('buttons').innerHTML += serialNum;                                        
+  }                                                                             
+                                                                                
+  function removeButton() {                                                     
+    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
+    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
+    $('buttons').innerHTML =  $('buttons').innerHTML.replace(serialNum,'');     
+  }  
+
 </script>
 
 
@@ -21,7 +57,9 @@ tt_cancel_destination = '/asset_details/' + "<%=params[:id]%>";
       <td><%=text_field(:asset, :name, :helpText => "Name" ,:value => @asset[:name]) %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :serial_num, :helpText => "Serial number",:value => @asset[:serial_number]) %></td>
+      <td><%=text_field(:asset, :serial_num, :helpText => "Serial number",
+          :value => @asset[:serial_number],:textCase => "upper",
+          :tt_onUnLoad => "removeButton();",:tt_onLoad => "setButton();") %></td>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :model ,:helpText => "Model",:value => @asset[:model]) %> </td>
@@ -39,6 +77,10 @@ tt_cancel_destination = '/asset_details/' + "<%=params[:id]%>";
       <td>                                                                      
         <%= select_tag "asset[manufacturer]", options_for_select(@manufacturers),
           :helpText => "Manufacturer" %>                                              
+      </td>                                                                     
+      <td>                                                                      
+        <%=text_field("asset[lifespan]", nil , :helpText => "Lifespan in years",:absoluteMin => 1,
+           :tt_pageStyleClass => "Numeric NumbersOnly",:field_type => 'number')%>
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                               
@@ -77,12 +119,13 @@ tt_cancel_destination = '/asset_details/' + "<%=params[:id]%>";
           :field_type => "date",:value => @asset[:purchased_date]) %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :quantity, :helpText => "Bought in Quantity",:value => @asset[:bought_quantity]) %> </td>
+      <td><%=text_field(:vendor, :quantity, :helpText => "Bought in Quantity",
+        :value => @asset[:bought_quantity],:tt_pageStyleClass => "Numeric NumbersOnly") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>
-        <%=text_field(:vendor, :cost, :helpText => "Cost",:value => @asset[:cost])%>
-        &nbsp;&nbsp;&nbsp;
+        <%=text_field(:vendor, :cost, :helpText => "Cost",:absoluteMin => 1,
+           :tt_pageStyleClass => "Numeric NumbersOnly", :value => @asset[:cost])%>
         <%= select_tag "vendor[currency]", options_for_select(@currencies),     
           :helpText => "Select currency" %>
       </td>
