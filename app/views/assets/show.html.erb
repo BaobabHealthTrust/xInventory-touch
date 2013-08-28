@@ -77,9 +77,8 @@
 
     <table class = "demographics">
       <tr>
-        <th>Name:&nbsp;</th>
+        <th>Category:&nbsp;</th>
         <td>
-          <%= @asset[:name] %>&nbsp;
           <%= @asset[:category] %>
         </td>
         <th>Version:&nbsp;</th><td><%=@asset[:version]%></td>
@@ -102,13 +101,19 @@
     <table class="xool_information">
       <tr>
         <td style="font-weight:bold;">Order/Invoice number:&nbsp;</td><td><%=@asset[:order_number]%></td>
+        <td colspan="2">&nbsp;</td>
         <td style="font-weight:bold;text-align:right;">Purchased date&nbsp;</td><td><%=@asset[:purchased_date]%></td>
         <td style="font-weight:bold;text-align:right;">Cost:&nbsp;</td><td><%=@asset[:cost]%></td>
       </tr>                     
       <tr>
         <td style="font-weight:bold;">Bought in quantity:&nbsp;</td><td><%=@asset[:bought_quantity]%></td>
+        <td colspan="2">&nbsp;</td>
         <td style="font-weight:bold;text-align:right;">Current quantity:&nbsp;</td><td><%=@asset[:current_quantity]%></td>
         <td style="font-weight:bold;text-align:right;">Delivered by:&nbsp;</td><td><%=@asset[:delivered_by]%></td>
+      </tr>                     
+      <tr>                     
+        <td style="font-weight:bold;text-align:left;">Expiry date:&nbsp;</td>
+        <td><%= @asset[:expiry_date].to_date.strftime('%d %B, %Y') rescue 'N/A'%></td>
       </tr>                     
       <tr>
         <td style="font-weight:bold;">Status on delivery&nbsp;</td><td><%=@asset[:status_on_delivery]%></td>
@@ -120,7 +125,6 @@
               <%= select_tag "asset[status]", options_for_select(@status),
               :placeholder => "Delivery status" %>                                  
         </td> 
-        <td style="font-weight:bold;text-align:right;">Location:&nbsp;</td><td><%=@asset[:location]%></td>
       </tr>                     
     </table>                                                                     
 

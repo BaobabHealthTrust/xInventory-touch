@@ -24,7 +24,8 @@ class AssetsController < ApplicationController
       [state.name , state.id]                                                   
     end 
 
-    @page_title = "asset details<br />Expiry date: #{@asset[:expiry_date].to_date.strftime('%d %B, %Y') rescue 'N/A'}"
+    @page_title = "#{@asset[:name]}<br />"
+    @page_title += "Location:&nbsp;#{@asset[:location]}"
     render :layout => 'imenu'
   end
 
