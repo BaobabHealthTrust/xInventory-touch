@@ -60,8 +60,8 @@ EOF
       if not session[:assets_to_dispatch].blank? and not params[:quantity].blank?
          asset = Item.find(params[:asset_id])
          if asset.current_quantity.to_f >= params[:quantity].to_f  
-           session[:assets_to_dispatch][:assets][asset] = params[:quantity]
-           session[:assets_to_dispatch][:current_state][asset] = params[:state]
+           session[:assets_to_dispatch][:assets][asset.id] = params[:quantity]
+           session[:assets_to_dispatch][:current_state][asset.id] = params[:state]
          end
       end
 
@@ -358,7 +358,8 @@ EOF
   end
 
   def create_batch_dispatch
-    (session[:assets_to_dispatch][:assets] || {}).each do |asset, quantity|
+    (session[:assets_to_dispatch][:assets] || {}).each do |asset_id, quantity|
+      asset = Item.find(asset_id)
       Item.transaction do
         dispatch = DispatchReceive.new()                                         
         dispatch.asset_id = asset.id                                             
@@ -375,7 +376,7 @@ EOF
 =end
         if dispatch.save                                                         
           curr_state = ItemState.where(:'item_id' => asset.id).first             
-          curr_state.current_state = StateType.find_by_name(session[:assets_to_dispatch][:current_state][asset]).id
+          curr_state.current_state = StateType.find_by_name(session[:assets_to_dispatch][:current_state][asset.id]).id
           curr_state.save                                                        
                                                                                 
           asset.current_quantity -= dispatch.quantity                            

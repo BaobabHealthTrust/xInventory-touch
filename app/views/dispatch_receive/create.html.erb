@@ -95,11 +95,13 @@
      </tr>
    <%end%>
 
-   <%(session[:assets_to_dispatch][:assets] || []).each do |asset, quantity| %>
+   <%(session[:assets_to_dispatch][:assets] || []).each do |asset_id, quantity| 
+      asset = Item.find(asset_id)
+   %>
     <tr>
       <td><%=asset.name%></td>
       <td style="text-align: right; padding-right: 10px;"><%=quantity%></td>
-      <td><%=session[:assets_to_dispatch][:current_state][asset]%></td>
+      <td><%=session[:assets_to_dispatch][:current_state][asset.id]%></td>
     </tr>
     <%end%>
     <%if session[:assets_to_dispatch][:assets].blank? %>
