@@ -33,6 +33,8 @@ class DispatchReceiveController < ApplicationController
 <form id="barcodeForm" action="/find_asset_to_dispatch_by_barcode">
 <input id="barcode" class="touchscreenTextInput" 
 type="text" value="" name="barcode" placeholder = "Scan barcode to add asset">
+<img class='barcode-img' src='/assets/barcode-main.jpg' style="height: 80px;                                                               
+vertical-align: top; width: 100px;"/>
 <input type="hidden" name="transferring" value="true" />
 <input type="submit" value="Submit" style="display:none" name="commit">
 </form>
@@ -69,6 +71,8 @@ EOF
 <form id="barcodeForm" action="/find_asset_to_dispatch_by_barcode">
 <input id="barcode" class="touchscreenTextInput" 
 type="text" value="" name="barcode" placeholder = "Scan barcode to add asset">
+<img class='barcode-img' src='/assets/barcode-main.jpg' style="height: 80px;                                                               
+vertical-align: top; width: 100px;"/>
 <input type="submit" value="Submit" style="display:none" name="commit">
 </form>
 EOF
@@ -430,6 +434,8 @@ EOF
 <form id="barcodeForm" action="/find_asset_to_dispatch_by_barcode">
 <input id="barcode" class="touchscreenTextInput" 
 type="text" value="" name="barcode" placeholder = "Scan barcode to add asset">
+<img class='barcode-img' src='/assets/barcode-main.jpg' style="height: 80px;                                                               
+vertical-align: top; width: 100px;"/>
 <input type="hidden" name="reimbursing" value="#{params[:id]}" />
 <input type="submit" value="Submit" style="display:none" name="commit">
 </form>
