@@ -240,7 +240,7 @@ EOF
        else                                                                      
          flash[:error] = 'Something went wrong - did not dispatch.'                
        end
-       redirect_to assets_to_url(:id => 'dispatch')
+       redirect_to "/asset_details/#{asset.id}"
     end
 
     @asset = get_asset(params[:id])
@@ -272,7 +272,7 @@ EOF
 
        if dispatch.save  
          curr_state = ItemState.where(:'item_id' => asset.id).first    
-         curr_state = StateType.find(params[:receive]['status']).id
+         curr_state.current_state = StateType.find(params[:receive]['status']).id
          curr_state.save
                 
          asset.current_quantity += dispatch.quantity
@@ -281,7 +281,7 @@ EOF
        else                                                                      
          flash[:error] = 'Something went wrong - did not received.'                
        end
-       redirect_to assets_to_url(:id => 'receive')
+       redirect_to "/asset_details/#{asset.id}"
     end
 
     @asset = get_asset(params[:id])

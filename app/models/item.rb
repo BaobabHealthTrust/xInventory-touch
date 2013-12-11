@@ -12,6 +12,15 @@ class Item < ActiveRecord::Base
   belongs_to :currency, :class_name => :Currencies, :foreign_key => :currency_id
 
 
+ def current_location
+  location = DispatchReceive.where(:asset_id => self.id)
+  unless location.blank?
+    return Site.find(location.last.location_id)
+  else
+    return Site.find(self.location)
+  end
+ end
+
  def barcode_label
    label = ZebraPrinter::StandardLabel.new                                     
    label.font_size = 2                                                         
