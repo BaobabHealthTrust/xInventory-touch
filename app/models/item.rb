@@ -29,7 +29,7 @@ class Item < ActiveRecord::Base
    label.left_margin = 50                                                      
    label.draw_barcode(50,180,0,1,5,15,120,false,"#{self.barcode}") 
    label.draw_multi_text("#{self.name.titleize}")                      
-   label.draw_multi_text("Project: #{self.project.name.titleize}")                      
+   label.draw_multi_text("Donor: #{self.donor.name.titleize}")                      
    label.draw_multi_text("#{self.barcode}")
    label.print(1)
  end
