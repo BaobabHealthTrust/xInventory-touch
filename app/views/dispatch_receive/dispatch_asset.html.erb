@@ -106,8 +106,13 @@ tt_cancel_destination = '/asset_details/' + "<%=params[:id]%>";
         </td>
       </tr>                     
         <td>
-          <%=text_area("dispatch[reason]",nil,
-            :helpText =>"Dispatch reason") %>
+          <%
+           @reasons = [ '','Deployment','Replacement of damaged asset',
+                        'Donation','Spare on site','Other'
+                      ]
+          %>
+          <%= select_tag "dispatch[reason]", options_for_select(@reasons), 
+              :helpText => "Dispatch reason" %>
         </td>
       </tr>                     
     </table>                                                                     
