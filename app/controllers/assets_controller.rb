@@ -253,13 +253,13 @@ class AssetsController < ApplicationController
       item.model = params[:asset]['model']
       item.project_id = params[:work]['project']
       item.donor_id = params[:work]['donor']
-      item.purchased_date = params[:vendor]['date_of_invoice'].to_date
+      item.purchased_date = params[:vendor]['date_of_invoice'].to_date rescue Date.new(2013,01,01)
       item.order_number = params[:vendor]['invoice_num']
       item.current_quantity = params[:vendor]['quantity']
       item.bought_quantity = params[:vendor]['quantity']
       item.cost = params[:vendor]['cost']
       item.currency_id = params[:vendor]['currency'].to_i
-      item.date_of_receipt = params[:organisation]['receipt_date'].to_date
+      item.date_of_receipt = params[:organisation]['receipt_date'].to_date rescue Date.new(2013,01,01)
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
