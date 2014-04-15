@@ -31,7 +31,6 @@ class Item < ActiveRecord::Base
    label.draw_multi_text("#{self.name.titleize}")                      
    label.draw_multi_text("Donor: #{self.donor.name.titleize}")                      
    label.draw_multi_text("#{self.serial_number}")
-   ot
    label.print(1)
  end
 
