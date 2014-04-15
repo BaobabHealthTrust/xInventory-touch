@@ -30,7 +30,8 @@ class Item < ActiveRecord::Base
    label.draw_barcode(50,180,0,1,5,15,120,false,"#{self.barcode}") 
    label.draw_multi_text("#{self.name.titleize}")                      
    label.draw_multi_text("Donor: #{self.donor.name.titleize}")                      
-   label.draw_multi_text("#{self.barcode}")
+   label.draw_multi_text("#{self.serial_number}")
+   ot
    label.print(1)
  end
 
