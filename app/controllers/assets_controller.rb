@@ -343,6 +343,12 @@ class AssetsController < ApplicationController
   end
 
   ######################## create a new asset ###############################
+  def find_by_delivered_by
+    @assets = Item.where("delivered_by LIKE(?)", 
+      "%#{params[:search_str]}%").group(:delivered_by).limit(10).map{|item|[[item.delivered_by]]}     
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+  end
+
   def find_by_version
     @assets = Item.where("version LIKE(?)", 
       "%#{params[:search_str]}%").group(:version).limit(10).map{|item|[[item.version]]}     

@@ -226,10 +226,12 @@ EOF
        dispatch.responsible_person = params[:dispatch]['collected_by'] 
        dispatch.location_id = params[:dispatch]['location']
        dispatch.quantity = params[:dispatch]['quantity']
+       asset.location = dispatch.location_id
        unless params[:dispatch]['reason'].blank?
          dispatch.reason = params[:dispatch]['reason']
        end
        if dispatch.save             
+         asset.save
          curr_state = ItemState.where(:'item_id' => asset.id).first    
          curr_state.current_state = StateType.find(params[:dispatch]['status']).id
          curr_state.save
@@ -265,12 +267,14 @@ EOF
        dispatch.approved_by = params[:receive]['approved_by'] 
        dispatch.responsible_person = params[:receive]['collected_by'] 
        dispatch.location_id = params[:receive]['location']
+       asset.location = dispatch.location_id
        dispatch.quantity = params[:receive]['quantity']
        unless params[:receive]['reason'].blank?
          dispatch.reason = params[:receive]['reason']
        end
 
        if dispatch.save  
+         asset.save
          curr_state = ItemState.where(:'item_id' => asset.id).first    
          curr_state.current_state = StateType.find(params[:receive]['status']).id
          curr_state.save
@@ -372,13 +376,15 @@ EOF
         dispatch.approved_by = session[:assets_to_dispatch][:approved_by]                  
         dispatch.responsible_person = session[:assets_to_dispatch][:received_by]         
         dispatch.location_id = Site.find_by_name(session[:assets_to_dispatch][:dispatch_site]).id 
+        asset.location = dispatch.location_id
         dispatch.quantity = quantity
 =begin
         unless params[:dispatch]['reason'].blank?                                
          dispatch.reason = params[:dispatch]['reason']                          
         end                                                                      
 =end
-        if dispatch.save                                                         
+        if dispatch.save                    
+          asset.save                                     
           curr_state = ItemState.where(:'item_id' => asset.id).first             
           curr_state.current_state = StateType.find_by_name(session[:assets_to_dispatch][:current_state][asset.id]).id
           curr_state.save                                                        

@@ -31,6 +31,7 @@ class Item < ActiveRecord::Base
    label.draw_multi_text("#{self.name.titleize}")                      
    label.draw_multi_text("Donor: #{self.donor.name.titleize}")                      
    label.draw_multi_text("SN: #{self.serial_number}")
+   label.draw_multi_text("Location: #{self.current_location.name}")
    label.print(1)
  end
 

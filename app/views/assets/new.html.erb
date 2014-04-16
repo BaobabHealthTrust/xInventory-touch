@@ -43,6 +43,12 @@ function getSerialNumber() {
       xmlhttp.send();                                                             
     }
 
+  function deliveredBySuggestions() {                                    
+    url = "/assets/find_by_delivered_by?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
+
   function nameSuggestions() {                                    
     url = "/assets/find_by_name?search_str=";                          
     $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
@@ -170,7 +176,10 @@ function getSerialNumber() {
       </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:organisation, :delivered_by, :helpText => "Delivered by") %> </td>
+      <td><%=text_field(:organisation, :delivered_by, 
+        :tt_onLoad => 'deliveredBySuggestions();', 
+        :allowFreeText => true ,                           
+        :ajaxURL => '',:helpText => "Delivered by") %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
