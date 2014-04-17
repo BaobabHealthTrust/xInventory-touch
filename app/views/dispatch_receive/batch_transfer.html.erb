@@ -1,6 +1,14 @@
 
 <script>
   var tt_cancel_destination="/"
+  
+  function approvedBySuggestions() {                                    
+    url = "/assets/find_by_approved_by?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
+
+
 </script>
 
 
@@ -17,7 +25,11 @@
   <%= select_tag "transfer[project_to]", options_for_select(@projects), 
       :helpText => "Project transferring to" %>
       
-  <%=text_field(:transfer, :approved_by ,:helpText => "Approved By") %>
+  <%#=text_field(:transfer, :approved_by ,:helpText => "Approved By") %>
+  <%=text_field(:transfer, :approved_by,
+        :tt_onLoad => 'approvedBySuggestions();',
+        :allowFreeText => true ,
+        :ajaxURL => '',:helpText => "Approved By") %>
 
   <%= submit_tag value="Submit"%>
 

@@ -79,6 +79,32 @@ function getSerialNumber() {
     $('buttons').innerHTML =  $('buttons').innerHTML.replace(serialNum,'');
   }
 
+  function checkForBarcode(){
+    if (!check_for_barcode)
+      return;
+
+    barcode_element = document.getElementById("touchscreenInput"+tstCurrentPage);
+    barcode_element.focus();
+
+    if (barcode_element.value.match(/.+\$$/i) != null){
+      valid_scan = barcode_element.value.substring(0,barcode_element.value.length-1)
+      if (valid_scan.length > 0) {
+        barcode_element.value = barcode_element.value.substring(0,(barcode_element.value.length - 1));
+        gotoNextPage();
+      }
+    }
+  }
+
+  function setFocus(element) {
+    check_for_barcode = true;
+  }
+
+  function removesetFocus(element) {
+    check_for_barcode = false;
+  }
+
+  var check_for_barcode = false;
+  window.setInterval("checkForBarcode()", 800); 
 </script>
 
 
@@ -99,8 +125,8 @@ function getSerialNumber() {
         :ajaxURL => '',:helpText => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();", 
-        :helpText => "Serial number", :textCase => "upper",:tt_onUnLoad => "removeButton();") %>
+      <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();setFocus(this);",
+        :helpText => "Serial number", :textCase => "upper",:tt_onUnLoad => "removeButton();removesetFocus(this);") %>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :model ,

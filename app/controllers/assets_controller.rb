@@ -346,6 +346,12 @@ class AssetsController < ApplicationController
   end
 
   ######################## create a new asset ###############################
+  def find_by_approved_by
+    @assets = DispatchReceive.where("approved_by LIKE(?)", 
+      "%#{params[:search_str]}%").group(:approved_by).limit(10).map{|item|[[item.approved_by]]}     
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+  end
+
   def find_by_delivered_by
     @assets = Item.where("delivered_by LIKE(?)", 
       "%#{params[:search_str]}%").group(:delivered_by).limit(10).map{|item|[[item.delivered_by]]}     
