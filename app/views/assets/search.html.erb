@@ -37,3 +37,20 @@ tt_cancel_destination = '/assets'
     <input type='hidden' name="reimbursing" value="<%=params[:reimbursing]%>" />
   <%end%>
 <%end%>
+
+<script>
+ function checkForBarcode(){
+    barcode_element = document.getElementById("touchscreenInput"+tstCurrentPage);
+    barcode_element.focus();
+
+    if (barcode_element.value.match(/.+\$$/i) != null){
+      valid_scan = barcode_element.value.substring(0,barcode_element.value.length-1)
+      if (valid_scan.length > 0) {
+        barcode_element.value = barcode_element.value.substring(0,(barcode_element.value.length - 1));
+        gotoNextPage();
+      }
+    }
+  }
+
+  window.setInterval("checkForBarcode()", 800); 
+</script>
