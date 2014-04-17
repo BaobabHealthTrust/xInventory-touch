@@ -19,13 +19,16 @@ class AssetsController < ApplicationController
 
   def show
     @asset = get_asset(params[:id])
-
+    responsible_person = Item.find(params[:id]).responsible_person
     @status = StateType.order('name ASC').collect do |state|                    
       [state.name , state.id]                                                   
     end 
 
     @page_title = "#{@asset[:name]}<br />"
     @page_title += "Location:&nbsp;#{@asset[:location]}"
+    unless responsible_person.blank?
+      @page_title += "&nbsp;&nbsp;Responsible person:&nbsp;#{responsible_person}"
+    end
     render :layout => 'imenu'
   end
 
