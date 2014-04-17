@@ -23,23 +23,17 @@ class Item < ActiveRecord::Base
 
  def barcode_label
    label = ZebraPrinter::StandardLabel.new                                     
-   label.font_size = 2                                                         
+   label.font_size = 1
    label.font_horizontal_multiplier = 2                                        
    label.font_vertical_multiplier = 2                                          
    label.left_margin = 50                                                      
-   label.draw_barcode(50,180,0,1,5,15,120,false,"#{self.barcode}") 
+   label.draw_barcode(50,210,0,1,2,15,70,false,"#{self.barcode}") 
    label.draw_multi_text("#{self.name.titleize}")                      
-   label.draw_multi_text("Donor: #{self.donor.name.titleize}")                      
    label.draw_multi_text("SN: #{self.serial_number}")
+   label.draw_multi_text("Donor: #{self.donor.name.upcase}")                      
+   label.draw_multi_text("Project: #{self.project.name}")
    label.draw_multi_text("Location: #{self.current_location.name}")
    label.print(1)
- end
-
- def responsible_person
-  location = DispatchReceive.where(:asset_id => self.id)
-  unless location.blank?
-    return location.last.responsible_person
-  end
  end
 
 end
