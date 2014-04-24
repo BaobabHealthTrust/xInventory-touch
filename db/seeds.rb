@@ -7,8 +7,8 @@
 #   Mayor.create(:name => 'Emanuel', :city => cities.first)
 
 
-sites = [['Baobab Health Trust (LL)',"Baobab's head office located in Lilongwe city in area 3"],
- ['Baobab Health Trust (BT)','Baobab regional branch located in Blantyre city - Mandala']
+sites = [['Storeroom (LL)',"Baobab's head storeroom located in Lilongwe city in area 3"],
+ ['Storeroom (BT)','Baobab regional branch located in Blantyre city - Mandala']
 ]         
 
 sites.each do |name,description|
