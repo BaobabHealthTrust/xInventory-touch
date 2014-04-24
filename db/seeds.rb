@@ -30,10 +30,12 @@ type.save
                              
 asset_states = [
  ['Good condition',nil] ,
- ['Bad condition',nil]  ,            
+ ['Faulty',nil]  ,            
  ['Stolen',nil] ,    
  ['Damage',nil]  ,            
- ['Went missing in the field',nil]              
+ ['New',nil]  ,            
+ ['Went missing in the field',nil] ,
+ ['Unknown',nil]          
 ]              
                              
 asset_states.each do |name,description|
