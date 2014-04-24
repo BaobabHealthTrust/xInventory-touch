@@ -35,5 +35,12 @@ class Item < ActiveRecord::Base
    label.draw_multi_text("Location: #{self.current_location.name}")
    label.print(1)
  end
+ 
+ def responsible_person
+  location = DispatchReceive.where(:asset_id => self.id)
+  unless location.blank?
+    return location.last.responsible_person
+  end
+ end
 
 end
