@@ -125,18 +125,18 @@ function getSerialNumber() {
         :ajaxURL => '',:helpText => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();setFocus(this);",
+      <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();setFocus(this);",:id => 'serial_num',
         :helpText => "Serial number", :textCase => "upper",:tt_onUnLoad => "removeButton();removesetFocus(this);") %>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :model ,
         :tt_onLoad => 'modelSuggestions();', :allowFreeText => true ,                                                
-        :ajaxURL => '', :helpText => "Model") %> </td>
+        :ajaxURL => '', :helpText => "Model",:id => 'asset_model') %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:asset, :version ,
+      <td><%=text_field(:asset, :version , {:id => 'version',
           :tt_onLoad => 'versionSuggestions();', :allowFreeText => true ,
-          :ajaxURL => '', :helpText => "Version") %> </td>
+          :ajaxURL => '', :helpText => "Version"}) %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>   
@@ -152,7 +152,7 @@ function getSerialNumber() {
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :lifespan ,:tt_pageStyleClass => "Numeric NumbersOnly",
-        :field_type => 'number',:helpText => "Lifespan in years") %> </td>
+        :field_type => 'number',:helpText => "Lifespan in years", :id =>'lifespan' ) %> </td>
     </tr>                                                                       
     <tr>                                                                        
       <td>                                                                      
@@ -173,19 +173,19 @@ function getSerialNumber() {
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :invoice_num, :helpText => "Invoice number") %> </td>
+      <td><%=text_field(:vendor, :invoice_num, :helpText => "Invoice number",:id => 'invoice_num') %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :date_of_invoice,  
+      <td><%=text_field(:vendor, :date_of_invoice, :id =>'invoice_date' ,  
           :helpText => "Invoice date", :field_type => 'date',                 
           :maxDate => "#{Date.today.to_date}") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 ,
+      <td><%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 ,:id => 'quantity',
           :tt_pageStyleClass => "Numeric NumbersOnly", :helpText => "Quantity") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:vendor, :cost, :helpText => "Cost", :absoluteMin => 1,
+      <td><%=text_field(:vendor, :cost, :helpText => "Cost", :absoluteMin => 1,:id => 'cost',
         :field_type => 'number',:tt_pageStyleClass => "Numeric NumbersOnly") %>
 
         <%= select_tag "vendor[currency]", options_for_select(@currencies),
@@ -196,15 +196,15 @@ function getSerialNumber() {
       <td><hr /></td>   
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:organisation, :receipt_date, 
-          :helpText => "Date of receipt",:field_type => 'date',                                                      
+      <td><%=text_field(:organisation, :receipt_date, :id => 'receipt_date',
+          :helpText => "Date of receipt",:field_type => 'date', 
           :maxDate => "#{Date.today.to_date}") %> 
       </td>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:organisation, :delivered_by, 
         :tt_onLoad => 'deliveredBySuggestions();', 
-        :allowFreeText => true ,                           
+        :allowFreeText => true , :id => 'delivered_by',
         :ajaxURL => '',:helpText => "Delivered by") %> </td>
     </tr>                                                                       
     <tr>                                                                        
@@ -222,7 +222,15 @@ function getSerialNumber() {
     <tr>                                                                        
       <td>                                                                      
         <%= select_tag "organisation[location]", options_for_select(@location),
-          :helpText => "Select store room location" %>                                              
+          :helpText => "Select store room location"%>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+           <%= text_field_tag :summary, nil, 
+            { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';", 
+            :tt_onUnLoad => "enableFinishButton();" ,:optional => "true", 
+            :tt_pageStyleClass   => "NoControls" } %>
       </td>                                                                     
     </tr>                                                                       
   </tbody>                                                                      
@@ -232,3 +240,108 @@ function getSerialNumber() {
 </div>                                                      
 </section> 
 
+<script>
+function disableFinishButton() {
+  document.getElementById('nextButton').disabled = true;
+}
+
+function enableFinishButton() {
+  document.getElementById('nextButton').disabled = false;
+}
+
+function summary() {
+  
+  var values = getValues();
+  var display = "<div><span class='title'><h3><b>Summary of enetered attributes:</b></h3></span></div>";
+  var display = "<div><hr /></div>";
+  for(var i = 0; i < values.length; i++){
+    display += "<div><span class='title'>" + values[i][0] + ": " +  values[i][1] + "</span></div>";
+    if(values[i][1].length < 1)
+      disableFinishButton();
+
+  }
+
+  $('inputFrame'+tstCurrentPage).innerHTML = '<div id="summary">' + display + '</div>' ;
+  $("clearButton").style.display = "none";
+}
+
+function getValues() {
+  var values = []
+  values.push(['Name', document.getElementById('asset_name').value]);
+  values.push(['Serial number', document.getElementById('serial_num').value]);
+  values.push(['Model', document.getElementById('asset_model').value]);
+  values.push(['Version', document.getElementById('version').value]);
+  values.push(['Category', document.getElementById('asset_category').value]);
+
+
+  values.push(['Manufacturer', available_manufacturers[document.getElementById('asset_manufacturer').value]]);
+  values.push(['Lifespan', document.getElementById('lifespan').value]);
+  values.push(['Project', available_projects[document.getElementById('work_project').value]]);
+  values.push(['Donor', available_donors[document.getElementById('work_donor').value]]);
+  values.push(['Supplier', available_suppliers[document.getElementById('vendor_supplier').value]]);
+  values.push(['Invoice number', document.getElementById('invoice_num').value]);
+
+  values.push(['Invoice date', document.getElementById('invoice_date').value]);
+  values.push(['Quantity', document.getElementById('quantity').value]);
+  values.push(['Currency', available_currencies[document.getElementById('vendor_currency').value]]);
+  values.push(['Receipt date', document.getElementById('receipt_date').value]);
+  values.push(['Delivery status', available_status[document.getElementById('organisation_delivery_status').value]]);
+  values.push(['Current status', available_status[document.getElementById('organisation_current_status').value]]);
+
+  return values;
+}
+
+var available_status = {};
+var available_manufacturers = {};
+var available_projects = {};
+var available_donors  = {};
+var available_suppliers = {};
+var available_currencies = {};
+var available_categories = {};
+var available_locations = {};
+
+<%@status.each do |name, id|%>
+  available_status[<%=id%>] = "<%=name%>"
+<%end%>
+
+<%@categories.each do |name, id|%>
+  available_categories[<%=id%>] = "<%=name%>"
+<%end%>
+
+<%@manufacturers.each do |name, id|%>
+  available_manufacturers[<%=id%>] = "<%=name%>"
+<%end%>
+
+<%@projects.each do |name, id|%>
+  available_projects[<%=id%>] = "<%=name%>"
+<%end%>
+
+<%@donors.each do |name, id|%>
+  available_donors[<%=id%>] = "<%=name%>"
+<%end%>
+
+<%@suppliers.each do |name, id|%>
+  available_suppliers[<%=id%>] = "<%=name%>"
+<%end%>
+
+<%@location.each do |name, id|%>
+  available_locations[<%=id%>] = "<%=name%>"
+<%end%>
+
+<%@currencies.each do |name, id|%>
+  available_currencies[<%=id%>] = "<%=name%>"
+<%end%>
+
+
+
+
+</script>
+
+<style>
+  #summary {
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+  }

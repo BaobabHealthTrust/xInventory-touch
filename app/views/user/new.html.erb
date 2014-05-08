@@ -1,59 +1,31 @@
-<%#= javascript_include_tag "bootstrap-datepicker" %>
-<%#= stylesheet_link_tag "datepicker" %>
 
 <style>
-  .content-details { text-align: center; }                                                                          
+/*
+  .tt_controls_lifespan_in_years #num, #char, #qwerty, #plus, #apostrophe, #star, 
+      #Unknown, #abc, #date, #slash, #minus, #comma, #percent, #decimal {
+    display: none;
+  }
 
-  .asset-details { width: 100%; }                                                                          
+  .tt_controls_qauntity #num, #char, #qwerty, #plus, #apostrophe, #star, #abc, 
+      #Unknown, #date, #slash, #minus, #comma, #percent, #decimal {
+    display: none;
+  }
+*/
+  .tt_controls_cost #decimal {
+    display: inline;
+  }
+
 
 </style>
 
 
-<script>
+<script>                                                                        
 
-function submitForm() {                                                         
-  if(validateForm())                                                            
-    document.getElementsByTagName('form')[0].submit();                          
-                                                                                
-}                                                                               
-                                                                                
-function validateForm(){                                                        
-    username = document.getElementById('user_username');                      
-    first_name = document.getElementById('user_first_name');                      
-    last_name = document.getElementById('user_last_name');                      
-    user_role = document.getElementById('user_role');                      
-    password = document.getElementById('user_password');                      
-    password_confirm = document.getElementById('user_confirm_password');                      
+tt_cancel_destination = '/assets'
 
-    if(username.value == '') {                                                     
-      alert("Please enter username ...");                                     
-      return false;                                                             
-    }else if(first_name.value == '') {                                                     
-      alert("Please enter user first name ...");                                     
-      return false;                                                             
-    }else if(last_name.value == '') {                                                     
-      alert("Please enter user last name ...");                                     
-      return false;                                                             
-    }else if(password.value == '') {                                                     
-      alert("Please password ...");                                     
-      return false;                                                             
-    }else if(password.value.length < 6) {                                                     
-      alert("Please password should be atleast six characters ....");                                     
-      return false;                                                             
-    }else if(password.value != password_confirm.value) {                                                     
-      alert("The two passwords you enter do not match ...");                                     
-      return false;                                                             
-    }else if(user_role.value == '') {                                                     
-      alert("Please select user role ...");                                     
-      return false;                                                             
-    }                               
-                                        
-    return true;                                                                  
-  }    
-
-  function checkUsername() {
-    username = document.getElementById('user_username').value;
-                                                                                
+function getSerialNumber() {                                                           
+    var serial_num = $('touchscreenInput'+tstCurrentPage);               
+                                                                                  
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
         xmlhttp=new XMLHttpRequest();                                             
       }else{// code for IE6, IE5                                                  
@@ -62,88 +34,203 @@ function validateForm(){
       xmlhttp.onreadystatechange=function() {                                     
         if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
           var results = xmlhttp.responseText;                                     
-          if(results == 'undefined' || results == '' || results == '"not validate"') {                           
-            return;                                                               
-          }else{                                                                  
-            if(results == 'available') {
-              document.getElementById('notice').innerHTML = 'username ' + results;
-              document.getElementById('notice').style.color = 'green';
-              document.getElementById('signup').disabled = false;
-            }else{
-              document.getElementById('notice').innerHTML = 'username ' + results;
-              document.getElementById('notice').style.color = 'red';
-              document.getElementById('signup').disabled = 'disabled';
-            }
-          }                                                                       
+          if(results) {                           
+            serial_num.value = results;
+          }                                                                     
         }                                                                         
       }                                                                           
-      xmlhttp.open("GET","/username_availability?search_str="+username,true);           
+      xmlhttp.open("GET","/serial_number_generator",true); 
       xmlhttp.send();                                                             
+    }
 
+  function deliveredBySuggestions() {                                    
+    url = "/assets/find_by_delivered_by?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
   }
+
+  function nameSuggestions() {                                    
+    url = "/assets/find_by_name?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
+
+  function modelSuggestions() {                                    
+    url = "/assets/find_by_model?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
+
+  function versionSuggestions() {                                    
+    url = "/assets/find_by_model?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
+
+  function setButton() {
+    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
+    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
+    $('buttons').innerHTML += serialNum;
+  }
+
+  function removeButton() {
+    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
+    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
+    $('buttons').innerHTML =  $('buttons').innerHTML.replace(serialNum,'');
+  }
+
+  function checkForBarcode(){
+    if (!check_for_barcode)
+      return;
+
+    barcode_element = document.getElementById("touchscreenInput"+tstCurrentPage);
+    barcode_element.focus();
+
+    if (barcode_element.value.match(/.+\$$/i) != null){
+      valid_scan = barcode_element.value.substring(0,barcode_element.value.length-1)
+      if (valid_scan.length > 0) {
+        barcode_element.value = barcode_element.value.substring(0,(barcode_element.value.length - 1));
+        gotoNextPage();
+      }
+    }
+  }
+
+  function setFocus(element) {
+    check_for_barcode = true;
+  }
+
+  function removesetFocus(element) {
+    check_for_barcode = false;
+  }
+
+  var check_for_barcode = false;
+  window.setInterval("checkForBarcode()", 800); 
 </script>
 
 
-
 <div class="page-header">
-  <h1>user <small>register a user</small></h1>
+  <h1>assets <small>register an asset</small></h1>
 </div>
 
-<siection id='modals'>                                              
+<section id='modals'>                                              
   <div class="content-details">
-  <div>                                                                         
-    <%if flash[:notice]%>                                                       
-      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
-    <%elsif flash[:error]%>                                                     
-      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
-    <%end%>                                                                     
-  </div>
   <%= form_tag :action => 'create', :method => :post  do %>
 
   <table class="asset-details">                                              
   <tbody>                                                                       
     <tr>                                                                        
-      <td>&nbsp;</td>                                                           
+      <td><%=text_field(:asset, :name, 
+        :tt_onLoad => 'nameSuggestions();', 
+        :allowFreeText => true ,                           
+        :ajaxURL => '',:helpText => "Name") %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><span id='notice'></span><br />
-        <%=text_field(:user, :username, :placeholder => "Username",:onkeyup => "checkUsername();") %> 
-      </td>
+      <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();setFocus(this);",:id => 'serial_num',
+        :helpText => "Serial number", :textCase => "upper",:tt_onUnLoad => "removeButton();removesetFocus(this);") %>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:user, :first_name, :placeholder => "First name") %> </td>
+      <td><%=text_field_tag(:asset, :model ,
+        :tt_onLoad => 'modelSuggestions();', :allowFreeText => true ,                                                
+        :ajaxURL => '', :helpText => "Model",:id => 'asset_model') %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><%=text_field(:user, :last_name, :placeholder => "Last name") %> </td>
+      <td><%=text_field_tag(:asset, :version , {:id => 'version',
+          :tt_onLoad => 'versionSuggestions();', :allowFreeText => true ,
+          :ajaxURL => '', :helpText => "Version"}) %> </td>
     </tr>                                                                       
     <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=password_field(:user, :password, :placeholder => "Password") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=password_field(:user, :confirm_password, :placeholder => "Confirm password") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr><td>           
-      <% @roles.unshift('') %> 
-      <%= select_tag "user[role]", options_for_select(@roles), 
-                :placeholder => "Select user role" %></td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <input onclick="submitForm();" type="button" id="signup" disabled='disabled' 
-          class="btn btn-primary signup_btn" value="Register" style="width:100%;" />
+      <td>   
+        <%= select_tag "asset[category]", options_for_select(@categories),
+          :helpText => "Category", :id => 'category' %>                                              
       </td>                                                                     
     </tr>                                                                       
     <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "asset[manufacturer]", options_for_select(@manufacturers),
+          :helpText => "Manufacturer" ,:id => 'manufacturer' %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field_tag(:asset, :lifespan ,:tt_pageStyleClass => "Numeric NumbersOnly",
+        :field_type => 'number',:helpText => "Lifespan in years", :id =>'lifespan' ) %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "work[project]", options_for_select(@projects),
+          :helpText => "Project",:id => 'project' %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "work[donor]", options_for_select(@donors),
+          :helpText => "Donor", :id => 'donor' %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "vendor[supplier]", options_for_select(@suppliers),
+          :helpText => "Supplier", :id => 'supplier' %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field_tag(:vendor, :invoice_num, :helpText => "Invoice number",:id => 'invoice_num') %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field_tag(:vendor, :date_of_invoice, :id =>'invoice_date' ,  
+          :helpText => "Invoice date", :field_type => 'date',                 
+          :maxDate => "#{Date.today.to_date}") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field_tag(:vendor, :quantity, :field_type => 'number',:min => 1 ,:id => 'quantity',
+          :tt_pageStyleClass => "Numeric NumbersOnly", :helpText => "Quantity") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field_tag(:vendor, :cost, :helpText => "Cost", :absoluteMin => 1,:id => 'cost',
+        :field_type => 'number',:tt_pageStyleClass => "Numeric NumbersOnly") %>
+
+        <%= select_tag "vendor[currency]", options_for_select(@currencies),
+          :helpText => "Select currency", :id => 'currency' %>                                              
+      </td>                                                                       
+    </tr>                                                                       
+    <tr>                                                                        
       <td><hr /></td>   
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field_tag(:organisation, :receipt_date, :id => 'receipt_date',
+          :helpText => "Date of receipt",:field_type => 'date', 
+          :maxDate => "#{Date.today.to_date}") %> 
+      </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td><%=text_field_tag(:organisation, :delivered_by, 
+        :tt_onLoad => 'deliveredBySuggestions();', 
+        :allowFreeText => true , :id => 'delivered_by',
+        :ajaxURL => '',:helpText => "Delivered by") %> </td>
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "organisation[delivery_status]", options_for_select(@status),
+          :helpText => "Delivery status", :id => 'delivery_status' %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "organisation[current_status]", options_for_select(@status),
+          :helpText => "Current status",:id => 'current_status' %>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+        <%= select_tag "organisation[location]", options_for_select(@location),
+          :helpText => "Select store room location" ,:id => 'location'%>                                              
+      </td>                                                                     
+    </tr>                                                                       
+    <tr>                                                                        
+      <td>                                                                      
+           <%= text_field_tag :summary, nil, 
+            { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';", 
+            :optional => "true", :tt_pageStyleClass   => "NoControls" } %>
+      </td>                                                                     
     </tr>                                                                       
   </tbody>                                                                      
  </table>
@@ -152,3 +239,38 @@ function validateForm(){
 </div>                                                      
 </section> 
 
+<script>
+/*
+function summary() {
+  var values = getValues();
+}
+
+function getValues() {
+  var values = []
+  values.push(['Name', document.getElementById('asset_name').value]);
+  values.push(['Serial number', document.getElementById('serial_num').value]);
+  values.push(['Model', document.getElementById('asset_model').value]);
+  values.push('Version', document.getElementById('version').value]);
+  values.push('Category', document.getElementById('category').value]);
+
+
+  values.push(['Manufacturer', document.getElementById('manufacturer').value]);
+  values.push(['Lifespan', document.getElementById('lifespan').value]);
+  values.push(['Project', document.getElementById('project').value]);
+  values.push(['Donor', document.getElementById('donor').value]);
+  values.push(['Supplier', document.getElementById('supplier').value]);
+  values.push(['Invoice number', document.getElementById('invoice_num').value]);
+
+  values.push(['Invoice date', document.getElementById('invoice_date').value]);
+  values.push(['Quantity', document.getElementById('quantity').value]);
+  values.push(['Currency', document.getElementById('currency').value]);
+  values.push(['Receipt date', document.getElementById('receipt_date').value]);
+  values.push(['Delivery status', document.getElementById('delivery_status').value]);
+  values.push(['Current status', document.getElementById('current_status').value]);
+
+  for(var i = 0; i < values.length; i++){
+    alert(values[i])
+  }
+}
+*/
+</script>
