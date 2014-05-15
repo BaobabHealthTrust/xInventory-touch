@@ -23,6 +23,28 @@
 
 tt_cancel_destination = '/assets'
 
+function checkSerialNumber() {                                                           
+    var serial_num = $('touchscreenInput'+tstCurrentPage);               
+    alert(serial_num);                                                                              
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results == 'false') {                           
+            return false;
+          }else{
+            return true;
+          }                                                                     
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/validate_serial_number/" + serial_num,true); 
+      xmlhttp.send();                                                             
+    }
+
 function getSerialNumber() {                                                           
     var serial_num = $('touchscreenInput'+tstCurrentPage);               
                                                                                   
@@ -126,7 +148,9 @@ function getSerialNumber() {
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();setFocus(this);",:id => 'serial_num',
-        :helpText => "Serial number", :textCase => "upper",:tt_onUnLoad => "removeButton();removesetFocus(this);") %>
+        :helpText => "Serial number", :textCase => "upper",
+        :validationJS =>"checkSerialNumber()",
+        :tt_onUnLoad => "removeButton();removesetFocus(this);") %>
     </tr>                                                                       
     <tr>                                                                        
       <td><%=text_field(:asset, :model ,

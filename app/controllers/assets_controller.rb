@@ -392,6 +392,10 @@ EOF
     render :text => get_serial_number and return
   end
 
+  def validate_serial_number
+    render :text => serial_number_validator(params[:id]) and return
+  end
+
   ######################## create a new asset ###############################
   def find_by_approved_by
     @assets = DispatchReceive.where("approved_by LIKE(?)", 
@@ -521,6 +525,11 @@ EOF
     last_barcode = Item.select("MAX(barcode) barcode")[0].try(:barcode) rescue 'BHT'
     number = last_barcode.sub("BHT",'').to_i 
     return "BHT#{(number + 1).to_s.rjust(6,"0")}"
+  end
+
+  def serial_number_validator(num)
+    serial_num = Item.where(:'serial_number' => num)
+    return serial_num.blank? ? true : false
   end
 
 end

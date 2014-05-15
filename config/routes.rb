@@ -150,6 +150,7 @@ XInventory::Application.routes.draw do
   match 'print_barcode/:id' => 'assets#print_barcode'
   match 'print_asset_barcode/:id' => 'assets#print_asset_barcode'
   get "assets/tedit"
+  match 'validate_serial_number/:id' => 'assets#validate_serial_number', :as => :validate_serial_number
   ########## Donors end #####################
 
   
