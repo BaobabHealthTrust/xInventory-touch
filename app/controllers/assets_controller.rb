@@ -296,8 +296,10 @@ EOF
           item.vendor = params[:vendor]['supplier'] unless params[:vendor]['supplier'].blank?
           item.purchased_date = params[:vendor]['date_of_invoice'].to_date unless params[:vendor]['date_of_invoice'].blank?
           item.order_number = params[:vendor]['invoice_num'] unless params[:vendor]['invoice_num'].blank?
-          item.current_quantity = params[:vendor]['quantity'] unless params[:vendor]['quantity'].blank?
-          #item.bought_quantity = params[:vendor]['quantity'] unless params[:vendor]['']
+          unless params[:vendor]['quantity'].blank?
+            #item.bought_quantity = params[:vendor]['quantity'] 
+            #item.current_quantity = (item.quantity - item.current_quantity)
+          end
           item.cost = params[:vendor]['cost'] unless params[:vendor]['cost'].blank?
           item.currency_id = params[:vendor]['currency'].to_i unless params[:vendor]['currency'].blank?
         end
