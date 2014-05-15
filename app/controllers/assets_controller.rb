@@ -210,6 +210,34 @@ class AssetsController < ApplicationController
 
   def edit
     @asset = get_asset(params[:id])
+    asset = Item.find(@asset[:asset_id])
+
+    @fields = [
+      ["Name: #{@asset[:name]}","name"],
+      ["Serial number: #{@asset[:serial_number]}","serial_number"], ["Model: #{@asset[:model]}","model"],
+      ["Version: #{@asset[:version]}","version"],["Category: #{@asset[:category]}","category"],
+      ["Manufacturer: #{@asset[:brand][0..23]}","manufacturer"],
+      ["Expiry date: #{asset.expiry_date}","lifespan"],
+      ["Project: #{@asset[:project]}","project"],["Donor: #{@asset[:donor]}","donor"],
+      ["Supplier: #{@asset[:supplier]}","supplier"],
+      ["Invoice number: #{@asset[:order_number]}","invoice_number"],
+      ["Invoice date: #{@asset[:purchased_date]}","invoice_date"],
+      ["Bought quantity: #{@asset[:bought_quantity]}","quantity"],
+      ["Cost: #{@asset[:cost]} (#{asset.currency.code})","cost"],
+      ["Date of receipt #{@asset[:date_of_receipt]}","date_of_receipt"],
+      ["Delivered by: #{@asset[:delivered_by]}","delivered_by"],
+      ["Delivered status #{@asset[:status_on_delivery]}","delivery_status"],
+      ["Current status: #{@asset[:current_state]}","current_status"]
+    ]
+     # ["Store room: #{@asset[:location]}","store_room"]
+
+    @page_title =<<EOF
+    <h3>Edit:&nbsp;<a href="#" onmousedown="editAttribute('name')">#{@asset[:name]}</a></h3>
+EOF
+    render :layout => 'imenu'
+  end
+
+  def tedit
     @categories = Category.order('name ASC').collect do |category|
       [category.name , category.id]
     end
@@ -242,46 +270,65 @@ class AssetsController < ApplicationController
       [currency.code , currency.id]
     end
 
+    @asset_id = params[:id]
+    @attr_to_edit = params[:par]
   end
 
   def update
-    Item.transaction do
-      item = Item.find(params[:id])
-      item.name = params[:asset]['name']
-      item.category_type = params[:asset]['category']
-      item.brand = params[:asset]['manufacturer']
-      item.version = params[:asset]['version']
-      item.serial_number = params[:asset]['serial_num']
-      item.vendor = params[:vendor]['supplier']
-      item.model = params[:asset]['model']
-      item.project_id = params[:work]['project']
-      item.donor_id = params[:work]['donor']
-      item.purchased_date = params[:vendor]['date_of_invoice'].to_date rescue Date.new(2013,01,01)
-      item.order_number = params[:vendor]['invoice_num']
-      item.current_quantity = params[:vendor]['quantity']
-      item.bought_quantity = params[:vendor]['quantity']
-      item.cost = params[:vendor]['cost']
-      item.currency_id = params[:vendor]['currency'].to_i
-      item.date_of_receipt = params[:organisation]['receipt_date'].to_date rescue Date.new(2013,01,01)
-      item.delivered_by = params[:organisation]['delivered_by']
-      item.status_on_delivery = params[:organisation]['delivery_status']
-      item.location = params[:organisation]['location']
+    if request.post?
+      Item.transaction do
+        item = Item.find(params[:asset_id])
+        unless params[:asset].blank?
+          item.name = params[:asset]['name'] unless params[:asset]['name'].blank?
+          item.category_type = params[:asset]['category'] unless params[:asset]['category'].blank?
+          item.brand = params[:asset]['manufacturer'] unless params[:asset]['manufacturer'].blank?
+          item.version = params[:asset]['version'] unless params[:asset]['version'].blank?
+          item.serial_number = params[:asset]['serial_num'] unless params[:asset]['serial_num'].blank?
+          item.model = params[:asset]['model'] unless params[:asset]['model'].blank?
+          
+          asset_lifespan = (params[:asset]['lifespan']).to_i rescue 0
+          if asset_lifespan > 0
+            item.expiry_date = (Date.today + asset_lifespan.year)
+          end
+        end
+      
+        unless params[:vendor].blank?
+          item.vendor = params[:vendor]['supplier'] unless params[:vendor]['supplier'].blank?
+          item.purchased_date = params[:vendor]['date_of_invoice'].to_date unless params[:vendor]['date_of_invoice'].blank?
+          item.order_number = params[:vendor]['invoice_num'] unless params[:vendor]['invoice_num'].blank?
+          item.current_quantity = params[:vendor]['quantity'] unless params[:vendor]['quantity'].blank?
+          #item.bought_quantity = params[:vendor]['quantity'] unless params[:vendor]['']
+          item.cost = params[:vendor]['cost'] unless params[:vendor]['cost'].blank?
+          item.currency_id = params[:vendor]['currency'].to_i unless params[:vendor]['currency'].blank?
+        end
 
-      asset_expiry_date = (params[:asset]['expiry_date']).to_date rescue nil
-      if asset_expiry_date
-        item.expiry_date = asset_expiry_date
-      end
+        unless params[:work].blank?
+          item.project_id = params[:work]['project'] unless params[:work]['project'].blank?
+          item.donor_id = params[:work]['donor'] unless params[:work]['donor'].blank?
+        end
 
-      if item.save 
-        curr_state = ItemState.where(:'item_id' => item.id)[0]                                  
-        curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
-        curr_state.save 
-        flash[:notice] = 'Successfully updated.'                                  
-      else                                                                        
-        flash[:error] = 'Something went wrong - did not create.'                  
+        unless params[:organisation].blank?
+          item.date_of_receipt = params[:organisation]['receipt_date'].to_date unless params[:organisation]['receipt_date'].blank?
+          item.delivered_by = params[:organisation]['delivered_by'] unless params[:organisation]['delivered_by'].blank?
+          item.status_on_delivery = params[:organisation]['delivery_status'] unless params[:organisation]['delivery_status'].blank?
+          item.location = params[:organisation]['location'] unless params[:organisation]['location'].blank?
+        end
+
+        if item.save 
+          unless params[:organisation].blank?
+            unless params[:organisation]['current_status'].blank?
+              curr_state = ItemState.where(:'item_id' => item.id)[0]                                  
+              curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
+              curr_state.save 
+            end
+          end
+          flash[:notice] = 'Successfully updated.'                                  
+        else                                                                        
+          flash[:error] = 'Something went wrong - did not update.'                  
+        end
       end
+      redirect_to edit_asset_url(:id => params[:asset_id])
     end
-    redirect_to asset_details_url(:id => params[:id])
   end
 
   def delete

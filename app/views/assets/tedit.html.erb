@@ -1,0 +1,153 @@
+<style>
+
+/*
+ ["Serial number: #{@asset[:serial_number]}","serial_number"], ["Model: #{@asset[:model]}","model"],
+      ["Version: #{@asset[:version]}","version"],["Category: #{@asset[:category]}","category"],
+      ["Manufacturer: #{@asset[:brand][0..23]}","manufacturer"],
+      ["Expiry date: #{asset.expiry_date}","lifespan"],
+      ["Project: #{@asset[:project]}","project"],["Donor: #{@asset[:donor]}","donor"],
+      ["Supplier: #{@asset[:supplier]}","supplier"],
+      ["Invoice number: #{@asset[:order_number]}","invoice_number"],
+      ["Invoice date: #{@asset[:purchased_date]}","invoice_date"],
+      ["Bought quantity: #{@asset[:bought_quantity]}","quantity"],
+      ["Cost: #{@asset[:cost]} (#{asset.currency.code})","cost"],
+      ["Date of receipt #{@asset[:date_of_receipt]}","date_of_receipt"],
+      ["Delivered by: #{@asset[:delivered_by]}","delivered_by"],
+      ["Delivered status #{@asset[:status_on_delivery]}","delivery_status"],
+      ["Current status: #{@asset[:current_state]}","current_status"],
+      ["Store room: #{@asset[:location]}","store_room"]
+*/
+</style>
+
+<script>
+
+tt_cancel_destination = "/edit_asset/<%=@asset_id%>"
+
+function nameSuggestions() {                                    
+    url = "/assets/find_by_name?search_str=";                          
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+    listSuggestions(tstCurrentPage);                                            
+  }
+
+  function setButton() {
+    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
+    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
+    $('buttons').innerHTML += serialNum;
+  }
+
+  function getSerialNumber() {                                                           
+    var serial_num = $('touchscreenInput'+tstCurrentPage);               
+                                                                                  
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
+        xmlhttp=new XMLHttpRequest();                                             
+      }else{// code for IE6, IE5                                                  
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
+      }                                                                           
+      xmlhttp.onreadystatechange=function() {                                     
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
+          var results = xmlhttp.responseText;                                     
+          if(results) {                           
+            serial_num.value = results;
+          }                                                                     
+        }                                                                         
+      }                                                                           
+      xmlhttp.open("GET","/serial_number_generator",true); 
+      xmlhttp.send();                                                             
+    }
+
+    function modelSuggestions() {                                    
+      url = "/assets/find_by_model?search_str=";                          
+      $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+      listSuggestions(tstCurrentPage);                                            
+    }
+  
+    function versionSuggestions() {                                    
+      url = "/assets/find_by_model?search_str=";                          
+      $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+      listSuggestions(tstCurrentPage);                                            
+    }
+
+    function deliveredBySuggestions() {                                    
+      url = "/assets/find_by_delivered_by?search_str=";                          
+      $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
+      listSuggestions(tstCurrentPage);                                            
+    }
+
+</script>
+
+<%= form_tag :action => 'update', :method => :post  do %>
+
+<%if @attr_to_edit == 'name'%>
+  <%=text_field(:asset, :name,
+  :tt_onLoad => 'nameSuggestions();',
+  :allowFreeText => true ,
+  :ajaxURL => '',:helpText => "Name") %>
+<%elsif @attr_to_edit == 'serial_number'%>
+  <%=text_field(:asset, :serial_num,
+  :tt_onLoad => "setButton();",:id => 'serial_num',
+  :helpText => "Serial number", :textCase => "upper") %>
+<%elsif @attr_to_edit == 'lifespan'%>
+  <%=text_field(:asset, :lifespan ,:tt_pageStyleClass => "Numeric NumbersOnly",
+  :field_type => 'number',:helpText => "Lifespan in years", :id =>'lifespan' ) %>
+<%elsif @attr_to_edit == 'model'%>
+  <%=text_field(:asset, :model ,
+  :tt_onLoad => 'modelSuggestions();', :allowFreeText => true ,
+  :ajaxURL => '', :helpText => "Model",:id => 'asset_model') %>
+<%elsif @attr_to_edit == 'version'%>
+  <%=text_field(:asset, :version , {:id => 'version',
+    :tt_onLoad => 'versionSuggestions();', :allowFreeText => true ,
+    :ajaxURL => '', :helpText => "Version"}) %>
+<%elsif @attr_to_edit == 'category'%>
+  <%= select_tag "asset[category]", options_for_select(@categories),
+    :helpText => "Category" %>
+<%elsif @attr_to_edit == 'manufacturer'%>
+   <%= select_tag "asset[manufacturer]", options_for_select(@manufacturers),
+    :helpText => "Manufacturer" %>
+<%elsif @attr_to_edit == 'project'%>
+  <%= select_tag "work[project]", options_for_select(@projects),
+    :helpText => "Project" %>
+<%elsif @attr_to_edit == 'supplier'%>
+  <%= select_tag "vendor[supplier]", options_for_select(@suppliers),
+    :helpText => "Supplier" %>
+<%elsif @attr_to_edit == 'donor'%>
+  <%= select_tag "work[donor]", options_for_select(@donors),
+          :helpText => "Donor" %>
+<%elsif @attr_to_edit == 'invoice_number'%>
+  <%=text_field(:vendor, :invoice_num, :helpText => "Invoice number",:id => 'invoice_num') %>
+<%elsif @attr_to_edit == 'invoice_date'%>
+  <%=text_field(:vendor, :date_of_invoice, :id =>'invoice_date' ,
+    :helpText => "Invoice date", :field_type => 'date',
+    :maxDate => "#{Date.today.to_date}") %>
+<%elsif @attr_to_edit == 'quantity'%>
+    <%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 ,:id => 'quantity',
+      :tt_pageStyleClass => "Numeric NumbersOnly", :helpText => "Quantity") %>
+<%elsif @attr_to_edit == 'cost'%>
+  <%=text_field(:vendor, :cost, :helpText => "Cost", :absoluteMin => 1,:id => 'cost',
+        :field_type => 'number',:tt_pageStyleClass => "Numeric NumbersOnly") %>
+
+  <%= select_tag "vendor[currency]", options_for_select(@currencies),
+    :helpText => "Select currency" %>
+<%elsif @attr_to_edit == 'date_of_receipt'%>
+  <%=text_field(:organisation, :receipt_date, :id => 'receipt_date',
+    :helpText => "Date of receipt",:field_type => 'date',
+    :maxDate => "#{Date.today.to_date}") %>
+<%elsif @attr_to_edit == 'delivered_by'%>
+  <%=text_field(:organisation, :delivered_by,
+    :tt_onLoad => 'deliveredBySuggestions();',
+    :allowFreeText => true , :id => 'delivered_by',
+    :ajaxURL => '',:helpText => "Delivered by") %> 
+<%elsif @attr_to_edit == 'delivery_status'%>
+  <%= select_tag "organisation[delivery_status]", options_for_select(@status),
+    :helpText => "Delivery status" %>
+<%elsif @attr_to_edit == 'current_status'%>
+  <%= select_tag "organisation[current_status]", options_for_select(@status),
+    :helpText => "Current status" %>
+<%elsif @attr_to_edit == 'store_room'%>
+  <%= select_tag "organisation[location]", options_for_select(@location),
+    :helpText => "Select store room location"%>
+<%end%>
+
+  <input type='hidden' name="asset_id" value = "<%=@asset_id%>" />
+  <input type='hidden' name="attr_to_edit" value = "<%=@attr_to_edit%>" />
+<%end%>
+

@@ -149,6 +149,7 @@ XInventory::Application.routes.draw do
   get 'assets/find_by_approved_by'
   match 'print_barcode/:id' => 'assets#print_barcode'
   match 'print_asset_barcode/:id' => 'assets#print_asset_barcode'
+  get "assets/tedit"
   ########## Donors end #####################
 
   

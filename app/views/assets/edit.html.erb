@@ -1,171 +1,93 @@
 <style>
-  .tt_controls_cost #decimal {                                                  
-    display: inline;                                                            
-  }  
+
+   div {
+    -moz-user-select: none;
+  }
+
+
+  .buttons {
+    padding: 10px;
+    float: right;
+    width: 200px;
+    height: 52px;
+    margin-right: 10px;
+  }
+
+  .elements label {
+    width: 40%;
+    line-height: 50px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .elements {
+    width: 100%;
+  }
+
+  .element_left {
+    float: left;
+    width: 49%;
+  }
+
+  .element_right {
+    float: right;
+    width: 49%;
+  }
+
+  td {
+    border-style: solid;
+    border-width: 0px 0px 1px;
+  }
+
+  .element_content {
+    /*overflow: auto;
+    height: 550px;*/
+  }
 
 </style>
 
-<script>                                                                        
-tt_cancel_destination = '/asset_details/' + "<%=params[:id]%>";
+<script>
 
-  function getSerialNumber() {                                                           
-    var serial_num = $('touchscreenInput'+tstCurrentPage);                      
-                                                                                  
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
-        xmlhttp=new XMLHttpRequest();                                             
-      }else{// code for IE6, IE5                                                  
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
-      }                                                                           
-      xmlhttp.onreadystatechange=function() {                                     
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
-          var results = xmlhttp.responseText;                                     
-          if(results) {                                                         
-            serial_num.value = results;                                         
-          }                                                                     
-        }                                                                         
-      }                                                                           
-      xmlhttp.open("GET","/serial_number_generator",true);                      
-      xmlhttp.send();                                                             
-    }
+  function editAttribute(parameter) {
+    document.location = "/assets/tedit?id=<%=@asset[:asset_id]%>&par=" + parameter;
+  }
 
-  function setButton() {                                                        
-    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
-    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
-    $('buttons').innerHTML += serialNum;                                        
-  }                                                                             
-                                                                                
-  function removeButton() {                                                     
-    var serialNum = '<button id="sButton" class="button red navButton" style="display: block;" ';
-    serialNum += 'onmousedown="getSerialNumber();"><span>Generate serial number</span></button>';
-    $('buttons').innerHTML =  $('buttons').innerHTML.replace(serialNum,'');     
-  }  
+  function setCancelButton() {
+    element = document.getElementById('nav');
+    element.innerHTML = '<img alt="Okay" onclick="gotBack();" src="/assets/okay.jpeg" style="margin-right: 20px; margin-top: 10px; cursor: pointer; float: right;" height="65" />';
+  }
 
+  function gotBack() {
+    document.location = "/asset_details/<%=@asset[:asset_id]%>";
+  }
+
+  setTimeout("setCancelButton();", 500);
 </script>
 
 
+<div class="element_content">
 
-<siection id='modals'>                                              
-  <div class="content-details">
-  <%= form_tag :action => 'update', :method => :post  do %>
+<div class="element_left">
+<% @fields[0..8].each do |name,attr|%>
+<table class="elements">
+  <tr>
+    <td><label><%= name %></label></td>
+    <td><button class="buttons" onmousedown="editAttribute('<%=attr%>')">Edit</button></td>
+  </tr>
+</table>
+<%end%>
+</div>
 
-  <table class="asset-details">                                              
-  <tbody>                                                                       
-    <tr>                                                                        
-      <td>&nbsp;</td>                                                           
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:asset, :name, :helpText => "Name" ,:value => @asset[:name]) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:asset, :serial_num, :helpText => "Serial number",
-          :value => @asset[:serial_number],:textCase => "upper",
-          :tt_onUnLoad => "removeButton();",:tt_onLoad => "setButton();") %></td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:asset, :model ,:helpText => "Model",:value => @asset[:model]) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:asset, :version ,:helpText => "Version",:value => @asset[:version]) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>   
-        <%= select_tag "asset[category]", options_for_select(@categories),
-          :helpText => "Category" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <%= select_tag "asset[manufacturer]", options_for_select(@manufacturers),
-          :helpText => "Manufacturer" %>                                              
-      </td>                                                                     
-      <td>                                                                      
-        <%=text_field("asset[lifespan]", nil , :helpText => "Lifespan in years",:absoluteMin => 1,
-           :tt_pageStyleClass => "Numeric NumbersOnly",:field_type => 'number')%>
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                               
-      <td><%=text_field(:asset, :expiry_date ,:helpText => "Expiry date",:field_type => "date",
-             :value =>  @asset[:expiry_date]) %> </td>
-    </tr>
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <%= select_tag "work[project]", options_for_select(@projects),
-          :helpText => "Project" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <%= select_tag "work[donor]", options_for_select(@donors),
-          :helpText => "Donor" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <%= select_tag "vendor[supplier]", options_for_select(@suppliers),
-          :helpText => "Supplier" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:vendor, :invoice_num, :helpText => "Invoice number",:value => @asset[:order_number]) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:vendor, :date_of_invoice,  :helpText => "Invoice date",
-          :field_type => "date",:value => @asset[:purchased_date]) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:vendor, :quantity, :helpText => "Bought in Quantity",
-        :value => @asset[:bought_quantity],:tt_pageStyleClass => "Numeric NumbersOnly") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>
-        <%=text_field(:vendor, :cost, :helpText => "Cost",:absoluteMin => 1,
-           :tt_pageStyleClass => "Numeric NumbersOnly", :value => @asset[:cost])%>
-        <%= select_tag "vendor[currency]", options_for_select(@currencies),     
-          :helpText => "Select currency" %>
-      </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:organisation, :receipt_date, :field_type => "date",
-          :helpText => "Date of receipt",
-           :value => @asset[:date_of_receipt]) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:organisation, :delivered_by, :helpText => "Delivered by",:value => @asset[:delivered_by]) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <%= select_tag "organisation[delivery_status]", options_for_select(@status),
-          :helpText => "Delivery status" %>                                              
-      </td>                                                                     
-    </tr>         
-     <tr>                                                                        
-      <td>                                                                      
-        <%= select_tag "organisation[current_status]", options_for_select(@status),
-          :helpText => "Current status" %>                                   
-      </td>                                                                     
-    </tr>                                                              
-    <tr>                                                                        
-      <td>                                                                      
-        <%= select_tag "organisation[location]", options_for_select(@location),
-          :helpText => "Select store room location" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-  </tbody>                                                                      
- </table>
- <input type='hidden' name = 'id' value = '<%=params[:id]%>' />                      
- <%end%>
-</div>                                                      
-</section> 
+<div class="element_right">
+<% @fields[9..-1].each do |name,attr|%>
+<table class="elements">
+  <tr>
+    <td><label><%= name %></label></td>
+    <td><button class="buttons" onmousedown="editAttribute('<%=attr%>')">Edit</button></td>
+  </tr>
+</table>
+<%end%>
+</div>
+
+</div>
 
