@@ -148,7 +148,7 @@ class AssetsController < ApplicationController
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
       item.barcode = assign_barcode
-
+        raise item.barcode.to_s
       asset_lifespan = (params[:asset]['lifespan']).to_i rescue 0
       if asset_lifespan > 0
         item.expiry_date = (Date.today + asset_lifespan.year)
@@ -529,12 +529,9 @@ EOF
   end
 
   def assign_barcode
-    last_barcode = Item.select("MAX(barcode) barcode")[0].try(:barcode) rescue 'BHT'
+    last_barcode = Item.find_by_sql("SELECT max(barcode) barcode FROM xinventory.items;")[0].barcode rescue 'BHT'
     number = last_barcode.sub("BHT",'').to_i 
-    new_barcode = "BHT#{(number + 1).to_s.rjust(6,"0")}"
-    duplicate = Item.where(:'barcode' => new_barcode)
-    return new_barcode if duplicate.blank?
-    return 'BHT' + Item.count.to_s.rjust(6,"0")
+    return "BHT#{(number + 1).to_s.rjust(6,"0")}"
   end
 
   def serial_number_validator(num)
