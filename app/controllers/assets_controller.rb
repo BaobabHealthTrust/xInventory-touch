@@ -148,7 +148,7 @@ class AssetsController < ApplicationController
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
       item.barcode = assign_barcode
-        raise item.barcode.to_s
+        
       asset_lifespan = (params[:asset]['lifespan']).to_i rescue 0
       if asset_lifespan > 0
         item.expiry_date = (Date.today + asset_lifespan.year)
