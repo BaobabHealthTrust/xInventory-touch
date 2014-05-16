@@ -531,7 +531,10 @@ EOF
   def assign_barcode
     last_barcode = Item.select("MAX(barcode) barcode")[0].try(:barcode) rescue 'BHT'
     number = last_barcode.sub("BHT",'').to_i 
-    return "BHT#{(number + 1).to_s.rjust(6,"0")}"
+    new_barcode = "BHT#{(number + 1).to_s.rjust(6,"0")}"
+    duplicate = Item.where(:'barcode' => new_barcode)
+    return new_barcode if duplicate.blank?
+    return 'BHT' + Item.count.to_s.rjust(6,"0")
   end
 
   def serial_number_validator(num)
