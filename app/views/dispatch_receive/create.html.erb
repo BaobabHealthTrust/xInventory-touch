@@ -72,13 +72,13 @@
 <tr>
   <th>Approved By</th>
   <td>
-    <%=session[:assets_to_dispatch][:approved_by]%>
+    <%= "#{@approving_name.first_name } #{@approving_name.last_name}"  %>
   </td>
 </tr>
 <tr>
   <th>Received By</th>
   <td>
-    <%=session[:assets_to_dispatch][:received_by]%>
+    <%= "#{@receiving_name.first_name } #{@receiving_name.last_name}" %>
   </td>
 </tr>
 

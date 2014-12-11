@@ -1,0 +1,110 @@
+
+<%=javascript_include_tag "jquery"%>
+<%=javascript_include_tag "bootstrap-dropdown"%>
+<%=javascript_include_tag "prototype"%>
+<script>jQuery.noConflict();</script>
+<%=javascript_include_tag "jquery_data_table" %>
+<%=javascript_include_tag "jquery.dataTables.min" %>
+
+<%= stylesheet_link_tag "demo_table" %>
+<%= stylesheet_link_tag "demo_table_jui" %>
+<%= stylesheet_link_tag "demo_page" %>
+
+
+<style>
+   .asset_search_div {
+    text-align: right;
+    height: 80px;
+    
+  }
+  #search_results_filter{
+    display:none;
+}
+  select {
+    height:3.8em;
+}
+  .opt_fonts{
+    font-size: 20px;
+    padding: 5px;
+    background: lightblue;
+}
+  #search_results{
+    width:100%;
+}
+</style>
+
+<script>
+ function dataT(){
+    $('#search_results').dataTable();
+  }
+  function approve(id){
+    var search_str = document.getElementById('search_words').value
+   if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }else{// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+          var results = xmlhttp.responseText;
+          document.getElementById('modals').innerHTML = results;
+          dataT();
+        }
+      }
+      xmlhttp.open("GET","/dispatch_approval?id="+search_str + "&item=" + id ,true);
+      xmlhttp.send();
+  }
+
+  function findUser() {
+    var id = document.getElementById('search_words').value
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }else{// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+          var results = xmlhttp.responseText;
+          if(results == 'undefined' || results == '' || results == '"not validate"') {
+            return;
+          }else{
+            document.getElementById('modals').innerHTML = results;
+            dataT();
+          }
+        }
+      }
+      xmlhttp.open("GET","/dispatch_user_search?id="+id,true);
+      xmlhttp.send();
+    }
+
+</script>
+
+
+<div class="page-header">
+</div>
+
+<section id='modals'>
+  <table id="search_results" class="table table-striped table-bordered table-condensed">
+  <thead>
+  <tr id = 'table_head'>
+    <th id="th1" style="width:200px;">Username</th>
+    <th id="th3" style="width:200px;">Item</th>
+    <th id="th4" style="width:200px;">Return Date</th>
+    <th id="th5" style="width:200px;">Quantity</th>
+    <th id="th8" style="width:150px;">Status</th>
+    <th id="th5" style="width:200px;">Checked By</th>
+    <th id="th5" style="width:200px;">Return Location</th>
+    <th id="th10" style="width:100px;">&nbsp;</th>
+  </tr>
+  </thead>
+  <tbody id='results'>
+
+  </tbody>
+  </table>
+
+</section>
+
+<script>
+  dataT();
+  findUser();
+</script>

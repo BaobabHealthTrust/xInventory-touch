@@ -95,6 +95,12 @@
       <%= link_to "reimburse asset(s)", '/borrowed_assets', :class => 'buttons' %>
     </p>
 
+    <% if admin? %>
+     <p>
+      <%= link_to "Confirm User Returns", '/confirm', :class => 'buttons' %>
+    </p>
+    <% end %>
+
     <!--p>                                                                           
       <%= link_to "projects", '/projects', :class => 'buttons' %>
     </p>

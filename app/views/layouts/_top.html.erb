@@ -75,7 +75,18 @@
       <tr>
         <td style="width: 100px; border-bottom: 1px solid #5496ef;">
           <font class="page-title"><%=@page_title.html_safe rescue nil%></font>
+          <% if @people.blank? %>
           <%= image_tag("baobab-tree.jpg" ,:id => "logo")%>
+          <% else %>
+            <div class="asset_search_div">
+                  Select User
+                  <select name="search" id="search_words"     placeholder = "Search"  style="height:3.8em;">
+                      <% (@people || []).each { |p| %>
+                    <option value="<%= p[1] %>" onmousedown="javascript:findUser()" class="opt_fonts"> <%= p[0]   %></option>
+                     <% } %>
+                  </select>
+                </div>
+          <% end %>
         </td>
       </tr>
 

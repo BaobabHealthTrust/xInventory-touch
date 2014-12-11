@@ -410,6 +410,24 @@ EOF
     render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
   end
 
+  def approved_by_name
+     @assets = DispatchReceive.find_by_sql("
+                      SELECT * FROM dispatch_receives d
+                      INNER JOIN people p ON p.id = d.approved_by
+                      WHERE p.first_name LIKE '%#{params[:search_str]}%'
+                      OR p.last_name LIKE '%#{params[:search_str]}%'
+                      GROUP BY approved_by").map{| u | "<li value='#{u.approved_by}'>#{u.first_name} #{u.last_name}</li>" }
+     render :text => @assets.join('') and return
+  end
+
+    def people_by_name
+     @assets = Person.find_by_sql("
+                      SELECT * FROM people 
+                      WHERE first_name LIKE '%#{params[:search_str]}%'
+                      OR last_name LIKE '%#{params[:search_str]}%'").map{| u | "<li value='#{u.id}'>#{u.first_name} #{u.last_name}</li>" }
+     render :text => @assets.join('') and return
+  end
+
   def find_by_delivered_by
     @assets = Item.where("delivered_by LIKE(?)", 
       "%#{params[:search_str]}%").group(:delivered_by).limit(10).map{|item|[[item.delivered_by]]}     

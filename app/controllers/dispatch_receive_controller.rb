@@ -16,6 +16,7 @@ class DispatchReceiveController < ApplicationController
   end
 
   def init_transfer
+    @approving_name = Person.find(params[:transfer]['approved_by']) rescue Person.find(session[:assets_to_transfer][:approved_by])
     session[:assets_to_transfer] = {
       :transfer_date => params[:transfer]['date'],
       :donor_to => params[:transfer]['donor_to'],
@@ -50,7 +51,25 @@ EOF
     session[:assets_to_dispatch] = nil
   end
 
+  def confirm
+        @people = Person.all.collect do |person|
+      ["#{person.first_name} #{person.last_name}", person.id]
+    end
+     @page_title = "<h1>Confirm <small>User Assets Returns</small></h1>"
+     render :layout => 'imenu'
+  end
+
+  def live_user
+    render :text => get_usertable(params[:id]) and return
+  end
+
+  def approve
+     render :text => get_usertable(params[:id], "approve", params[:item]) and return
+  end
+
   def create
+     @approving_name = Person.find(params[:dispatch]['approved_by']) rescue Person.find(session[:assets_to_dispatch][:approved_by])
+         @receiving_name = Person.find(params[:dispatch]['received_by']) rescue Person.find(session[:assets_to_dispatch][:received_by])
     session[:assets_to_dispatch] = {
       :dispatch_date => params[:dispatch]['date'],
       :dispatch_site => Site.find(params[:dispatch]['site']).name,
@@ -78,6 +97,68 @@ vertical-align: top; width: 100px;"/>
 EOF
 
     render :layout => 'imenu'
+  end
+
+    def get_usertable(id, type=nil, item=[])
+    unless item.blank?
+       approved = DispatchReceive.find(item)
+       approved.approved = "Approved"
+       approved.save
+
+       if approved.save
+          asset = Item.find(approved.asset_id)
+          asset.current_quantity += approved.quantity
+          asset.save
+       end
+    end
+
+    @html =<<EOF
+      <table id="search_results" class="table table-striped table-bordered table-condensed">
+        <thead>
+          <tr id = 'table_head'>
+            <th id="th1" style="width:200px;">Username</th>
+            <th id="th3" style="width:200px;">Item</th>
+            <th id="th4" style="width:200px;">Return Date</th>
+            <th id="th5" style="width:200px;">Quantity</th>
+            <th id="th8" style="width:150px;">Status</th>
+            <th id="th5" style="width:200px;">Checked by</th>
+            <th id="th5" style="width:200px;">Return Location</th>
+            <th id="th10" style="width:100px;">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody id='results'>
+EOF
+
+  type = DispatchReceiveType.find_by_name("Receive").id
+  transaction = DispatchReceive.find(:all,
+          :conditions =>["transaction_type = ? and responsible_person = ?
+            and (approved IS NULL or approved != 'Approved')", type, id])
+   user = User.find(id)
+
+    (transaction || []).each do |tr|
+       item = Item.find(tr.asset_id)
+
+       @html +=<<EOF
+          <tr>
+            <td>#{user.username}</td>
+            <td>#{item.name}</td>
+            <td>#{tr.encounter_date}</td>
+            <td>#{tr.quantity}</td>
+            <td>#{StateType.find(ItemState.where(:'item_id' => tr.asset_id).first).name}</td>
+            <td>#{Person.find(tr.approved_by).first_name}</td>
+            <td>#{Site.find(tr.location_id).name}</td>
+            <td><a href="#" onclick="approve(#{tr.id})" class="buttons">Approve</a></td>
+          </tr>
+EOF
+    end
+
+
+       @html +=<<EOF
+         </tbody>
+  </table>
+EOF
+
+    return @html
   end
 
   def find_asset_to_dispatch_by_barcode
@@ -269,6 +350,7 @@ EOF
        dispatch.location_id = params[:receive]['location']
        asset.location = dispatch.location_id
        dispatch.quantity = params[:receive]['quantity']
+       dispatch.approved = "Approved"
        unless params[:receive]['reason'].blank?
          dispatch.reason = params[:receive]['reason']
        end
@@ -378,11 +460,7 @@ EOF
         dispatch.location_id = Site.find_by_name(session[:assets_to_dispatch][:dispatch_site]).id 
         asset.location = dispatch.location_id
         dispatch.quantity = quantity
-=begin
-        unless params[:dispatch]['reason'].blank?                                
-         dispatch.reason = params[:dispatch]['reason']                          
-        end                                                                      
-=end
+        
         if dispatch.save                    
           asset.save                                     
           curr_state = ItemState.where(:'item_id' => asset.id).first             
