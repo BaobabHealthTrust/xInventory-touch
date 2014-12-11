@@ -44,6 +44,8 @@ XInventory::Application.routes.draw do
 
   ########## dispatch_receive start #####################
   match 'dispatch_receive' => 'dispatch_receive#index'
+  match 'dispatch_approval' => 'dispatch_receive#approve'
+  match 'confirm' => 'dispatch_receive#confirm'
   match 'search/:id' => 'dispatch_receive#search', :as => :assets_to
   match 'dispatch/:id' => 'dispatch_receive#dispatch_asset', :as => :dispatch
   match 'receive/:id' => 'dispatch_receive#receive_asset', :as => :receive
@@ -59,6 +61,7 @@ XInventory::Application.routes.draw do
   match 'transfer/:id' => 'dispatch_receive#transfer', :as => :transfer
   match 'batch_dispatch' => 'dispatch_receive#batch_dispatch'
   #post  'dispatch_receive/create'
+  match 'dispatch_user_search' => 'dispatch_receive#live_user'
   match 'init_dispatch' => "dispatch_receive#create"
   match '/find_asset_to_dispatch_by_barcode' => 'dispatch_receive#find_asset_to_dispatch_by_barcode'
   match '/create_batch_dispatch' => 'dispatch_receive#create_batch_dispatch'
@@ -147,6 +150,8 @@ XInventory::Application.routes.draw do
   get 'assets/find_by_version'
   get 'assets/find_by_delivered_by'
   get 'assets/find_by_approved_by'
+  get 'assets/approved_by_name'
+  get 'assets/people_by_name'
   match 'print_barcode/:id' => 'assets#print_barcode'
   match 'print_asset_barcode/:id' => 'assets#print_asset_barcode'
   get "assets/tedit"
