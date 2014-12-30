@@ -134,7 +134,7 @@ EOF
           :conditions =>["transaction_type = ? and responsible_person = ?
             and (approved IS NULL or approved != 'Approved')", type, id])
    user = User.find(id)
-
+#<td>#{StateType.find(ItemState.where(:'item_id' => tr.asset_id).first).name}</td> Reserved
     (transaction || []).each do |tr|
        item = Item.find(tr.asset_id)
 
@@ -144,7 +144,7 @@ EOF
             <td>#{item.name}</td>
             <td>#{tr.encounter_date}</td>
             <td>#{tr.quantity}</td>
-            <td>#{StateType.find(ItemState.where(:'item_id' => tr.asset_id).first).name}</td>
+            <td>#{StateType.find(ItemState.where(:'item_id' => tr.asset_id).first.current_state).name}</td>
             <td>#{Person.find(tr.approved_by).first_name}</td>
             <td>#{Site.find(tr.location_id).name}</td>
             <td><a href="#" onclick="approve(#{tr.id})" class="buttons">Approve</a></td>
