@@ -68,8 +68,14 @@ EOF
   end
 
   def create
+    if ! session[:dispatched].blank?
+     if session[:dispatched].upcase == "YES"
+        session[:dispatched] = nil
+        redirect_to "/" and return
+     end
+    end
      @approving_name = Person.find(params[:dispatch]['approved_by']) rescue Person.find(session[:assets_to_dispatch][:approved_by])
-         @receiving_name = Person.find(params[:dispatch]['received_by']) rescue Person.find(session[:assets_to_dispatch][:received_by])
+     @receiving_name = Person.find(params[:dispatch]['received_by']) rescue Person.find(session[:assets_to_dispatch][:received_by])
     session[:assets_to_dispatch] = {
       :dispatch_date => params[:dispatch]['date'],
       :dispatch_site => Site.find(params[:dispatch]['site']).name,
@@ -448,6 +454,7 @@ EOF
   end
 
   def create_batch_dispatch
+     print_str = ""
     (session[:assets_to_dispatch][:assets] || {}).each do |asset_id, quantity|
       asset = Item.find(asset_id)
       Item.transaction do
@@ -458,7 +465,7 @@ EOF
         dispatch.approved_by = session[:assets_to_dispatch][:approved_by]                  
         dispatch.responsible_person = session[:assets_to_dispatch][:received_by]         
         dispatch.location_id = Site.find_by_name(session[:assets_to_dispatch][:dispatch_site]).id 
-        asset.location = dispatch.location_id
+        #asset.location = dispatch.location_id
         dispatch.quantity = quantity
         
         if dispatch.save                    
@@ -470,9 +477,17 @@ EOF
           asset.current_quantity -= dispatch.quantity                            
           asset.save
         end
+        
       end
+      print_str += Item.find(asset_id).barcode_label
     end
-    redirect_to '/'
+    item(print_str)
+  end
+
+  def item(item)
+    session[:dispatched] = "Yes"
+    send_data(item,:type=>"application/label; charset=utf-8", :stream=> false,
+      :filename=>"#{rand(10000)}.lbl", :disposition => "inline")
   end
 
   def create_batch_transfer

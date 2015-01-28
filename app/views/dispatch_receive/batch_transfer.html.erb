@@ -17,13 +17,13 @@
     {:id => "start_date",                                                   
     :field_type => 'date',
     :maxDate => "#{Date.today.to_date}",
-    :helpText => "Transfer date"} %>
+    :helpText => "Borrowing date"} %>
 
   <%= select_tag "transfer[donor_to]", options_for_select(@donors), 
-      :helpText => "Donor transferring to" %>
+      :helpText => "Donor borrowing to" %>
       
   <%= select_tag "transfer[project_to]", options_for_select(@projects), 
-      :helpText => "Project transferring to" %>
+      :helpText => "Project borrowing to" %>
       
   <%#=text_field(:transfer, :approved_by ,:helpText => "Approved By") %>
   <%=text_field(:transfer, :approved_by,

@@ -57,7 +57,7 @@
 <table class="main-table">
 
 <tr>
-  <th>Transfer date</th>
+  <th>Borrowing date</th>
   <td>
     <%=session[:assets_to_transfer][:transfer_date].to_date.strftime('%d %B, %Y')%>
   </td>
@@ -103,7 +103,7 @@
     <%if session[:assets_to_transfer][:assets].blank? %>
       <tr>
         <td colspan="2" style="text-align: center;">
-          Select assets to transfer
+          Select assets to borrow
         </td>
       </tr>
     <%end%>
@@ -123,9 +123,9 @@
 
 <p>
   <%if session[:assets_to_transfer][:assets].blank? %>
-    <a class="buttons" href="#">Transfer</a>
+    <a class="buttons" href="#">Borrow</a>
   <%else%>
-    <a class="buttons" href="/create_batch_transfer">Transfer</a>
+    <a class="buttons" href="/create_batch_transfer">Borrow</a>
   <%end%>
 </p>
 
