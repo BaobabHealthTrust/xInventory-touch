@@ -9,7 +9,7 @@ class HomeController < ApplicationController
 
     @page_title=<<EOF
 <form id="barcodeForm" action="/find_by_barcode">
-<input id="barcode" class="touchscreenTextInput" type="text" value="" name="barcode">
+Scan or Enter Barcode <input id="barcode" class="touchscreenTextInput" type="text" value="" name="barcode">
 <img class='barcode-img' src='/assets/barcode-main.jpg' style="height: 80px;                                                               
 vertical-align: top; width: 100px;"/>
 <input type="submit" value="Submit" style="display:none" name="commit">

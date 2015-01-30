@@ -4,6 +4,8 @@ tt_cancel_destination = '/assets'
   tt_cancel_destination = '/init_dispatch';
 <%elsif params[:transfer] == 'true'%>
   tt_cancel_destination = '/dispatch_receive/init_transfer';
+<%elsif params[:receiving] == 'true'%>
+  tt_cancel_destination = '/init_return';
 <%elsif not params[:reimbursing].blank?%>
   tt_cancel_destination = '/available_asset_list/' + "<%=params[:reimbursing]%>";
 <%end%>
@@ -33,6 +35,8 @@ tt_cancel_destination = '/assets'
     <input type='hidden' name="dispatching" value="true" />
   <%elsif params[:transfer] == 'true'%>
     <input type='hidden' name="transferring" value="true" />
+  <%elsif params[:receiving] == 'true'%>
+    <input type='hidden' name="receiving" value="true" />
   <%elsif not params[:reimbursing].blank?%>
     <input type='hidden' name="reimbursing" value="<%=params[:reimbursing]%>" />
   <%end%>

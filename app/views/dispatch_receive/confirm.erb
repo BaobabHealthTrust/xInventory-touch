@@ -12,6 +12,10 @@
 
 
 <style>
+  .search_results_wrapper{
+    height: 600px ! important;
+    overflow: auto ! important;
+}
    .asset_search_div {
     text-align: right;
     height: 80px;
@@ -84,11 +88,12 @@
 <div class="page-header">
 </div>
 
-<section id='modals'>
+<section id='modals' class="contents">
   <table id="search_results" class="table table-striped table-bordered table-condensed">
   <thead>
   <tr id = 'table_head'>
     <th id="th1" style="width:200px;">Username</th>
+    <th id="th3" style="width:200px;">Serial Number</th>
     <th id="th3" style="width:200px;">Item</th>
     <th id="th4" style="width:200px;">Return Date</th>
     <th id="th5" style="width:200px;">Quantity</th>

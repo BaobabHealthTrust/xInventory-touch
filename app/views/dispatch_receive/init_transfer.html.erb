@@ -85,16 +85,18 @@
   <table class="asset-table">
    <%unless session[:assets_to_transfer][:assets].blank? %>
      <tr>
+       <th>Serial Number</th>
        <th>Asset</th>
        <th>Current project</th>
        <th>Current donor</th>
      </tr>
    <%end%>
 
-   <%(session[:assets_to_transfer][:assets] || []).each do |asset_id| 
+   <%(session[:assets_to_transfer][:assets] || []).each do |asset_id|
       asset = Item.find(asset_id)
    %>
     <tr>
+      <td><%=asset.serial_number %></td>
       <td><%=asset.name%></td>
       <td><%=asset.project.name%></td>
       <td><%=asset.donor.name%></td>

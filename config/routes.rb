@@ -29,7 +29,7 @@ XInventory::Application.routes.draw do
 
   ########## Reports start #####################
   match 'reports' => 'reports#index'
-  
+
   match 'stock_balances' => 'reports#stock_balances'
   match 'dispatched_assets' => 'reports#list_of_dispatched_assets'
   match 'items_bought_in' => 'reports#list_of_items_bought_in'
@@ -61,11 +61,16 @@ XInventory::Application.routes.draw do
   post "dispatch_receive/reimburse_create"
   match 'transfer/:id' => 'dispatch_receive#transfer', :as => :transfer
   match 'batch_dispatch' => 'dispatch_receive#batch_dispatch'
+  match 'batch_return' => 'dispatch_receive#batch_return'
   #post  'dispatch_receive/create'
   match 'dispatch_user_search' => 'dispatch_receive#live_user'
+  match 'item' => "dispatch_receive#item"
   match 'init_dispatch' => "dispatch_receive#create"
+  match 'init_return' => "dispatch_receive#init_return"
   match '/find_asset_to_dispatch_by_barcode' => 'dispatch_receive#find_asset_to_dispatch_by_barcode'
+  match '/find_asset_to_return_by_barcode' => 'dispatch_receive#find_asset_to_return_by_barcode'
   match '/create_batch_dispatch' => 'dispatch_receive#create_batch_dispatch'
+  match '/create_batch_return' => 'dispatch_receive#create_batch_return'
   match '/batch_transfer' => 'dispatch_receive#batch_transfer'
   get  'dispatch_receive/init_transfer'
   match '/create_batch_transfer' => 'dispatch_receive#create_batch_transfer'
@@ -159,8 +164,8 @@ XInventory::Application.routes.draw do
   match 'validate_serial_number/:id' => 'assets#validate_serial_number', :as => :validate_serial_number
   ########## Donors end #####################
 
-  
-  
+
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -16,12 +16,12 @@
 <%= form_tag :controller => 'user', :action => 'login', :method => :post do %> 
 <table>                                                                 
   <tr>                                                                  
-    <td><%=text_field(:user, :username, :textCase => "lower",:placeholder => "username") %></td>
+    <td><%=text_field(:user, :username, :textCase => "lower",:placeholder => "username", :helpText => "Enter Username") %></td>
   </tr>                                                                 
   <tr>                                                                  
     <td>                                                                
       <%=password_field(:user, :password, :textCase => "lower",         
-      :placeholder => "password", :style => "width: 99%;") %>         
+      :placeholder => "password", :style => "width: 99%;", :helpText => "Enter Password") %>
       <%= submit_tag "Login" ,:class => "btn btn-primary" , :style => "position: relative;top: -5px;"%>
     </td>                                                               
   </tr>                                                                 

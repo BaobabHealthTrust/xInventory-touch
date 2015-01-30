@@ -1,0 +1,38 @@
+
+<script>
+  var tt_cancel_destination="/"
+
+   function approvedBySuggestions() {
+    url = "/assets/find_by_approved_by?search_str=";
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);
+    listSuggestions(tstCurrentPage);
+  }
+
+
+
+</script>
+
+
+<form method = "get" action = "init_return">
+  <%= text_field_tag "return[date]", nil,
+    {:id => "start_date",
+    :field_type => 'date',
+    :maxDate => "#{Date.today.to_date}",
+    :helpText => "Return date"} %>
+
+  <%= select_tag "return[site]", options_for_select(@sites), :helpText => "Returning from" %>
+
+  <%#=text_field(:dispatch, :approved_by ,:helpText => "Approved By") %>
+  <%=text_field(:return, :approved_by,
+        #:tt_onLoad => 'approvedBySuggestions();',
+        :allowFreeText => true ,
+        :ajaxURL => '/assets/people_by_name?search_str=',
+        :helpText => "Approved By") %>
+
+   <%#=text_field(:dispatch, :received_by ,:helpText => "Received By") %>
+   <%=text_field(:return, :returned_by,
+        #:tt_onLoad => 'approvedBySuggestions();',
+        :allowFreeText => true ,
+        :ajaxURL => '/assets/people_by_name?search_str=',
+        :helpText => "Returned By") %>
+</form>

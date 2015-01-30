@@ -55,6 +55,10 @@ class AssetsController < ApplicationController
           redirect_to :controller => :dispatch_receive, 
             :action => :find_asset_to_dispatch_by_barcode,:transferring => true,
             :barcode => Item.find(asset_ids.first).serial_number
+        elsif params[:receiving] == 'true'
+          redirect_to :controller => :dispatch_receive,
+            :action => :find_asset_to_return_by_barcode,:receiving => true,
+            :barcode => Item.find(asset_ids.first).serial_number
         elsif not params[:reimbursing].blank?
           redirect_to :controller => :dispatch_receive, 
             :action => :find_asset_to_dispatch_by_barcode,:reimbursing => params[:reimbursing],
@@ -70,6 +74,9 @@ class AssetsController < ApplicationController
         elsif params[:transferring] == 'true'
           redirect_to :action => :search_results, :transferring => true,
             :id => asset_ids[0..99].join(',')
+        elsif params[:receiving] == 'true'
+          redirect_to :action => :search_results, :receiving => true,
+            :id => asset_ids[0..99].join(',')
         elsif not params[:reimbursing].blank?
           redirect_to :action => :search_results, :reimbursing => params[:reimbursing],
             :id => asset_ids[0..99].join(',')
@@ -83,6 +90,8 @@ class AssetsController < ApplicationController
           redirect_to :action => :search, :dispatching => true
         elsif params[:transferring] == 'true'
           redirect_to :action => :search, :transfer => true
+        elsif params[:receiving] == 'true'
+          redirect_to :action => :search, :receiving => true
         elsif not params[:reimbursing].blank?
           redirect_to :action => :search, :reimbursing => params[:reimbursing]
         end

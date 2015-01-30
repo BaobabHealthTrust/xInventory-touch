@@ -57,16 +57,16 @@
 <table class="main-table">
 
 <tr>
-  <th>Dispatching date</th>
+  <th>Date returned</th>
   <td>
-    <%=session[:assets_to_dispatch][:dispatch_date].to_date.strftime('%d %B, %Y')%>
+    <%=session[:assets_to_return][:return_date].to_date.strftime('%d %B, %Y')%>
   </td>
 </tr>
 
 <tr>
   <th>Location</th>
   <td>
-    <%=session[:assets_to_dispatch][:dispatch_site]%>
+    <%=session[:assets_to_return][:return_site]%>
   </td>
 </tr>
 <tr>
@@ -76,7 +76,7 @@
   </td>
 </tr>
 <tr>
-  <th>Received By</th>
+  <th>Returned By</th>
   <td>
     <%= "#{@receiving_name.first_name } #{@receiving_name.last_name}" %>
   </td>
@@ -87,29 +87,31 @@
 
 <div class="asset-div">
   <table class="asset-table">
-   <%unless session[:assets_to_dispatch][:assets].blank? %>
+   <%unless session[:assets_to_return][:assets].blank? %>
      <tr>
        <th>Serial number</th>
        <th>Asset</th>
        <th style="text-align: right; padding-right: 10px;">Quantity</th>
-       <th>Current asset state</th>
+       <th>Asset condition</th>
+       <th>Asset state</th>
      </tr>
    <%end%>
 
-   <%(session[:assets_to_dispatch][:assets] || []).each do |asset_id, quantity|
+   <%(session[:assets_to_return][:assets] || []).each do |asset_id, quantity|
       asset = Item.find(asset_id)
    %>
     <tr>
       <td><%=asset.serial_number %></td>
       <td><%=asset.name%></td>
       <td style="text-align: right; padding-right: 10px;"><%=quantity%></td>
-      <td><%=session[:assets_to_dispatch][:current_state][asset.id]%></td>
+      <td><%=session[:assets_to_return][:current_state][asset.id]%></td>
+      <td><%=session[:assets_to_return][:state][asset.id]%></td>
     </tr>
     <%end%>
-    <%if session[:assets_to_dispatch][:assets].blank? %>
+    <%if session[:assets_to_return][:assets].blank? %>
       <tr>
         <td colspan="2" style="text-align: center;">
-          Select assets to dispatch
+          Select assets to return
         </td>
       </tr>
     <%end%>
@@ -122,16 +124,16 @@
 <div class="right-div">
 
 <p>
-  <a class="buttons" href="/asset_search?dispatching=true">Add asset</a>
+  <a class="buttons" href="/asset_search?receiving=true">Add asset</a>
 </p>
 
 <p>&nbsp;</p>
 
 <p>
-  <%if session[:assets_to_dispatch][:assets].blank? %>
-    <a class="buttons" href="#">Dispatch</a>
+  <%if session[:assets_to_return][:assets].blank? %>
+    <a class="buttons" href="#">Return</a>
   <%else%>
-    <a class="buttons" href="/create_batch_dispatch">Dispatch</a>
+    <a class="buttons" href="/create_batch_return?type='return'">Return</a>
   <%end%>
 </p>
 
