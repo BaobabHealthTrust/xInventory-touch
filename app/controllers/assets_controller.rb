@@ -7,7 +7,7 @@ class AssetsController < ApplicationController
   end
 
   def find_by_barcode
-    @item = Item.where("(barcode = ? OR serial_number = ?)",                    
+    @item = Item.where("(barcode = ? OR serial_number = ?)",
       params[:barcode],params[:barcode])[0] rescue nil
 
     if @item
@@ -20,9 +20,9 @@ class AssetsController < ApplicationController
   def show
     @asset = get_asset(params[:id])
     responsible_person = Item.find(params[:id]).responsible_person
-    @status = StateType.order('name ASC').collect do |state|                    
-      [state.name , state.id]                                                   
-    end 
+    @status = StateType.order('name ASC').collect do |state|
+      [state.name , state.id]
+    end
 
     @page_title = "#{@asset[:name]}<br />"
     @page_title += "Location:&nbsp;#{@asset[:location]}"
@@ -48,11 +48,11 @@ class AssetsController < ApplicationController
 
       if asset_ids.length == 1
         if params[:dispatching] == 'true'
-          redirect_to :controller => :dispatch_receive, 
+          redirect_to :controller => :dispatch_receive,
             :action => :find_asset_to_dispatch_by_barcode,
             :barcode => Item.find(asset_ids.first).serial_number
         elsif params[:transferring] == 'true'
-          redirect_to :controller => :dispatch_receive, 
+          redirect_to :controller => :dispatch_receive,
             :action => :find_asset_to_dispatch_by_barcode,:transferring => true,
             :barcode => Item.find(asset_ids.first).serial_number
         elsif params[:receiving] == 'true'
@@ -60,7 +60,7 @@ class AssetsController < ApplicationController
             :action => :find_asset_to_return_by_barcode,:receiving => true,
             :barcode => Item.find(asset_ids.first).serial_number
         elsif not params[:reimbursing].blank?
-          redirect_to :controller => :dispatch_receive, 
+          redirect_to :controller => :dispatch_receive,
             :action => :find_asset_to_dispatch_by_barcode,:reimbursing => params[:reimbursing],
             :barcode => Item.find(asset_ids.first).serial_number
         else
@@ -135,6 +135,8 @@ class AssetsController < ApplicationController
   end
 
   def create
+    item = Item.where("serial_number = ?", params[:asset]['serial_num'])
+    if item.blank?
     Item.transaction do
       item = Item.new()
       item.name = params[:asset]['name']
@@ -157,28 +159,31 @@ class AssetsController < ApplicationController
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
       item.barcode = assign_barcode
-        
+
       asset_lifespan = (params[:asset]['lifespan']).to_i rescue 0
       if asset_lifespan > 0
         item.expiry_date = (Date.today + asset_lifespan.year)
       end
 
       if item.save
-        curr_state = ItemState.new()                                  
+        curr_state = ItemState.new()
         curr_state.item_id = item.id
-        curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
-        curr_state.save 
+        curr_state.current_state = StateType.find(params[:organisation]['current_status']).id
+        curr_state.save
         print_and_redirect("/print_barcode/#{item.id}", "/asset_details/#{item.id}") and return
-      else                                                                        
-        flash[:error] = 'Something went wrong - did not create.'                  
+      else
+        flash[:error] = 'Something went wrong - did not create.'
       end
     end
+  else
+    flash[:error] = 'Something went wrong - did not create.'
+  end
     redirect_to '/assets'
   end
-  
+
   def print_barcode
-    print_string = Item.find(params[:id]).barcode_label 
-    send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false, 
+    print_string = Item.find(params[:id]).barcode_label
+    send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false,
       :filename=>"#{params[:id]}#{rand(10000)}.lbl", :disposition => "inline")
   end
 
@@ -190,31 +195,31 @@ class AssetsController < ApplicationController
   end
 
   def create_category
-    category = Category.new()                                                         
-    category.name = params[:category]['name']                                         
+    category = Category.new()
+    category.name = params[:category]['name']
     category.abbreviation = params[:category]['abv'] unless params[:category]['abv'].blank?
     category.description = params[:category]['description'] unless params[:category]['description'].blank?
-    if category.save                                                               
-      flash[:notice] = 'Successfully created.'                                  
-    else                                                                        
-      flash[:error] = 'Something went wrong - did not create.'                  
-    end                                                                         
-    redirect_to '/create_new_category'
+    if category.save
+      flash[:notice] = 'Successfully created.'
+    else
+      flash[:error] = 'Something went wrong - did not create.'
+    end
+    redirect_to '/assets'
   end
 
   def new_state
   end
 
   def create_state
-    state = StateType.new()                                                         
-    state.name = params[:state]['name']                                         
+    state = StateType.new()
+    state.name = params[:state]['name']
     state.description = params[:state]['description'] unless params[:state]['description'].blank?
-    if state.save                                                               
-      flash[:notice] = 'Successfully created.'                                  
-    else                                                                        
-      flash[:error] = 'Something went wrong - did not create.'                  
-    end                                                                         
-    redirect_to '/create_new_state'
+    if state.save
+      flash[:notice] = 'Successfully created.'
+    else
+      flash[:error] = 'Something went wrong - did not create.'
+    end
+    redirect_to '/assets'
   end
 
   def edit
@@ -274,7 +279,7 @@ EOF
     @location = Site.order('name ASC').collect do |site|
       [site.name , site.id]
     end
-    
+
     @currencies = Currencies.order('code ASC').collect do |currency|
       [currency.code , currency.id]
     end
@@ -294,13 +299,13 @@ EOF
           item.version = params[:asset]['version'] unless params[:asset]['version'].blank?
           item.serial_number = params[:asset]['serial_num'] unless params[:asset]['serial_num'].blank?
           item.model = params[:asset]['model'] unless params[:asset]['model'].blank?
-          
+
           asset_lifespan = (params[:asset]['lifespan']).to_i rescue 0
           if asset_lifespan > 0
             item.expiry_date = (Date.today + asset_lifespan.year)
           end
         end
-      
+
         unless params[:vendor].blank?
           item.vendor = params[:vendor]['supplier'] unless params[:vendor]['supplier'].blank?
           item.purchased_date = params[:vendor]['date_of_invoice'].to_date unless params[:vendor]['date_of_invoice'].blank?
@@ -308,7 +313,7 @@ EOF
           unless params[:vendor]['quantity'].blank?
             original_bought_quantity = item.bought_quantity
             if original_bought_quantity.to_f > params[:vendor]['quantity'].to_f
-              item.bought_quantity = params[:vendor]['quantity'] 
+              item.bought_quantity = params[:vendor]['quantity']
               item.current_quantity = (original_bought_quantity - item.current_quantity)
             elsif original_bought_quantity.to_f < params[:vendor]['quantity'].to_f
               #Do something
@@ -330,17 +335,17 @@ EOF
           item.location = params[:organisation]['location'] unless params[:organisation]['location'].blank?
         end
 
-        if item.save 
+        if item.save
           unless params[:organisation].blank?
             unless params[:organisation]['current_status'].blank?
-              curr_state = ItemState.where(:'item_id' => item.id)[0]                                  
-              curr_state.current_state = StateType.find(params[:organisation]['current_status']).id            
-              curr_state.save 
+              curr_state = ItemState.where(:'item_id' => item.id)[0]
+              curr_state.current_state = StateType.find(params[:organisation]['current_status']).id
+              curr_state.save
             end
           end
-          flash[:notice] = 'Successfully updated.'                                  
-        else                                                                        
-          flash[:error] = 'Something went wrong - did not update.'                  
+          flash[:notice] = 'Successfully updated.'
+        else
+          flash[:error] = 'Something went wrong - did not update.'
         end
       end
       redirect_to edit_asset_url(:id => params[:asset_id])
@@ -362,7 +367,7 @@ EOF
   def show_asset_category
     @category = Category.find(params[:id])
     if request.post?
-      @category.name = params[:category]['name']                                         
+      @category.name = params[:category]['name']
       @category.abbreviation = params[:category]['abv'] unless params[:category]['abv'].blank?
       @category.description = params[:category]['description'] unless params[:category]['description'].blank?
       @category.save
@@ -375,7 +380,7 @@ EOF
     @category.voided = true
     @category.void_reason = 'removed by user'
     @category.save
-    redirect_to '/asset_categories' 
+    redirect_to '/asset_categories'
   end
 
   def states_search
@@ -383,12 +388,12 @@ EOF
   end
 
   def edit_asset_state
-    @state = StateType.find(params[:id])                                                    
+    @state = StateType.find(params[:id])
     if request.post?
-      @state.name = params[:state]['name']                                         
+      @state.name = params[:state]['name']
       @state.description = params[:state]['description'] unless params[:state]['description'].blank?
       @state.save
-      redirect_to '/asset_states_search' 
+      redirect_to '/asset_states_search'
     end
   end
 
@@ -397,7 +402,7 @@ EOF
     state.voided = true
     state.void_reason = 'removed by user'
     state.save
-    redirect_to '/asset_states_search' 
+    redirect_to '/asset_states_search'
   end
 
   def live_search
@@ -414,9 +419,9 @@ EOF
 
   ######################## create a new asset ###############################
   def find_by_approved_by
-    @assets = DispatchReceive.where("approved_by LIKE(?)", 
-      "%#{params[:search_str]}%").group(:approved_by).limit(10).map{|item|[[item.approved_by]]}     
-    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+    @assets = DispatchReceive.where("approved_by LIKE(?)",
+      "%#{params[:search_str]}%").group(:approved_by).limit(10).map{|item|[[item.approved_by]]}
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"
   end
 
   def approved_by_name
@@ -431,64 +436,64 @@ EOF
 
     def people_by_name
      @assets = Person.find_by_sql("
-                      SELECT * FROM people 
+                      SELECT * FROM people
                       WHERE first_name LIKE '%#{params[:search_str]}%'
                       OR last_name LIKE '%#{params[:search_str]}%'").map{| u | "<li value='#{u.id}'>#{u.first_name} #{u.last_name}</li>" }
      render :text => @assets.join('') and return
   end
 
   def find_by_delivered_by
-    @assets = Item.where("delivered_by LIKE(?)", 
-      "%#{params[:search_str]}%").group(:delivered_by).limit(10).map{|item|[[item.delivered_by]]}     
-    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+    @assets = Item.where("delivered_by LIKE(?)",
+      "%#{params[:search_str]}%").group(:delivered_by).limit(10).map{|item|[[item.delivered_by]]}
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"
   end
 
   def find_by_version
-    @assets = Item.where("version LIKE(?)", 
-      "%#{params[:search_str]}%").group(:version).limit(10).map{|item|[[item.version]]}     
-    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+    @assets = Item.where("version LIKE(?)",
+      "%#{params[:search_str]}%").group(:version).limit(10).map{|item|[[item.version]]}
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"
   end
 
   def find_by_model
-    @assets = Item.where("model LIKE(?)", 
-      "%#{params[:search_str]}%").group(:model).limit(10).map{|item|[[item.model]]}     
-    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+    @assets = Item.where("model LIKE(?)",
+      "%#{params[:search_str]}%").group(:model).limit(10).map{|item|[[item.model]]}
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"
   end
 
   def find_by_name
-    @assets = Item.where("name LIKE(?)", 
-      "%#{params[:search_str]}%").group(:name).limit(10).map{|item|[[item.name]]}     
-    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"     
+    @assets = Item.where("name LIKE(?)",
+      "%#{params[:search_str]}%").group(:name).limit(10).map{|item|[[item.name]]}
+    render :text => "<li></li><li>" + @assets.join("</li><li>") + "</li>"
   end
   ######################## create a new asset ###############################
- 
-  private                           
-  
+
+  private
+
   def get_serial_number
     chars = ('A'..'Z').to_a + (0..9).to_a
     size = 16
     return (0...size).collect { chars[Kernel.rand(chars.length)] }.join
   end
-  
+
   def get_datatable(search_str)
     @html =<<EOF
       <table id="search_results" class="table table-striped table-bordered table-condensed">
-        <thead>                                                                       
-          <tr id = 'table_head'>                                                        
-            <th id="th1" style="width:200px;">Serial number</th>                        
-            <th id="th3" style="width:200px;">Name</th>                                 
-            <th id="th4" style="width:200px;">Category</th>                             
-            <th id="th5" style="width:200px;">Brand</th>                                
-            <th id="th8" style="width:150px;">Quantity</th>                             
-            <th id="th10" style="width:100px;">&nbsp;</th>                              
-          </tr>                                                                         
-        </thead>                                                                      
+        <thead>
+          <tr id = 'table_head'>
+            <th id="th1" style="width:200px;">Serial number</th>
+            <th id="th3" style="width:200px;">Name</th>
+            <th id="th4" style="width:200px;">Category</th>
+            <th id="th5" style="width:200px;">Brand</th>
+            <th id="th8" style="width:150px;">Quantity</th>
+            <th id="th10" style="width:100px;">&nbsp;</th>
+          </tr>
+        </thead>
         <tbody id='results'>
 EOF
 
      brand_ids = Manufacturer.where("name LIKE ('#{search_str}%%')").map(&:id)
      brand_ids = [0] if brand_ids.blank?
-      
+
      items = Item.order("name ASC").where("name LIKE ('%#{search_str}%')
      OR serial_number LIKE ('%#{search_str}%') OR description LIKE ('%#{search_str}%')
      OR brand IN (#{brand_ids.join(',')}) OR version LIKE ('%#{search_str}%')
@@ -497,34 +502,34 @@ EOF
      (items || []).each do |item|
        asset = get_asset(item.id)
        @html +=<<EOF
-          <tr>                                                                        
-            <td>#{asset[:serial_number]}</td>                                       
-            <td>#{asset[:name]}</td>                                                
-            <td>#{asset[:category]}</td>                                            
-            <td>#{asset[:brand]}</td>                                               
-            <td>#{asset[:current_quantity]}</td>                                            
-            <td><a href="#{asset_details_url(:id => item.id)}">Show</a></td>       
+          <tr>
+            <td>#{asset[:serial_number]}</td>
+            <td>#{asset[:name]}</td>
+            <td>#{asset[:category]}</td>
+            <td>#{asset[:brand]}</td>
+            <td>#{asset[:current_quantity]}</td>
+            <td><a href="#{asset_details_url(:id => item.id)}">Show</a></td>
           </tr>
 EOF
      end
 
        @html +=<<EOF
-         </tbody>                                                                      
+         </tbody>
   </table>
 EOF
 
     return @html
   end
-                                              
-                                                                                
-  def check_authorized                                                          
-    if action_name == 'new' or action_name == 'create' or 
+
+
+  def check_authorized
+    if action_name == 'new' or action_name == 'create' or
         action_name == 'new_category' or action_name == 'create_category' or
         action_name == 'create_state' or action_name == 'new_state'
-      unless admin?                                                             
-        redirect_to '/assets'                                            
-      end                                                                       
-    end                                                                         
+      unless admin?
+        redirect_to '/assets'
+      end
+    end
   end
 
   def get_asset(asset_id)
@@ -548,7 +553,7 @@ EOF
       :date_of_receipt => asset.date_of_receipt.strftime('%d %B %Y'),
       :delivered_by => asset.delivered_by,
       :status_on_delivery => StateType.find(asset.status_on_delivery).name,
-      :location => asset.current_location.name , 
+      :location => asset.current_location.name ,
       :asset_id => asset.id,
       :expiry_date => asset.expiry_date,
       :current_state => StateType.find(asset.current_state.current_state).name
@@ -557,7 +562,7 @@ EOF
 
   def assign_barcode
     last_barcode = Item.find_by_sql("SELECT max(barcode) barcode FROM xinventory.items;")[0].barcode rescue 'BHT'
-    number = last_barcode.sub("BHT",'').to_i 
+    number = last_barcode.sub("BHT",'').to_i
     return "BHT#{(number + 1).to_s.rjust(6,"0")}"
   end
 

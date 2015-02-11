@@ -22,18 +22,18 @@
 
   .menu-buttons a {
     width: 95%;
-    line-height: 50px;
+    line-height: 30px;
   }
 
   .buttons { /*
-    background-color: grey;                                                     
-    border-bottom: 1px outset #EEEEEE;                                          
-    border-style: outset;                                                       
-    border-top: 1px outset #EEEEEE;                                             
-    color: white;                                                               
-    display: block;                                                             
-    padding: 10px;                                               
-    text-align: center;                                                         
+    background-color: grey;
+    border-bottom: 1px outset #EEEEEE;
+    border-style: outset;
+    border-top: 1px outset #EEEEEE;
+    color: white;
+    display: block;
+    padding: 10px;
+    text-align: center;
     text-decoration: none;
 
 
@@ -57,10 +57,10 @@
 
 
 <!--div class="scan-barcode">
-  <form id='barcodeForm' action="/find_by_barcode">                               
+  <form id='barcodeForm' action="/find_by_barcode">
     <%#= text_field_tag :barcode, '', {:id => 'barcode', :class => 'touchscreenTextInput' } %>
-    <%#= submit_tag "Submit", :style => "display:none" %>                        
-    <div style="color:gray">scan a barcode</div>                                
+    <%#= submit_tag "Submit", :style => "display:none" %>
+    <div style="color:gray">scan a barcode</div>
   </form>
 </div-->
 
@@ -68,22 +68,22 @@
 <div class="main-container">
 
   <div class="description">
-    <div class="page-header">                                                     
-      <h1><%=organization_name %> <small>inventory system</small></h1>            
-    </div>                                                                        
-                                                                                
-                                                                                
-    <div id = "description-content">                                                     
-      <%=render(:inline => print_content(about_organization))%>                   
+    <div class="page-header">
+      <h1><%=organization_name %> <small>inventory system</small></h1>
+    </div>
+
+
+    <div id = "description-content">
+      <%=render(:inline => print_content(about_organization))%>
     </div>
   </div>
 
   <div class="menu-buttons">
-    <p>                                                                           
+    <p>
       <%= link_to "assets", '/assets', :class => 'buttons' %>
     </p>
 
-    <p>                                                                           
+    <p>
       <%= link_to "dispatch asset(s)", '/batch_dispatch', :class => 'buttons' %>
     </p>
 
@@ -91,11 +91,11 @@
       <%= link_to "Return asset(s)", '/batch_return', :class => 'buttons' %>
     </p>
 
-    <p>                                                                           
+    <p>
       <%= link_to "borrow asset(s)", '/batch_transfer', :class => 'buttons' %>
     </p>
 
-    <p>                                                                           
+    <p>
       <%= link_to "reimburse asset(s)", '/borrowed_assets', :class => 'buttons' %>
     </p>
 
@@ -105,23 +105,23 @@
     </p>
     <% end %>
 
-    <!--p>                                                                           
+    <!--p>
       <%= link_to "projects", '/projects', :class => 'buttons' %>
     </p>
 
-    <p>                                                                           
+    <p>
       <%= link_to "donors", '/donors', :class => 'buttons' %>
     </p>
 
-    <p>                                                                           
+    <p>
       <%= link_to "suppliers", '/suppliers', :class => 'buttons' %>
     </p>
 
-    <p>                                                                           
+    <p>
       <%= link_to "manufactures", '/manufacturers', :class => 'buttons' %>
     </p>
 
-    <p>                                                                           
+    <p>
       <%= link_to "reports", '/reports', :class => 'buttons' %>
     </p-->
 
