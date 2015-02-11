@@ -11,7 +11,7 @@
       tstCurrentDate = "<%= Time.now.strftime("%Y-%m-%d") %>";
       var tstUserKeyboardPref = "abc";
       var tt_cancel_destination = null;
-      
+
       var total  = <%="#{session[:mastercard_ids].length.to_i}" rescue 0%>;
       var current = <%="#{session[:mastercard_counter].to_i + 1}" rescue 0%>;
 
@@ -38,18 +38,18 @@
       }
 
     </script>
-    <%= stylesheet_link_tag "ToolKit/touch-fancy" %>                            
-    <%= stylesheet_link_tag "ToolKit/graytabs" %>                               
-    <%= stylesheet_link_tag "ToolKit/form" %>                                   
-                                                                                
-    <%#= javascript_include_tag "ToolKit/touchscreenToolkit" %>                  
-    <%= javascript_include_tag "ToolKit/barcode" %>                             
+    <%= stylesheet_link_tag "ToolKit/touch-fancy" %>
+    <%= stylesheet_link_tag "ToolKit/graytabs" %>
+    <%= stylesheet_link_tag "ToolKit/form" %>
+
+    <%#= javascript_include_tag "ToolKit/touchscreenToolkit" %>
+    <%= javascript_include_tag "ToolKit/barcode" %>
     <%#= javascript_include_tag "ToolKit/standard" %>
 
 
 
   </head>
-  <body id="mateme">  
+  <body id="mateme">
     <div id="container">
       <div id="content">
         <div id="description" style="color:#777;position:absolute;margin-top:-70px;">
@@ -62,18 +62,18 @@
           <% unless flash[:error].nil? %>
             <p id="flash_error" style="color: red"><%= flash[:error] %></p>
           <% end %>
-        </div>  
-        <%= yield %>  
+        </div>
+        <%= yield %>
         <div id="footer">
           <div id="buttons" class="buttonsDiv" style="bottom: 0px;">
-            <button id="finishButton" class="button navButton red" 
+            <button id="finishButton" class="button navButton red"
               onclick="location='/user/logout'"><span>Logout</span></button>
            </div>
             <div id="tt_extraButtons"/>
           </div>
-          
-        </div>    
-      </div>  
+
+        </div>
+      </div>
     </div>
     <script>
       try {

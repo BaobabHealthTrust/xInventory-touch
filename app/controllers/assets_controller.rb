@@ -142,7 +142,7 @@ class AssetsController < ApplicationController
       item.name = params[:asset]['name']
       item.category_type = params[:asset]['category']
       item.brand = params[:asset]['manufacturer']
-      item.version = params[:asset]['version']
+      item.version = params[:asset]['version'].to_s rescue ""
       item.serial_number = params[:asset]['serial_num']
       item.vendor = params[:vendor]['supplier']
       item.model = params[:asset]['model']
@@ -178,6 +178,7 @@ class AssetsController < ApplicationController
   else
     flash[:error] = 'Something went wrong - did not create.'
   end
+
     redirect_to '/assets'
   end
 

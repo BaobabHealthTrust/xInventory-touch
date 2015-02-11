@@ -20,19 +20,19 @@
     <%#= javascript_include_tag "ToolKit/standard" %>
     <script type="text/javascript" language="javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer="true"></script>
   </head>
-  <body id="container">  
+  <body id="container">
     <div id="content">
         <div id="description" style="color:#777;position:absolute;margin-top:-70px;">
-          <% 
+          <%
           show_intro_text = false
           if show_intro_text %>
             This demonstration site contains the work of <a href="http://pih.org" style="color:white">Partners In Health</a>
             and <a href="http://baobabhealth.org" style="color:white">Baobab Health.</a>
             This EMR is built on top of OpenMRS 1.4 and is currently being used in Neno and Ngoni, Malawi.
-            It is designed for an 800 by 600 pixel touch screen at the point of patient contact. 
+            It is designed for an 800 by 600 pixel touch screen at the point of patient contact.
             <br/><a href="mailto:jeff@baobabhealth.org" style="color:white">Email</a> with questions.
             Login using the sample login "demo", password "demo" and location "7".
-          <% end %>  
+          <% end %>
         </div>
         <% unless flash[:notice].nil? %>
           <p id="flash_notice" style="color: green"><%= flash[:notice] %></p>
@@ -43,10 +43,10 @@
         <% unless flash[:error].nil? %>
           <p id="flash_alert" style="color: green"><%= flash[:alert] %></p>
         <% end %>
-        <%= yield %>  
+        <%= yield %>
         <div id="footer">
-        </div>    
-      </div>  
+        </div>
+      </div>
     </div>
   </body>
 </html>

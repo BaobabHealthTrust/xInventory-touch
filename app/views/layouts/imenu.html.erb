@@ -142,37 +142,37 @@
         height: 100px;
       }
 
-        .buttons {                                                                
-    border-bottom: 1px outset #EEEEEE;                                          
-    border-style: outset;                                                       
-    border-top: 1px outset #EEEEEE;                                             
-    color: white;                                                               
-    display: block;                                                             
-    padding: 14px;                                                              
-    text-align: center;                                                         
-    text-decoration: none;                                                      
-    box-shadow:inset 0px 1px 0px 0px #bbdaf7;                                   
+        .buttons {
+    border-bottom: 1px outset #EEEEEE;
+    border-style: outset;
+    border-top: 1px outset #EEEEEE;
+    color: white;
+    display: block;
+    padding: 14px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow:inset 0px 1px 0px 0px #bbdaf7;
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
-    background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );    
+    background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5');
-    background-color:#79bbff;                                                   
-    -moz-border-radius:42px;                                                    
-    -webkit-border-radius:42px;                                                 
-    -moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;                              
-    -webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;                           
-    border-radius:42px;                                                         
-    border:1px solid #84bbf3;                                                   
-    border-bottom-color: rgba(0, 0, 0, 0.25);                                   
-    border-left-color-ltr-source: physical;                                     
-    border-left-color-rtl-source: physical;                                     
-    border-left-color-value: rgba(0, 0, 0, 0.1);                                
-    border-right-color-ltr-source: physical;                                    
-    border-right-color-rtl-source: physical;                                    
-    border-right-color-value: rgba(0, 0, 0, 0.1);                               
-    border-top-color: rgba(0, 0, 0, 0.1);                                       
-    font-size: 1.3em;                                                           
-    font-weight:bold;                                                           
-  }          
+    background-color:#79bbff;
+    -moz-border-radius:42px;
+    -webkit-border-radius:42px;
+    -moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+    border-radius:42px;
+    border:1px solid #84bbf3;
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: rgba(0, 0, 0, 0.1);
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: rgba(0, 0, 0, 0.1);
+    border-top-color: rgba(0, 0, 0, 0.1);
+    font-size: 1.3em;
+    font-weight:bold;
+  }
     </style>
 
     <%= csrf_meta_tag %>
@@ -180,13 +180,20 @@
   <body>
     <%= render  :partial =>  "/layouts/top" %>
     <div id="container" style="width: 100%; overflow: auto;">
+      <div style="padding-left: 15px;font-size:1.2em;">
+            <%  unless flash[:notice].blank? %>
+            <p id="flash_notice" style="color: green"><%= flash[:notice] %></p>
+            <% end %>
+            <% unless flash[:error].blank? %>
+            <p id="flash_error" style="color: red"><%= flash[:error] %></p>
+            <% end %>
+      </div>
       <%= yield %>
     </div>
     <div id="nav" style="width: 100%; height: 90px; border-top: 1px solid #5496ef;
         left: 0px; position: absolute; bottom: 0px;">
-      <%= image_tag("okay.jpeg" ,:height => "65",:style =>"margin-right: 20px;        
+      <%= image_tag("okay.jpeg" ,:height => "65",:style =>"margin-right: 20px;
                 margin-top: 10px; cursor: pointer; float: right;",:onclick =>"window.location='/'")%>
     </div>
   </body>
 </html>
-

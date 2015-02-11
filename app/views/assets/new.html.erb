@@ -1,12 +1,12 @@
 
 <style>
 /*
-  .tt_controls_lifespan_in_years #num, #char, #qwerty, #plus, #apostrophe, #star, 
+  .tt_controls_lifespan_in_years #num, #char, #qwerty, #plus, #apostrophe, #star,
       #Unknown, #abc, #date, #slash, #minus, #comma, #percent, #decimal {
     display: none;
   }
 
-  .tt_controls_qauntity #num, #char, #qwerty, #plus, #apostrophe, #star, #abc, 
+  .tt_controls_qauntity #num, #char, #qwerty, #plus, #apostrophe, #star, #abc,
       #Unknown, #date, #slash, #minus, #comma, #percent, #decimal {
     display: none;
   }
@@ -19,74 +19,74 @@
 </style>
 
 
-<script>                                                                        
+<script>
 
 tt_cancel_destination = '/assets'
 
-function checkSerialNumber() {                                                           
-    var serial_num = $('touchscreenInput'+tstCurrentPage);               
-    alert(serial_num);                                                                              
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
-        xmlhttp=new XMLHttpRequest();                                             
-      }else{// code for IE6, IE5                                                  
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
-      }                                                                           
-      xmlhttp.onreadystatechange=function() {                                     
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
-          var results = xmlhttp.responseText;                                     
-          if(results == 'false') {                           
+function checkSerialNumber() {
+    var serial_num = $('touchscreenInput'+tstCurrentPage);
+    alert(serial_num);
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }else{// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+          var results = xmlhttp.responseText;
+          if(results == 'false') {
             return false;
           }else{
             return true;
-          }                                                                     
-        }                                                                         
-      }                                                                           
-      xmlhttp.open("GET","/validate_serial_number/" + serial_num,true); 
-      xmlhttp.send();                                                             
+          }
+        }
+      }
+      xmlhttp.open("GET","/validate_serial_number/" + serial_num,true);
+      xmlhttp.send();
     }
 
-function getSerialNumber() {                                                           
-    var serial_num = $('touchscreenInput'+tstCurrentPage);               
-                                                                                  
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari  
-        xmlhttp=new XMLHttpRequest();                                             
-      }else{// code for IE6, IE5                                                  
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");                           
-      }                                                                           
-      xmlhttp.onreadystatechange=function() {                                     
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {                       
-          var results = xmlhttp.responseText;                                     
-          if(results) {                           
+function getSerialNumber() {
+    var serial_num = $('touchscreenInput'+tstCurrentPage);
+
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }else{// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+          var results = xmlhttp.responseText;
+          if(results) {
             serial_num.value = results;
-          }                                                                     
-        }                                                                         
-      }                                                                           
-      xmlhttp.open("GET","/serial_number_generator",true); 
-      xmlhttp.send();                                                             
+          }
+        }
+      }
+      xmlhttp.open("GET","/serial_number_generator",true);
+      xmlhttp.send();
     }
 
-  function deliveredBySuggestions() {                                    
-    url = "/assets/find_by_delivered_by?search_str=";                          
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
-    listSuggestions(tstCurrentPage);                                            
+  function deliveredBySuggestions() {
+    url = "/assets/find_by_delivered_by?search_str=";
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);
+    listSuggestions(tstCurrentPage);
   }
 
-  function nameSuggestions() {                                    
-    url = "/assets/find_by_name?search_str=";                          
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
-    listSuggestions(tstCurrentPage);                                            
+  function nameSuggestions() {
+    url = "/assets/find_by_name?search_str=";
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);
+    listSuggestions(tstCurrentPage);
   }
 
-  function modelSuggestions() {                                    
-    url = "/assets/find_by_model?search_str=";                          
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
-    listSuggestions(tstCurrentPage);                                            
+  function modelSuggestions() {
+    url = "/assets/find_by_model?search_str=";
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);
+    listSuggestions(tstCurrentPage);
   }
 
-  function versionSuggestions() {                                    
-    url = "/assets/find_by_model?search_str=";                          
-    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);          
-    listSuggestions(tstCurrentPage);                                            
+  function versionSuggestions() {
+    url = "/assets/find_by_model?search_str=";
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', url);
+    listSuggestions(tstCurrentPage);
   }
 
   function setButton() {
@@ -126,7 +126,7 @@ function getSerialNumber() {
   }
 
   var check_for_barcode = false;
-  window.setInterval("checkForBarcode()", 800); 
+  window.setInterval("checkForBarcode()", 800);
 </script>
 
 
@@ -134,135 +134,130 @@ function getSerialNumber() {
   <h1>assets <small>register an asset</small></h1>
 </div>
 
-<section id='modals'>                                              
+<section id='modals'>
   <div class="content-details">
   <%= form_tag :action => 'create', :method => :post  do %>
 
-  <table class="asset-details">                                              
-  <tbody>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:asset, :name, 
-        :tt_onLoad => 'nameSuggestions();', 
-        :allowFreeText => true ,                           
+  <table class="asset-details">
+  <tbody>
+    <tr>
+      <td><%=text_field(:asset, :name,
+        :tt_onLoad => 'nameSuggestions();',
+        :allowFreeText => true ,
         :ajaxURL => '',:helpText => "Name") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
+    </tr>
+    <tr>
       <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();setFocus(this);",:id => 'serial_num',
         :helpText => "Serial number", :textCase => "upper",
         :validationJS =>"checkSerialNumber()",
         :tt_onUnLoad => "removeButton();removesetFocus(this);") %>
-    </tr>                                                                       
-    <tr>                                                                        
+    </tr>
+    <tr>
       <td><%=text_field(:asset, :model ,
-        :tt_onLoad => 'modelSuggestions();', :allowFreeText => true ,                                                
+        :tt_onLoad => 'modelSuggestions();', :allowFreeText => true ,
         :ajaxURL => '', :helpText => "Model",:id => 'asset_model') %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:asset, :version , {:id => 'version',
-          :tt_onLoad => 'versionSuggestions();', :allowFreeText => true ,
-          :ajaxURL => '', :helpText => "Version"}) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>   
+    </tr>
+    <tr>
+      <td>
         <%= select_tag "asset[category]", options_for_select(@categories),
-          :helpText => "Category" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
+          :helpText => "Category" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <%= select_tag "asset[manufacturer]", options_for_select(@manufacturers),
-          :helpText => "Manufacturer" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
+          :helpText => "Manufacturer" %>
+      </td>
+    </tr>
+    <tr>
       <td><%=text_field(:asset, :lifespan ,:tt_pageStyleClass => "Numeric NumbersOnly",
         :field_type => 'number',:helpText => "Lifespan in years", :id =>'lifespan' ) %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
+    </tr>
+    <tr>
+      <td>
         <%= select_tag "work[project]", options_for_select(@projects),
-          :helpText => "Project" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
+          :helpText => "Project" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <%= select_tag "work[donor]", options_for_select(@donors),
-          :helpText => "Donor" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
+          :helpText => "Donor" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <%= select_tag "vendor[supplier]", options_for_select(@suppliers),
-          :helpText => "Supplier" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
+          :helpText => "Supplier" %>
+      </td>
+    </tr>
+    <tr>
       <td><%=text_field(:vendor, :invoice_num, :helpText => "Invoice number",:id => 'invoice_num') %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:vendor, :date_of_invoice, :id =>'invoice_date' ,  
-          :helpText => "Invoice date", :field_type => 'date',                 
+    </tr>
+    <tr>
+      <td><%=text_field(:vendor, :date_of_invoice, :id =>'invoice_date' ,
+          :helpText => "Invoice date", :field_type => 'date',
           :maxDate => "#{Date.today.to_date}") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
+    </tr>
+    <tr>
       <td><%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 ,:id => 'quantity',
           :tt_pageStyleClass => "Numeric NumbersOnly", :helpText => "Quantity") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
+    </tr>
+    <tr>
       <td><%=text_field(:vendor, :cost, :helpText => "Cost", :absoluteMin => 1,:id => 'cost',
         :field_type => 'number',:tt_pageStyleClass => "Numeric NumbersOnly") %>
 
         <%= select_tag "vendor[currency]", options_for_select(@currencies),
-          :helpText => "Select currency" %>                                              
-      </td>                                                                       
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:organisation, :receipt_date, :id => 'receipt_date',
-          :helpText => "Date of receipt",:field_type => 'date', 
-          :maxDate => "#{Date.today.to_date}") %> 
+          :helpText => "Select currency" %>
       </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:organisation, :delivered_by, 
-        :tt_onLoad => 'deliveredBySuggestions();', 
+    </tr>
+    <tr>
+      <td><hr /></td>
+    </tr>
+    <tr>
+      <td><%=text_field(:organisation, :receipt_date, :id => 'receipt_date',
+          :helpText => "Date of receipt",:field_type => 'date',
+          :maxDate => "#{Date.today.to_date}") %>
+      </td>
+    </tr>
+    <tr>
+      <td><%=text_field(:organisation, :delivered_by,
+        :tt_onLoad => 'deliveredBySuggestions();',
         :allowFreeText => true , :id => 'delivered_by',
         :ajaxURL => '',:helpText => "Delivered by") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
+    </tr>
+    <tr>
+      <td>
         <%= select_tag "organisation[delivery_status]", options_for_select(@status),
-          :helpText => "Delivery status" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
+          :helpText => "Delivery status" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <%= select_tag "organisation[current_status]", options_for_select(@status),
-          :helpText => "Current status" %>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
+          :helpText => "Current status" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <%= select_tag "organisation[location]", options_for_select(@location),
-          :helpText => "Select store room location"%>                                              
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-           <%= text_field_tag :summary, nil, 
-            { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';", 
-            :tt_onUnLoad => "enableFinishButton();" ,:optional => "true", 
+          :helpText => "Select store room location"%>
+      </td>
+    </tr>
+    <tr>
+      <td>
+           <%= text_field_tag :summary, nil,
+            { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';",
+            :tt_onUnLoad => "enableFinishButton();" ,:optional => "true",
             :tt_pageStyleClass   => "NoControls" } %>
-      </td>                                                                     
-    </tr>                                                                       
-  </tbody>                                                                      
+      </td>
+    </tr>
+  </tbody>
  </table>
-                      
+
  <%end%>
-</div>                                                      
-</section> 
+</div>
+</section>
 
 <script>
 function disableFinishButton() {
@@ -274,7 +269,7 @@ function enableFinishButton() {
 }
 
 function summary() {
-  
+
   var values = getValues();
   var display = "<div><span class='title'><h3><b>Summary of enetered attributes:</b></h3></span></div>";
   var display = "<div><hr /></div>";
@@ -294,7 +289,7 @@ function getValues() {
   values.push(['Name', document.getElementById('asset_name').value]);
   values.push(['Serial number', document.getElementById('serial_num').value]);
   values.push(['Model', document.getElementById('asset_model').value]);
-  values.push(['Version', document.getElementById('version').value]);
+  //values.push(['Version', document.getElementById('version').value]);
   values.push(['Category', document.getElementById('asset_category').value]);
 
 

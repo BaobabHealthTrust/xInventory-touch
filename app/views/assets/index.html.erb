@@ -1,27 +1,34 @@
-
-<div class='menu-buttons'>                                              
-  <p>                                                                           
+<style>
+.menu-buttons{
+  width: 400px ! important;
+  align: center ! important;
+}
+</style>
+<div class='menu-buttons'>
+  <p>
     <%= link_to "Find asset(s)", '/asset_search', :class => 'buttons' %>
-  </p>                                                                          
-                                                                                
-  <p>                                                                           
-    <%= link_to "Register an asset", '/create_new_asset', :class => 'buttons' %>
   </p>
-                                                                                
-  <!--p>                                                                           
+  <p>
+    <%= link_to "Register a donor", '/create_new_donor',  :class => 'buttons' %>
+
+  </p>
+  <p>
+    <%= link_to "Register an asset", '/create_new_asset',  :class => 'buttons' %>
+
+  </p>
+  <!--p>
     <%= link_to "Find asset categories", '/asset_categories', :class => 'buttons' %>
   </p-->
-                                                                                
-  <p>                                                                           
+
+  <p>
     <%= link_to "Create asset category", '/create_new_category', :class => 'buttons' %>
   </p>
-                                                                                
-  <!--p>                                                                           
+
+  <!--p>
     <%= link_to "Find asset states", '/asset_states_search', :class => 'buttons' %>
   </p-->
-                                                                                
-  <p>                                                                           
+
+  <p>
     <%= link_to "Create asset state", '/create_new_state', :class => 'buttons' %>
   </p>
-</div> 
-
+</div>

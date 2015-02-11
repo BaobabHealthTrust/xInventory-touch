@@ -17,11 +17,15 @@ class DonorsController < ApplicationController
     redirect_to :action => :show ,:id => @donor.id
   end
 
-  def find_by_name                                                              
-    @donors = Donor.where("name LIKE(?)",                                        
+  def new
+    
+  end
+
+  def find_by_name
+    @donors = Donor.where("name LIKE(?)",
       "%#{params[:search_str]}%").group(:name).limit(10).map{|item|[[item.name]]}
-    render :text => "<li></li><li>" + @donors.join("</li><li>") + "</li>"       
-  end 
+    render :text => "<li></li><li>" + @donors.join("</li><li>") + "</li>"
+  end
 
   def edit_donor_details
     @donor = Donor.find(params[:id])
@@ -55,18 +59,18 @@ class DonorsController < ApplicationController
     redirect_to '/create_new_donor'
   end
 
-  def search 
+  def search
     @donors = Donor.order('Name ASC')
   end
 
-  private                                                                       
-                                                                                
-  def check_authorized                                                          
-    if action_name == 'new' or action_name == 'create'                          
-      unless admin?                                                             
-        redirect_to '/donors'                                            
-      end                                                                       
-    end                                                                         
+  private
+
+  def check_authorized
+    if action_name == 'new' or action_name == 'create'
+      unless admin?
+        redirect_to '/donors'
+      end
+    end
   end
 
 end

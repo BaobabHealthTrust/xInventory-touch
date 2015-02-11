@@ -2,83 +2,44 @@
 <%#= stylesheet_link_tag "datepicker" %>
 
 <style>
-  .content-details { text-align: center; }                                                                          
+  .content-details { text-align: center; }
 
-  .asset-details { width: 100%; }                                                                          
+  .asset-details { width: 100%; }
 
 </style>
-
-
 <script>
-
-function submitForm() {                                                         
-  if(validateForm())                                                            
-    document.getElementsByTagName('form')[0].submit();                          
-                                                                                
-}                                                                               
-                                                                                
-function validateForm(){                                                        
-    asset_name = document.getElementById('donor_name');                      
-
-    if(donor_name.value == '') {                                                     
-      alert("Please enter donor name ...");                                     
-      return false;                                                             
-    }                                                                           
-  return true;                                                                  
-}  
-
+  tt_cancel_destination = '/assets'
 </script>
 
-
-
 <div class="page-header">
-  <h1>donor <small>register a donor</small></h1>
+  <h1>Donor <small>register a donor</small></h1>
 </div>
 
-<section id='modals'>                                              
+
+<section id='modals'>
   <div class="content-details">
-  <div>
-    <%if flash[:notice]%>                                                           
-      <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
-    <%elsif flash[:error]%>
-      <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
-    <%end%>
-  </div>
-  <%= form_tag :action => 'create', :method => :post  do %>
+    <%= form_tag :action => 'create', :method => :post  do %>
 
-  <table class="asset-details">                                              
-  <tbody>                                                                       
-    <tr>                                                                        
-      <td>&nbsp;</td>                                                           
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:donor, :name, :placeholder => "Name") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:donor, :abv, :placeholder => "Abbreviation") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><%=text_area_tag("donor[description]", nil, :placeholder => "Description") %></td>
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-    <tr>                                                                        
-      <td>                                                                      
-        <input onclick="submitForm();" type="button" id="signup" 
-          class="btn btn-primary signup_btn" value="Register" style="width:100%;" />
-      </td>                                                                     
-    </tr>                                                                       
-    <tr>                                                                        
-      <td><hr /></td>   
-    </tr>                                                                       
-  </tbody>                                                                      
- </table>
-                      
- <%end%>
-</div>                                                      
-</section> 
+    <table class="asset-details">
+      <tbody>
+        <tr>
+          <td><%=text_field(:donor, :name, :placeholder => "Name",
+          :helpText => "Name") %>
+          </td>
+        </tr>
+        <tr>
+          <td><%=text_field(:donor, :abv, :placeholder => "Abbreviation",
+          :helpText => "Abbreviation") %>
+          </td>
+        </tr>
+        <tr>
+          <td><%=text_area_tag("donor[description]", nil, :placeholder => "Description",
+          :helpText => "Description") %>
+          </td>
+        </tr>
+        </tbody>
+       </table>
 
+          <%end%>
+        </div>
+      </section>
