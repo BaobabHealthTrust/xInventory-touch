@@ -15,7 +15,21 @@ class ApplicationController < ActionController::Base
     @message = message                                                          
     render :template => 'print/print', :layout => nil                           
   end
-                                                                                  
+
+  def current_location
+
+		if session[:site]
+			@current_location ||= Site.find(session[:site]) rescue nil
+
+			if @current_location.nil?
+				session = nil
+				return
+			else
+				Site.current_location_id = @current_location.id
+			end
+		end
+	end
+
   protected                                                                     
                                                                                 
   def perform_basic_auth                                                        

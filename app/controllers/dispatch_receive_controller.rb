@@ -120,8 +120,11 @@ EOF
         redirect_to "/" and return
       end
     end
-    @approving_name = Person.find(params[:return]['approved_by']) rescue Person.find(session[:assets_to_return][:approved_by])
-    @receiving_name = Person.find(params[:return]['returned_by']) rescue Person.find(session[:assets_to_return][:returned_by])
+   if params[:return].blank? and session[:assets_to_return].blank?
+     redirect_to "/" and return
+   end
+    @approving_name = Person.find(params[:return]['approved_by']) rescue Person.find(session[:assets_to_return][:approved_by]) rescue []
+    @receiving_name = Person.find(params[:return]['returned_by']) rescue Person.find(session[:assets_to_return][:returned_by]) rescue []
     session[:assets_to_return] = {
       :return_date => params[:return]['date'],
       :return_site => Site.find(params[:return]['site']).name,
@@ -278,6 +281,8 @@ EOF
       reimburse.transfer_transation_id = params[:transfer_transation]
       reimburse.reimbursed_item_id = params[:selected_asset]
       reimburse.reimbursed_date = Date.today
+      reimburse.transaction_point = current_location
+      
       if reimburse.save
         selected_asset = TransferTransations.find(params[:transfer_transation])
         selected_asset.returned = true
@@ -384,6 +389,7 @@ EOF
        dispatch.responsible_person = params[:dispatch]['collected_by']
        dispatch.location_id = params[:dispatch]['location']
        dispatch.quantity = params[:dispatch]['quantity']
+       dispatch.transaction_point = current_location
        asset.location = dispatch.location_id
        unless params[:dispatch]['reason'].blank?
          dispatch.reason = params[:dispatch]['reason']
@@ -430,6 +436,8 @@ EOF
        asset.location = dispatch.location_id
        dispatch.quantity = params[:receive]['quantity']
        dispatch.approved = "Approved"
+       dispatch.transaction_point = current_location
+
        unless params[:receive]['reason'].blank?
          dispatch.reason = params[:receive]['reason']
        end
@@ -500,6 +508,7 @@ EOF
           transfer_transaction.from_location = asset.location
           transfer_transaction.to_project = params[:transfer]['project']
           transfer_transaction.to_donor = params[:transfer]['donor']
+          transfer_transaction.transaction_point = current_location
           transfer_transaction.save
 
           #now we up the asset info to reflect the transfer
@@ -544,6 +553,7 @@ EOF
         dispatch.location_id = Site.find_by_name(session[:assets_to_dispatch][:dispatch_site]).id
         asset.location = dispatch.location_id
         dispatch.quantity = quantity
+        dispatch.transaction_point = current_location
 
         if dispatch.save
           asset.save
@@ -560,46 +570,7 @@ EOF
       end
       print_str += Item.find(asset_id).barcode_label
     end
-    item(print_str)
-  end
-
-  def create_batch_return
-    print_str = ""
-    (session[:assets_to_return][:assets] || {}).each do |asset_id, quantity|
-      asset = Item.find(asset_id)
-      Item.transaction do
-        dispatch = DispatchReceive.new()
-        dispatch.asset_id = asset.id
-        dispatch.transaction_type = DispatchReceiveType.find_by_name('Receive').id
-        dispatch.encounter_date = session[:assets_to_return][:return_date]
-        dispatch.approved_by = session[:assets_to_return][:approved_by]
-        dispatch.responsible_person = session[:assets_to_return][:returned_by]
-        dispatch.location_id = Site.find_by_name(session[:assets_to_return][:return_site]).id
-
-        if admin?
-        #  dispatch.approved = "Approved"
-        end
-        asset.location = dispatch.location_id
-        dispatch.quantity = quantity
-
-        if dispatch.save
-          asset.save
-          curr_state = ItemState.where(:'item_id' => asset.id).first
-          curr_state.current_state = StateType.find_by_name(session[:assets_to_return][:current_state][asset.id]).id
-          curr_state.save
-
-          asset.current_quantity += dispatch.quantity
-          asset.save
-
-          DispatchState.create_state(asset.id, "In Stores", Date.today)
-        end
-
-      end
-      print_str += Item.find(asset_id).barcode_label + "\n"
-    end
     print_and_redirect("/item?message=#{print_str}", '/',"Printing, please wait...")
-    #item(print_str)
-    #redirect_to '/'
   end
 
   def item
@@ -627,6 +598,7 @@ EOF
           transfer_transaction.from_location = asset.location
           transfer_transaction.to_project = session[:assets_to_transfer][:project_to]
           transfer_transaction.to_donor = session[:assets_to_transfer][:donor_to]
+          transfer_transaction.transaction_point = current_location
           transfer_transaction.save
 
           #now we update the asset info to reflect the transfer
@@ -681,6 +653,7 @@ EOF
         reimburse.transfer_transation_id = transfer_transaction.id
         reimburse.reimbursed_item_id = asset_id
         reimburse.reimbursed_date = Date.today
+        reimburse.transaction_point = current_location
         if reimburse.save
           transfer_transaction.returned = true
           if transfer_transaction.save
@@ -770,7 +743,7 @@ EOF
   end
 
   def check_authorized
-   return if params[:action] == "batch_dispatch" or params[:action] == "batch_return"
+   return if params[:action] == "batch_dispatch" or params[:action] == "batch_return" or params[:action] == "init_return"
     unless admin?
       redirect_to '/home'
     end

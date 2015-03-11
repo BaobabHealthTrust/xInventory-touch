@@ -205,6 +205,7 @@ class AssetsController < ApplicationController
     else
       flash[:error] = 'Something went wrong - did not create.'
     end
+
     redirect_to '/assets'
   end
 

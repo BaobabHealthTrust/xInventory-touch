@@ -8,6 +8,7 @@
   <p>
     <%= link_to "Find asset(s)", '/asset_search', :class => 'buttons' %>
   </p>
+  <% if admin? %>
   <p>
     <%= link_to "Register a donor", '/create_new_donor',  :class => 'buttons' %>
 
@@ -31,4 +32,5 @@
   <p>
     <%= link_to "Create asset state", '/create_new_state', :class => 'buttons' %>
   </p>
+  <% end %>
 </div>

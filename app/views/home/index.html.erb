@@ -90,7 +90,8 @@
     <p>
       <%= link_to "Return asset(s)", '/batch_return', :class => 'buttons' %>
     </p>
-
+    
+    <% if admin? %>
     <p>
       <%= link_to "borrow asset(s)", '/batch_transfer', :class => 'buttons' %>
     </p>
@@ -99,7 +100,7 @@
       <%= link_to "reimburse asset(s)", '/borrowed_assets', :class => 'buttons' %>
     </p>
 
-    <% if admin? %>
+
      <p>
       <%= link_to "Confirm User Returns", '/confirm', :class => 'buttons' %>
     </p>

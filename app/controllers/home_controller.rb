@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   def index
     (session || {}).each do |name , values|
       next if name == 'user_id'
+      next if name == 'site'
       next if name == 'flash'
       next if name == '_csrf_token'
       session[name] = nil

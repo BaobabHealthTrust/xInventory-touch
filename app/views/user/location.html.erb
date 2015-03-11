@@ -1,0 +1,37 @@
+<script>
+tt_cancel_destination = '/';
+</script>
+
+<style>
+
+</style>
+
+<div class="page-header">
+  <h1><%=organization_name %> <small>inventory system</small></h1>
+</div>
+
+<div id = "image-logo">
+  <%= image_tag("keys.png" ,:id => "keys")%>
+</div>
+<%= form_tag :controller => 'user', :action => 'find_location', :method => :post do %>
+<%= text_field_tag :location, nil , :field_type => 'number' ,
+:helpText => "Enter location/barcode",
+:placeholder => "Enter location/barcode" %>
+<%end%>
+
+<script>
+function checkForBarcode(){
+  barcode_element = document.getElementById("touchscreenInput"+tstCurrentPage);
+  barcode_element.focus();
+
+  if (barcode_element.value.match(/.+\$$/i) != null){
+    valid_scan = barcode_element.value.substring(0,barcode_element.value.length-1)
+    if (valid_scan.length > 0) {
+      barcode_element.value = barcode_element.value.substring(0,(barcode_element.value.length - 1));
+      gotoNextPage();
+    }
+  }
+}
+
+window.setInterval("checkForBarcode()", 800);
+</script>

@@ -13,6 +13,8 @@ XInventory::Application.routes.draw do
   ########## Users start #####################
   match 'login' => 'user#login'
   get "user/logout"
+  get "location" => 'user#location'
+  post "find_location" => 'user#find_location'
   post "user/login"
   match 'edit_user/:id' => 'user#edit', :as => :edit_user
   post "user/update"
