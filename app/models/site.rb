@@ -16,4 +16,15 @@ class Site < ActiveRecord::Base
 	def self.current_location
 		self.find(self.current_location_id)
 	end
+
+  def barcode_label
+    label = ZebraPrinter::StandardLabel.new
+    label.font_size = 2
+    label.font_horizontal_multiplier = 2
+    label.font_vertical_multiplier = 2
+    label.left_margin = 50
+    label.draw_barcode(50,180,0,1,5,15,120,false,"#{self.id}")
+    label.draw_multi_text("#{self.name.titleize}")
+    label.print(1)
+  end
 end

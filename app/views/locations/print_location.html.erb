@@ -1,0 +1,15 @@
+
+<script>
+var tt_cancel_destination="/locations"
+function changeText(){
+  __$("nextButton").innerHTML = "Print";
+}
+</script>
+
+
+<%= form_tag :action => 'print_location', :method => :post  do %>
+
+<%= select_tag "location[location]", options_for_select(@locations),
+:onLoad => "changeText();",
+:helpText => "Location Name" %>
+<% end %>

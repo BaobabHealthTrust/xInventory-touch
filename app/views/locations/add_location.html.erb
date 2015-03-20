@@ -1,0 +1,49 @@
+
+<script>
+  var tt_cancel_destination="/locations"
+
+  function checkName() {
+    var name = $('touchscreenInput'+tstCurrentPage).value;
+    alert(name.innerHTML)
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }else{// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+        var results = xmlhttp.responseText;
+        if(results == 'false') {
+          return false;
+        }else{
+          return true;
+        }
+      }
+    }
+    xmlhttp.open("GET","/validate_name/" + name,true);
+    xmlhttp.send();
+  }
+
+  function resetButton(){
+    nextButton.onmousedown = function () {
+      var result = checkName();
+      if (result == false){
+        gotoNextPage();
+      }
+      }
+  }
+
+</script>
+
+
+ <%= form_tag :action => 'add_location', :method => :post  do %>
+
+  <%=text_field(:location, :name,
+        :allowFreeText => true,
+        :validationJS =>"checkName();",
+        :helpText => "Name") %>
+
+  <%=text_field(:location, :descrption,
+        :allowFreeText => true,
+        :helpText => "Descrption") %>
+<% end %>

@@ -1,6 +1,15 @@
 XInventory::Application.routes.draw do
 
 
+  get "locations" => "locations#index"
+
+  match "add_location" => "locations#add_location"
+
+  match "print_location" => "locations#print_location"
+  match 'print_barcode/:id' => 'locations#print_barcode'
+
+  match 'validate_name/:id' => 'locations#validate_name', :as => :validate_name
+
   ########## home starts #####################
   match 'home' => 'home#index'
   ########## home ends #####################

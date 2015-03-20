@@ -5,36 +5,42 @@
 
 <script>
   tt_cancel_destination = '/assets'
+
+  function checkCategory(){
+    alert("here")
+  }
 </script>
 
 
 
-<siection id='modals'>                                              
+<siection id='modals'>
   <div class="content-details">
-  <div>                                                                         
-    <%if flash[:notice]%>                                                       
+  <div>
+    <%if flash[:notice]%>
       <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
-    <%elsif flash[:error]%>                                                     
+    <%elsif flash[:error]%>
       <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
-    <%end%>                                                                     
+    <%end%>
   </div>
   <%= form_tag :action => 'create_category', :method => :post  do %>
 
-  <table class="asset-details">                                              
-  <tbody>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:category, :name, :helpText => "Name") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
+  <table class="asset-details">
+  <tbody>
+    <tr>
+      <td><%=text_field(:category, :name,
+      :validationCode => 'checkCategory(this.value)',
+      :validationMessage => "Dublicate name entered!",
+      :helpText => "Category Name") %> </td>
+    </tr>
+    <tr>
       <td><%=text_field(:category, :abv, :helpText => "Abbreviation") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
+    </tr>
+    <tr>
       <td><%=text_area_tag("category[description]", nil, :helpText => "Description") %></td>
-    </tr>                                                                       
-  </tbody>                                                                      
+    </tr>
+  </tbody>
  </table>
-                      
- <%end%>
-</div>                                                      
-</section> 
 
+ <%end%>
+</div>
+</section>
