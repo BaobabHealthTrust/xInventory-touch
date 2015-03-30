@@ -5,32 +5,68 @@
 
 <script>
   tt_cancel_destination = '/assets'
+
+  function checkState(){
+    var value = $('touchscreenInput'+tstCurrentPage).value;
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }else{// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+        var results = xmlhttp.responseText;
+        if(results == 'false') {
+          resetNext();
+          gotoNextPage();
+        }else{
+          showMessage("State already Exists!")
+        }
+      }
+    }
+    xmlhttp.open("GET","/validate_state/" + value,true);
+    xmlhttp.send();
+  }
+
+  function validName(){
+    nextButton.onmousedown = function(){
+      checkState();
+    }
+  }
+
+  function resetNext(){
+    nextButton.onmousedown = function(){
+      gotoNextPage();
+    }
+  }
+
 </script>
 
 
 
-<siection id='modals'>                                              
+<siection id='modals'>
   <div class="content-details">
-    <%if flash[:notice]%>                                                       
+    <%if flash[:notice]%>
       <font id="flash_notice" style="color: green;"><%= flash[:notice] %></font><br />
-    <%elsif flash[:error]%>                                                     
+    <%elsif flash[:error]%>
       <font id="flash_notice" style="color: red;"><%= flash[:notice] %></font><br />
-    <%end%>                                                                     
+    <%end%>
   </div>
   <%= form_tag :action => 'create_state', :method => :post  do %>
 
-  <table class="asset-details">                                              
-  <tbody>                                                                       
-    <tr>                                                                        
-      <td><%=text_field(:state, :name, :helpText => "Name") %> </td>
-    </tr>                                                                       
-    <tr>                                                                        
+  <table class="asset-details">
+  <tbody>
+    <tr>
+      <td><%=text_field(:state, :name,
+      :tt_onLoad => "validName()",
+      :helpText => "State Name") %> </td>
+    </tr>
+    <tr>
       <td><%=text_area_tag("state[description]", nil, :helpText => "Description") %></td>
-    </tr>                                                                       
-  </tbody>                                                                      
+    </tr>
+  </tbody>
  </table>
-                      
- <%end%>
-</div>                                                      
-</section> 
 
+ <%end%>
+</div>
+</section>

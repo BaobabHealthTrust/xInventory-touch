@@ -212,6 +212,24 @@ class AssetsController < ApplicationController
   def new_state
   end
 
+  def validate_category
+    render :text => name_validator(params[:id]) and return
+  end
+
+  def validate_state
+    render :text => state_validator(params[:id]) and return
+  end
+
+  def state_validator(name)
+    name = StateType.where(:'name' => name)
+    return ! name.blank? ? true : false
+  end
+
+  def name_validator(name)
+    name = Category.where(:'name' => name)
+    return ! name.blank? ? true : false
+  end
+
   def create_state
     state = StateType.new()
     state.name = params[:state]['name']

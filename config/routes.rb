@@ -10,6 +10,10 @@ XInventory::Application.routes.draw do
 
   match 'validate_name/:id' => 'locations#validate_name', :as => :validate_name
 
+  match 'validate_category/:id' => 'assets#validate_category', :as => :validate_category
+
+  match 'validate_state/:id' => 'assets#validate_state', :as => :validate_state
+
   ########## home starts #####################
   match 'home' => 'home#index'
   ########## home ends #####################

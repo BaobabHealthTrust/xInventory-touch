@@ -230,6 +230,7 @@ function getSerialNumber() {
     <tr>
       <td>
         <%= select_tag "organisation[delivery_status]", options_for_select(@status),
+          :allowFreeText => true ,
           :helpText => "Delivery status" %>
       </td>
     </tr>

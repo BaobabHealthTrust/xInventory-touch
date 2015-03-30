@@ -16,6 +16,7 @@ tt_cancel_destination = '/';
 <%= form_tag :controller => 'user', :action => 'find_location', :method => :post do %>
 <%= text_field_tag :location, nil , :field_type => 'number' ,
 :helpText => "Enter location/barcode",
+:tt_onLoad => "__$('keyboard').style.display = 'none';",
 :placeholder => "Enter location/barcode" %>
 <%end%>
 
