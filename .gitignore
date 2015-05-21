@@ -15,3 +15,5 @@ mockups
 rerun.txt
 nbproject
 Gemfile.lock
+*.yml
+.idea/*
