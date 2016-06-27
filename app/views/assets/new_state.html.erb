@@ -42,7 +42,9 @@
 
 </script>
 
-
+<div class="page-header">
+  <h1>Asset State <small>create asset state</small></h1>
+</div>
 
 <siection id='modals'>
   <div class="content-details">
@@ -54,15 +56,17 @@
   </div>
   <%= form_tag :action => 'create_state', :method => :post  do %>
 
-  <table class="asset-details">
+  <table class="asset-details" align="center">
   <tbody>
     <tr>
-      <td><%=text_field(:state, :name,
+      <td align="right" style="padding-right:2em;"> Name</td>
+      <td align="left"><%=text_field(:state, :name,
       :tt_onLoad => "validName()",
       :helpText => "State Name") %> </td>
     </tr>
     <tr>
-      <td><%=text_area_tag("state[description]", nil, :helpText => "Description") %></td>
+      <td align="right" style="padding-right: 2em;">Description</td>
+      <td align="left"><%=text_area_tag("state[description]", nil, :helpText => "Description") %></td>
     </tr>
   </tbody>
  </table>

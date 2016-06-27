@@ -41,7 +41,9 @@
   }
 </script>
 
-
+<div class="page-header">
+  <h1>Category <small>create asset category</small></h1>
+</div>
 
 <siection id='modals'>
   <div class="content-details">
@@ -54,18 +56,21 @@
   </div>
   <%= form_tag :action => 'create_category', :method => :post  do %>
 
-  <table class="asset-details">
+  <table class="asset-details" align="center">
   <tbody>
     <tr>
-      <td><%=text_field(:category, :name,
+      <td align="right" style="padding-right: 2em;">Name</td>
+      <td align="left"><%=text_field(:category, :name,
       :tt_onLoad => "validName()",
       :helpText => "Category Name") %> </td>
     </tr>
     <tr>
-      <td><%=text_field(:category, :abv, :helpText => "Abbreviation") %> </td>
+      <td align="right" style="padding-right: 2em;">Abbreviation</td>
+      <td align="left"><%=text_field(:category, :abv, :helpText => "Abbreviation") %> </td>
     </tr>
     <tr>
-      <td><%=text_area_tag("category[description]", nil, :helpText => "Description") %></td>
+      <td align="right" style="padding-right: 2em;">Description</td>
+      <td align="left"><%=text_area_tag("category[description]", nil, :helpText => "Description") %></td>
     </tr>
   </tbody>
  </table>
