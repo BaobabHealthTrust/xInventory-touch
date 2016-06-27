@@ -139,72 +139,85 @@ function getSerialNumber() {
   <div class="content-details">
   <%= form_tag :action => 'create', :method => :post  do %>
 
-  <table class="asset-details">
+  <table class="asset-details" align="center">
   <tbody>
     <tr>
+      <td align="right" style="padding-right:2em;">Name</td>
       <td><%=text_field(:asset, :name,
         :tt_onLoad => 'nameSuggestions();',
         :allowFreeText => true ,
         :ajaxURL => '',:helpText => "Name") %> </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Serial number</td>
       <td><%=text_field(:asset, :serial_num,:tt_onLoad => "setButton();setFocus(this);",:id => 'serial_num',
         :helpText => "Serial number", :textCase => "upper",
         :validationJS =>"checkSerialNumber()",
         :tt_onUnLoad => "removeButton();removesetFocus(this);") %>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Model</td>
       <td><%=text_field(:asset, :model ,
         :tt_onLoad => 'modelSuggestions();', :allowFreeText => true ,
         :ajaxURL => '', :helpText => "Model",:id => 'asset_model') %> </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Category</td>
       <td>
         <%= select_tag "asset[category]", options_for_select(@categories),
           :helpText => "Category" %>
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Manufacturer</td>
       <td>
         <%= select_tag "asset[manufacturer]", options_for_select(@manufacturers),
           :helpText => "Manufacturer" %>
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Lifespan in years</td>
       <td><%=text_field(:asset, :lifespan ,:tt_pageStyleClass => "Numeric NumbersOnly",
         :field_type => 'number',:helpText => "Lifespan in years", :id =>'lifespan' ) %> </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Project</td>
       <td>
         <%= select_tag "work[project]", options_for_select(@projects),
           :helpText => "Project" %>
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Donor</td>
       <td>
         <%= select_tag "work[donor]", options_for_select(@donors),
           :helpText => "Donor" %>
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Supplier</td>
       <td>
         <%= select_tag "vendor[supplier]", options_for_select(@suppliers),
           :helpText => "Supplier" %>
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Invoice number</td>
       <td><%=text_field(:vendor, :invoice_num, :helpText => "Invoice number",:id => 'invoice_num') %> </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Invoice date</td>
       <td><%=text_field(:vendor, :date_of_invoice, :id =>'invoice_date' ,
           :helpText => "Invoice date", :field_type => 'date',
           :maxDate => "#{Date.today.to_date}") %> </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Quantity</td>
       <td><%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 ,:id => 'quantity',
           :tt_pageStyleClass => "Numeric NumbersOnly", :helpText => "Quantity") %> </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Cost</td>
       <td><%=text_field(:vendor, :cost, :helpText => "Cost", :absoluteMin => 1,:id => 'cost',
         :field_type => 'number',:tt_pageStyleClass => "Numeric NumbersOnly") %>
 
@@ -214,20 +227,24 @@ function getSerialNumber() {
     </tr>
     <tr>
       <td><hr /></td>
+      <td><hr /></td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Date of receipt</td>
       <td><%=text_field(:organisation, :receipt_date, :id => 'receipt_date',
           :helpText => "Date of receipt",:field_type => 'date',
           :maxDate => "#{Date.today.to_date}") %>
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Delivered by</td>
       <td><%=text_field(:organisation, :delivered_by,
         :tt_onLoad => 'deliveredBySuggestions();',
         :allowFreeText => true , :id => 'delivered_by',
         :ajaxURL => '',:helpText => "Delivered by") %> </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Delivery status</td>
       <td>
         <%= select_tag "organisation[delivery_status]", options_for_select(@status),
           :allowFreeText => true ,
@@ -235,18 +252,21 @@ function getSerialNumber() {
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Curent status</td>
       <td>
         <%= select_tag "organisation[current_status]", options_for_select(@status),
           :helpText => "Current status" %>
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Store room location</td>
       <td>
         <%= select_tag "organisation[location]", options_for_select(@location),
           :helpText => "Select store room location"%>
       </td>
     </tr>
     <tr>
+      <td align="right" style="padding-right:2em;">Summary</td>
       <td>
            <%= text_field_tag :summary, nil,
             { :tt_onLoad => "summary();__$('keyboard').style.display = 'none';",
