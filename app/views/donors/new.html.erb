@@ -23,18 +23,21 @@
     <table class="asset-details">
       <tbody>
         <tr>
-          <td><%=text_field(:donor, :name, :placeholder => "Name",
+          <td align="right" style="padding-right:2em;">Name</td>
+          <td align="left"><%=text_field(:donor, :name, :placeholder => "Name",
           :helpText => "Name") %>
           </td>
         </tr>
         <tr>
-          <td><%=text_field(:donor, :abv, :placeholder => "Abbreviation",
+          <td align="right" style="padding-right:2em;">Abbreviation</td>
+          <td align="left"><%=text_field(:donor, :abv, :placeholder => "Abbreviation",
           :helpText => "Abbreviation") %>
           </td>
         </tr>
         <tr>
-          <td><%=text_area_tag("donor[description]", nil, :placeholder => "Description",
-          :helpText => "Description") %>
+          <td align="right" style="padding-right:2em;">Description</td>
+          <td align="left"><%=text_area_tag("donor[description]", nil, :placeholder => "Description",
+          :helpText => "Description", :size => "40") %>
           </td>
         </tr>
         </tbody>
