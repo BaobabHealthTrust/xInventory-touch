@@ -744,7 +744,7 @@ EOF
 
   def check_authorized
    return if params[:action] == "batch_dispatch" or params[:action] == "batch_return" or params[:action] == "init_return"
-    unless admin?
+    unless admin? || superuser?
       redirect_to '/home'
     end
   end

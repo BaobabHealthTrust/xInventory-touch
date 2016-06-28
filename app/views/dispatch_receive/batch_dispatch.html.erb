@@ -12,14 +12,20 @@
 
 </script>
 
+<section class="content-header"> 
+  <h1>Batch dispatch </h1>
+
+</section>
 
 <form method = "get" action = "init_dispatch">
   <%= text_field_tag "dispatch[date]", nil,                            
     {:id => "start_date",                                                   
     :field_type => 'date',
     :maxDate => "#{Date.today.to_date}",
-    :helpText => "Dispatch date"} %>
+    :helpText => "Dispatch date",
+    :placeholder => "Dispatch date"} %>
 
+  <%= label_tag("Destination location:") %>
   <%= select_tag "dispatch[site]", options_for_select(@sites), :helpText => "Dispatching to" %> 
 
   <%#=text_field(:dispatch, :approved_by ,:helpText => "Approved By") %>
@@ -27,12 +33,14 @@
         #:tt_onLoad => 'approvedBySuggestions();',
         :allowFreeText => true ,
         :ajaxURL => '/assets/people_by_name?search_str=',
-        :helpText => "Approved By") %>
+        :helpText => "Approved By",
+        :placeholder => "Approved By") %>
    
    <%#=text_field(:dispatch, :received_by ,:helpText => "Received By") %>   
    <%=text_field(:dispatch, :received_by,
         #:tt_onLoad => 'approvedBySuggestions();',
         :allowFreeText => true ,
         :ajaxURL => '/assets/people_by_name?search_str=',
-        :helpText => "Received By") %>
+        :helpText => "Received By",
+        :placeholder => "Received By") %>
 </form>

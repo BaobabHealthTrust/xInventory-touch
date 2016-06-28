@@ -134,7 +134,7 @@
   </div>
 
   <div class="admin-buttons">
-    <%if admin? %>                                                          
+    <%if admin? || superuser? %>                                                          
     <table>
       <tr> 
         <td><a class="buttons" href="<%=dispatch_url(:id => @asset[:asset_id])%>">Dispatch</a></td>
@@ -142,11 +142,14 @@
         <td><a class="buttons" href="<%=transfer_url(:id => @asset[:asset_id])%>">Transfer</a></td>
       </tr> 
       <tr>
+                                   
+        <td><a class="buttons" href="/print_asset_barcode/<%=@asset[:asset_id]%>">Barcode (print)</a></td>
+    <%end%> 
+    <%if admin? %>
         <td><a class="buttons" href="<%=edit_asset_url(:id => @asset[:asset_id])%>">Edit</a></td>
-        <td><a class="buttons" href="<%=delete_asset_url(:id => @asset[:asset_id])%>">Delete</a></td>                               
-        <td><a class="buttons" href="/print_asset_barcode/<%=@asset[:asset_id]%>">Barcode (print)</a></td>                               
+        <td><a class="buttons" href="<%=delete_asset_url(:id => @asset[:asset_id])%>">Delete</a></td>                                   
       </tr> 
     </table>
-    <%end%>                                                                   
+    <%end%>                                                                  
   </div>
 

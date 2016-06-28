@@ -546,7 +546,7 @@ EOF
     if action_name == 'new' or action_name == 'create' or
         action_name == 'new_category' or action_name == 'create_category' or
         action_name == 'create_state' or action_name == 'new_state'
-      unless admin?
+      unless admin? || superuser?
         redirect_to '/assets'
       end
     end

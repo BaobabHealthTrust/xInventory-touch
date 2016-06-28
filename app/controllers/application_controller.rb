@@ -7,7 +7,13 @@ class ApplicationController < ActionController::Base
     User.current_user.user_roles.map(&:role).include?('admin')                  
   end
 
+  def superuser?
+    User.current_user.user_roles.map(&:role).include?('superuser')
+  end
+
   helper_method :admin?
+
+  helper_method :superuser?
 
   def print_and_redirect(print_url, redirect_url, message = "Printing, please wait...")
     @print_url = print_url                                                      
