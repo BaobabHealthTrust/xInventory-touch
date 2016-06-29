@@ -18,6 +18,7 @@ tt_cancel_destination = '/assets'
 }                                                                               
                                                                                 
 </style>
+<p></p>
 
 <% if @notfound
      text = 'Asset(s) not found'
@@ -41,6 +42,8 @@ tt_cancel_destination = '/assets'
     <input type='hidden' name="reimbursing" value="<%=params[:reimbursing]%>" />
   <%end%>
 <%end%>
+
+
 
 <script>
  function checkForBarcode(){

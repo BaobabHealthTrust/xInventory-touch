@@ -67,7 +67,7 @@ class DonorsController < ApplicationController
 
   def check_authorized
     if action_name == 'new' or action_name == 'create'
-      unless admin?
+      unless admin? || superuser?
         redirect_to '/donors'
       end
     end

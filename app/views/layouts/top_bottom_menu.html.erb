@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <!--script type="text/javascript" src="/javascripts/calendar.js"></script-->
+    
+
+
+  </head>
+  <body>
+    <%= render  :partial =>  "/layouts/top_simple" %>
+    
+      <%= yield %>
+    
+   <div id="nav" style="width: 100%; height: 90px; border-top: 1px solid #5496ef;
+        left: 0px; position: absolute; bottom: 0px;">
+      <%= image_tag("back.jpeg" ,:height => "65",:style =>"margin-right: 20px;
+                margin-top: 10px; cursor: pointer; float: right;",:onclick =>"window.location='/assets'")%>
+    </div>
+  </body>
+</html>

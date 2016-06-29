@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>Home</title>
+    <style type="text/css">
+      body {
+        background-color: #fff;
+        margin: 20px;
+        font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+        overflow: hidden;
+        color: #000;
+        -moz-user-select: none;
+      }
+
+      
+
+      
+
+      .page-title {
+      
+        font-weight: bold;
+        position: absolute;
+        vertical-align: middle;
+      }
+
+      #logo {
+         height: 80px;
+         float: right;
+      }
+    </style>
+
+    
+
+  </head>
+  <body>
+    <table width="100%" cellspacing="0" cellpadding="10">
+      <tr>
+        <td style="width: 100px; border-bottom: 1px solid #5496ef;">
+          <font class="page-title" size="4px"><%=@page_title.html_safe rescue nil%></font>
+         
+          <%= image_tag("baobab-tree.jpg" ,:id => "logo")%>
+          
+        </td>
+      </tr>
+
+       </table>
+</body>
+</html>

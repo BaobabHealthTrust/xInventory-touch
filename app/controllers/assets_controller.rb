@@ -97,6 +97,8 @@ class AssetsController < ApplicationController
         end
       end
     end
+    @page_title = "<h1>Find assets <small>....</small></h1>"
+    render :layout => 'top_bottom_menu'
   end
 
   def new
