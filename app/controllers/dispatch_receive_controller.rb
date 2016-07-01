@@ -13,6 +13,8 @@ class DispatchReceiveController < ApplicationController
     @donors = Donor.order('name ASC').collect do |r|
       [r.name , r.id]
     end
+    @page_title = "<h2> Batch transfers </h2>"
+    render :layout => 'imenu'
   end
 
   def init_transfer
@@ -49,6 +51,8 @@ EOF
       [site.name , site.id]
     end
     session[:assets_to_dispatch] = nil
+    @page_title = "<h2>Batch dispatch</h2>"
+    render :layout => 'imenu'
   end
 
   def batch_return
@@ -57,6 +61,8 @@ EOF
     end
 
     session[:assets_to_dispatch] = nil
+    @page_title = "<h2>Return Assets</h2>"
+    render :layout => 'imenu'
   end
 
   def confirm

@@ -132,7 +132,7 @@ class AssetsController < ApplicationController
 
     @currencies = Currencies.order('code ASC').collect do |currency|
       [currency.code , currency.id]
-    end
+    end  
 
   end
 
@@ -195,6 +195,8 @@ class AssetsController < ApplicationController
   end
 
   def new_category
+    @page_title = "<h1>Create Asset Category</h1>"
+    render :layout => 'top_bottom_menu'
   end
 
   def create_category
@@ -212,6 +214,8 @@ class AssetsController < ApplicationController
   end
 
   def new_state
+    @page_title = "<h1>Create asset state</h1>"
+    render :layout => 'top_bottom_menu'
   end
 
   def validate_category

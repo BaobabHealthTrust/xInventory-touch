@@ -18,6 +18,8 @@ class DonorsController < ApplicationController
   end
 
   def new
+    @page_title = "<h1>Register <small>Donor</small></h1>"
+    render :layout => 'top_bottom_menu'
     
   end
 

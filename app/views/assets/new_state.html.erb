@@ -42,10 +42,6 @@
 
 </script>
 
-<div class="page-header">
-  <h1>Asset State <small>create asset state</small></h1>
-</div>
-
 <siection id='modals'>
   <div class="content-details">
     <%if flash[:notice]%>
@@ -56,6 +52,7 @@
   </div>
   <%= form_tag :action => 'create_state', :method => :post  do %>
 
+<p></p>
   <table class="asset-details" align="center">
   <tbody>
     <tr>
