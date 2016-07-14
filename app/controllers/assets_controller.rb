@@ -98,7 +98,7 @@ class AssetsController < ApplicationController
       end
     end
     @page_title = "<h1>Find assets <small>....</small></h1>"
-    render :layout => 'top_bottom_menu'
+    #render :layout => 'top_bottom_menu'
   end
 
   def new
@@ -196,7 +196,7 @@ class AssetsController < ApplicationController
 
   def new_category
     @page_title = "<h1>Create Asset Category</h1>"
-    render :layout => 'top_bottom_menu'
+    #render :layout => 'top_bottom_menu'
   end
 
   def create_category
@@ -215,7 +215,7 @@ class AssetsController < ApplicationController
 
   def new_state
     @page_title = "<h1>Create asset state</h1>"
-    render :layout => 'top_bottom_menu'
+    #render :layout => 'top_bottom_menu'
   end
 
   def validate_category

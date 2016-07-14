@@ -14,7 +14,7 @@ class DispatchReceiveController < ApplicationController
       [r.name , r.id]
     end
     @page_title = "<h2> Batch transfers </h2>"
-    render :layout => 'imenu'
+    #render :layout => 'imenu'
   end
 
   def init_transfer
@@ -52,7 +52,7 @@ EOF
     end
     session[:assets_to_dispatch] = nil
     @page_title = "<h2>Batch dispatch</h2>"
-    render :layout => 'imenu'
+    #render :layout => 'imenu'
   end
 
   def batch_return
@@ -62,7 +62,7 @@ EOF
 
     session[:assets_to_dispatch] = nil
     @page_title = "<h2>Return Assets</h2>"
-    render :layout => 'imenu'
+    #render :layout => 'imenu'
   end
 
   def confirm
@@ -373,7 +373,7 @@ EOF
   def borrowed_assets
     @page_title = "<h1>borrowed <small>assets</small></h1>"
     @borrowed_assets = get_transferred_assets
-    render :layout => 'imenu'
+    #render :layout => 'imenu'
   end
 
   def transfer_assets_search
