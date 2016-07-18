@@ -23,16 +23,16 @@ class Item < ActiveRecord::Base
 
  def barcode_label
    label = ZebraPrinter::StandardLabel.new                                     
-   label.font_size = 1
-   label.font_horizontal_multiplier = 2                                        
-   label.font_vertical_multiplier = 2                                          
+   label.font_size = 2
+   label.font_horizontal_multiplier = 1                                    
+   label.font_vertical_multiplier = 1                                     
    label.left_margin = 50                                                      
-   label.draw_barcode(50,210,0,1,2,15,70,false,"#{self.barcode}") 
+   label.draw_barcode(50,200,0,3,3,11,80,false,"#{self.barcode}") 
    label.draw_multi_text("#{self.name.titleize}")                      
    label.draw_multi_text("SN: #{self.serial_number}")
    label.draw_multi_text("Donor: #{self.donor.name.upcase}")                      
    label.draw_multi_text("Project: #{self.project.name}")
-   label.draw_multi_text("Location: #{self.current_location.name}")
+   
    label.print(1)
  end
  

@@ -172,7 +172,7 @@ class AssetsController < ApplicationController
         curr_state.item_id = item.id
         curr_state.current_state = StateType.find(params[:organisation]['current_status']).id
         curr_state.save
-        print_and_redirect("/print_barcode/#{item.id}", "/asset_details/#{item.id}") and return
+        print_and_redirect("/barcode_print/#{item.id}", "/asset_details/#{item.id}") and return
       else
         flash[:error] = 'Something went wrong - did not create.'
       end
@@ -191,7 +191,7 @@ class AssetsController < ApplicationController
   end
 
   def print_asset_barcode
-    print_and_redirect("/print_barcode/#{params[:id]}", "/asset_details/#{params[:id]}") and return
+    print_and_redirect("/barcode_print/#{params[:id]}", "/asset_details/#{params[:id]}") and return
   end
 
   def new_category
