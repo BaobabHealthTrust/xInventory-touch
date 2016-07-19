@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   def index
-     @page_title = "<h1>Locations <small>....</small></h1>"
+     @page_title = "<h1>Locations <small>...</small></h1>"
      render :layout => 'imenu'
   end
 

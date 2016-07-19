@@ -213,7 +213,7 @@ function getSerialNumber() {
     </tr>
     <tr>
       <td align="right" style="padding-right:2em;">Quantity</td>
-      <td><%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 ,:id => 'quantity',
+      <td><%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 , :max => 1, :id => 'quantity',
           :tt_pageStyleClass => "Numeric NumbersOnly", :helpText => "Quantity") %> </td>
     </tr>
     <tr>
