@@ -592,6 +592,7 @@ EOF
     return "BHT#{(number + 1).to_s.rjust(6,"0")}"
   end
 
+
   def serial_number_validator(num)
     serial_num = Item.where(:'serial_number' => num)
     return serial_num.blank? ? true : false
