@@ -102,6 +102,25 @@ function getSerialNumber() {
     $('buttons').innerHTML =  $('buttons').innerHTML.replace(serialNum,'');
   }
 
+  function validateRule(aNumber) {
+    var aRule = aNumber.getAttribute("validationRule")
+    if (aRule == null) return ""
+
+    var re = new RegExp(aRule)
+    if (aNumber.value.search(re) == -1) {
+        var aMsg = aNumber.getAttribute("validationMessage")
+        if (aMsg == null || aMsg == "")
+            return "" + (typeof(tstLocaleWords) != "undefined" ?
+                (tstLocaleWords["please enter a valid value"] ? tstLocaleWords["please enter a valid value"] : "Please enter a valid value") : "Please enter a valid value") + ""
+        else
+            return aMsg
+    }
+    return ""
+}
+
+validateRule: function () {
+        return validateRule(this.element)
+    },
   function checkForBarcode(){
     if (!check_for_barcode)
       return;
@@ -213,7 +232,7 @@ function getSerialNumber() {
     </tr>
     <tr>
       <td align="right" style="padding-right:2em;">Quantity</td>
-      <td><%=text_field(:vendor, :quantity, :field_type => 'number',:min => 1 , :max => 1, :id => 'quantity',
+      <td><%=text_field(:vendor, :quantity, :field_type => 'number',:max => 1 ,:id => 'quantity',
           :tt_pageStyleClass => "Numeric NumbersOnly", :helpText => "Quantity") %> </td>
     </tr>
     <tr>

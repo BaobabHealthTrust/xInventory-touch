@@ -16,7 +16,7 @@ class AssetsController < ApplicationController
       redirect_to :action => :index
     end
   end
-
+  
   def show
     @asset = get_asset(params[:id])
     responsible_person = Item.find(params[:id]).responsible_person
@@ -587,7 +587,7 @@ EOF
   end
 
   def assign_barcode
-    last_barcode = Item.find_by_sql("SELECT max(barcode) barcode FROM xinventory.items;")[0].barcode rescue 'BHT'
+    last_barcode = Item.select("MAX(barcode) barcode")[0].try(:barcode) || 'BHT'
     number = last_barcode.sub("BHT",'').to_i
     return "BHT#{(number + 1).to_s.rjust(6,"0")}"
   end
