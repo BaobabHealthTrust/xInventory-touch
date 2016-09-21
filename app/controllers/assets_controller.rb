@@ -160,7 +160,8 @@ class AssetsController < ApplicationController
       item.delivered_by = params[:organisation]['delivered_by']
       item.status_on_delivery = params[:organisation]['delivery_status']
       item.location = params[:organisation]['location']
-      item.barcode = assign_barcode
+      item.barcode = assign_barcode  #method call
+
 
       asset_lifespan = (params[:asset]['lifespan']).to_i rescue 0
       if asset_lifespan > 0
