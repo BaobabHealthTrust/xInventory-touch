@@ -14,5 +14,5 @@ db/schema.rb
 mockups
 rerun.txt
 nbproject
-Gemfile.lock
+*.lock
 *.pid
