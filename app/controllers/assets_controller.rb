@@ -268,7 +268,8 @@ class AssetsController < ApplicationController
       ["Date of receipt #{@asset[:date_of_receipt]}","date_of_receipt"],
       ["Delivered by: #{@asset[:delivered_by]}","delivered_by"],
       ["Delivered status #{@asset[:status_on_delivery]}","delivery_status"],
-      ["Current status: #{@asset[:current_state]}","current_status"]
+      ["Current status: #{@asset[:current_state]}","current_status"],
+      ["Current Location: #{@asset[:location]}","store_room"]
     ]
      # ["Store room: #{@asset[:location]}","store_room"]
 
